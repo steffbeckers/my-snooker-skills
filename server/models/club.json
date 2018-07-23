@@ -1,0 +1,48 @@
+{
+  "name": "Club",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "string"
+    },
+    "telephone": {
+      "type": "string"
+    },
+    "info": {
+      "type": "object"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "address": {
+      "type": "hasOne",
+      "model": "Address"
+    },
+    "players": {
+      "type": "hasMany",
+      "model": "UserModel"
+    },
+    "teams": {
+      "type": "hasMany",
+      "model": "Team"
+    },
+    "leagues": {
+      "type": "hasMany",
+      "model": "League"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

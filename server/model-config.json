@@ -1,0 +1,84 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./mixins",
+      "../node_modules/@mean-expert/loopback-component-realtime/dist/mixins",
+      "../node_modules/loopback-ds-timestamp-mixin",
+      "../node_modules/loopback-softdelete-mixin3"
+    ]
+  },
+  "Email": {
+    "dataSource": "email"
+  },
+  "User": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "UserModel": {
+    "dataSource": "mongodb",
+    "public": true,
+    "options": {
+      "emailVerificationRequired": true
+    }
+  },
+  "AccessToken": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "ACL": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "mongodb",
+    "public": false,
+    "options": {
+      "strictObjectIDCoercion": true
+    }
+  },
+  "Role": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "Club": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "Address": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "League": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "Tournament": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "Team": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "Match": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "Frame": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "Break": {
+    "dataSource": "mongodb",
+    "public": true
+  }
+}

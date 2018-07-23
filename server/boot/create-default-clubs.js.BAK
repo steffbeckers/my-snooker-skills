@@ -1,0 +1,19 @@
+﻿module.exports = function(app) {
+  app.dataSources.mongodb.automigrate('Club', function(err) {
+    if (err) throw err;
+
+    app.models.Club.create(
+      {
+        "slug": "karteria",
+        "name": "Karteria",
+        "mailaddress": "info@karteria.be",
+        "telephone": "+3211428993",
+        "color": "9E0C81"
+      },
+      function (err, coffeeShops) {
+          if (err) throw err;
+          console.log('Models created: \n', coffeeShops);
+      }
+    );
+  });
+};

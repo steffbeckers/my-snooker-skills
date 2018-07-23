@@ -1,0 +1,46 @@
+{
+  "name": "Tournament",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "startDateTime": {
+      "type": "date"
+    },
+    "endDateTime": {
+      "type": "date"
+    },
+    "settings": {
+      "type": "object"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "players": {
+      "type": "hasAndBelongsToMany",
+      "model": "UserModel"
+    },
+    "teams": {
+      "type": "hasAndBelongsToMany",
+      "model": "Team"
+    },
+    "league": {
+      "type": "belongsTo",
+      "model": "League"
+    },
+    "frames": {
+      "type": "hasMany",
+      "model": "Frame"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

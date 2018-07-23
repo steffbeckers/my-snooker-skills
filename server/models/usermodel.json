@@ -1,0 +1,124 @@
+{
+  "name": "UserModel",
+  "base": "User",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "mixins": {
+    "TimeStamp": {
+      "createdAt": "createdOn",
+      "updatedAt": "updatedOn",
+      "validateUpsert": true,
+      "required": false
+    }
+  },
+  "properties": {
+    "firstName": {
+      "type": "string",
+      "required": true
+    },
+    "lastName": {
+      "type": "string",
+      "required": true
+    },
+    "telephone": {
+      "type": "string"
+    },
+    "settings": {
+      "type": "object"
+    },
+    "profilePicture": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "address": {
+      "type": "hasOne",
+      "model": "Address"
+    },
+    "club": {
+      "type": "belongsTo",
+      "model": "Club"
+    },
+    "team": {
+      "type": "hasAndBelongsToMany",
+      "model": "Team"
+    },
+    "tournaments": {
+      "type": "hasAndBelongsToMany",
+      "model": "Tournament"
+    },
+    "matches": {
+      "type": "hasAndBelongsToMany",
+      "model": "Match",
+      "foreignKey": "userModelId"
+    },
+    "frames": {
+      "type": "hasAndBelongsToMany",
+      "model": "Frame",
+      "foreignKey": "userModelId"
+    },
+    "breaks": {
+      "type": "hasMany",
+      "model": "Break"
+    },
+    "roles": {
+      "type": "hasMany",
+      "model": "Role",
+      "foreignKey": "principalId",
+      "through": "RoleMapping"
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "Administrator",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "searchByFullnameOrUsername"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "calculateStatistics"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "statistics"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "listPlayers"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "resendVerificationEmail"
+    }
+  ],
+  "methods": {}
+}

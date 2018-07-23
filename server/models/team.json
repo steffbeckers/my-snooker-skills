@@ -1,0 +1,49 @@
+{
+  "name": "Team",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "clubId": {
+      "type": {
+        "required": true
+      }
+    },
+    "season": {
+      "type": "string"
+    },
+    "division": {
+      "type": "string"
+    },
+    "char": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "club": {
+      "type": "belongsTo",
+      "model": "Club"
+    },
+    "players": {
+      "type": "hasAndBelongsToMany",
+      "model": "UserModel"
+    },
+    "reserves": {
+      "type": "hasAndBelongsToMany",
+      "model": "UserModel"
+    },
+    "tournaments": {
+      "type": "hasAndBelongsToMany",
+      "model": "Tournament"
+    },
+    "matches": {
+      "type": "hasAndBelongsToMany",
+      "model": "Match"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

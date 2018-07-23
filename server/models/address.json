@@ -1,0 +1,41 @@
+{
+  "name": "Address",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "street": {
+      "type": "string"
+    },
+    "number": {
+      "type": "string"
+    },
+    "extension": {
+      "type": "string"
+    },
+    "zipcode": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "location": {
+      "type": "geopoint"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "club": {
+      "type": "belongsTo",
+      "model": "Club"
+    },
+    "user": {
+      "type": "belongsTo",
+      "model": "UserModel"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

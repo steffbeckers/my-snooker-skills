@@ -1,0 +1,99 @@
+{
+  "name": "Break",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "mixins": {
+    "TimeStamp": {
+      "createdAt": "createdOn",
+      "updatedAt": "updatedOn",
+      "validateUpsert": true,
+      "required": false
+    },
+    "SoftDelete": {
+      "deletedAt": "deletedOn"
+    },
+    "FireLoop": true
+  },
+  "properties": {
+    "dateTime": {
+      "type": "date"
+    },
+    "score": {
+      "type": "number"
+    },
+    "balls": {
+      "type": "object"
+    },
+    "foul": {
+      "type": "object"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "userModel": {
+      "type": "belongsTo",
+      "model": "UserModel",
+      "foreignKey": "ownerId"
+    },
+    "createdByUser": {
+      "type": "belongsTo",
+      "model": "UserModel",
+      "foreignKey": "createdBy"
+    },
+    "updatedByUser": {
+      "type": "belongsTo",
+      "model": "UserModel",
+      "foreignKey": "updatedBy"
+    },
+    "frame": {
+      "type": "belongsTo",
+      "model": "Frame"
+    },
+    "player": {
+      "type": "belongsTo",
+      "model": "UserModel"
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "framePlayer",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "frameReferee",
+      "permission": "ALLOW"
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "create"
+    }
+  ],
+  "methods": {}
+}

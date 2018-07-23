@@ -1,0 +1,141 @@
+{
+  "name": "Frame",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "mixins": {
+    "TimeStamp": {
+      "createdAt": "createdOn",
+      "updatedAt": "updatedOn",
+      "validateUpsert": true,
+      "required": false
+    },
+    "SoftDelete": {
+      "deletedAt": "deletedOn"
+    },
+    "FireLoop": true
+  },
+  "properties": {
+    "number": {
+      "type": "number"
+    },
+    "startDateTime": {
+      "type": "date"
+    },
+    "endDateTime": {
+      "type": "date"
+    },
+    "reds": {
+      "type": "number"
+    },
+    "scores": {
+      "type": "object"
+    },
+    "handicaps": {
+      "type": "object"
+    },
+    "scoreboard": {
+      "type": "object"
+    },
+    "statistics": {
+      "type": "object"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "userModel": {
+      "type": "belongsTo",
+      "model": "UserModel",
+      "foreignKey": "ownerId"
+    },
+    "createdByUser": {
+      "type": "belongsTo",
+      "model": "UserModel",
+      "foreignKey": "createdBy"
+    },
+    "updatedByUser": {
+      "type": "belongsTo",
+      "model": "UserModel",
+      "foreignKey": "updatedBy"
+    },
+    "match": {
+      "type": "belongsTo",
+      "model": "Match"
+    },
+    "players": {
+      "type": "hasAndBelongsToMany",
+      "model": "UserModel"
+    },
+    "breakOffBy": {
+      "type": "belongsTo",
+      "model": "UserModel"
+    },
+    "tossWonBy": {
+      "type": "belongsTo",
+      "model": "UserModel"
+    },
+    "turnOf": {
+      "type": "belongsTo",
+      "model": "UserModel"
+    },
+    "winner": {
+      "type": "belongsTo",
+      "model": "UserModel"
+    },
+    "breaks": {
+      "type": "hasMany",
+      "model": "Break"
+    },
+    "referee": {
+      "type": "belongsTo",
+      "model": "UserModel"
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "framePlayer",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "frameReferee",
+      "permission": "ALLOW"
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "create"
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "__link__players"
+    }
+  ],
+  "methods": {}
+}

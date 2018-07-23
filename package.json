@@ -1,0 +1,53 @@
+{
+  "name": "Snooker",
+  "version": "1.0.0",
+  "main": "server/server.js",
+  "engines": {
+    "node": ">=4"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "start": "npm run kill && forever -l forever.log -o output.log -e error.log --minUptime 3000 --spinSleepTime 3000 --verbose --uid \"snooker\" --watch server/server.js",
+    "posttest": "npm run lint && nsp check",
+    "build.sdk": "node ./../loopback-sdk-builder/bin/lb-sdk ./server/server ../angular/src/client/app/shared/sdk -d ng2web",
+    "kill": "powershell.exe If (Get-NetTCPConnection -LocalPort 3000) { Stop-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess -Force }",
+    "deploy": "powershell git checkout master; git merge develop; git push; git push live; git checkout develop; pause; npm run kill; npm start"
+  },
+  "dependencies": {
+    "@mean-expert/loopback-component-realtime": "^1.0.1",
+    "asynckit": "^0.4.0",
+    "compression": "^1.7.3",
+    "cors": "^2.5.2",
+    "ejs": "^2.6.1",
+    "elasticsearch": "^14.2.2",
+    "helmet": "^3.12.2",
+    "http-status": "^1.2.0",
+    "lodash": "^4.17.10",
+    "loopback": "^3.21.0",
+    "loopback-boot": "^2.27.1",
+    "loopback-component-explorer": "^6.1.0",
+    "loopback-component-passport": "^3.10.0",
+    "loopback-component-storage": "^3.5.0",
+    "loopback-connector-mongodb": "^3.4.4",
+    "loopback-ds-timestamp-mixin": "^3.4.1",
+    "loopback-softdelete-mixin3": "0.0.12",
+    "loopback-softdelete-mixin4": "^1.0.8",
+    "moment": "^2.22.2",
+    "options": "0.0.6",
+    "serve-favicon": "^2.5.0",
+    "strong-error-handler": "^2.3.2",
+    "xmlcreate": "^1.0.2"
+  },
+  "devDependencies": {
+    "@mean-expert/loopback-sdk-builder": "^2.3.1",
+    "eslint": "^4.19.1",
+    "eslint-config-loopback": "^10.0.0",
+    "nsp": "^3.2.1"
+  },
+  "repository": {
+    "type": "",
+    "url": ""
+  },
+  "license": "UNLICENSED",
+  "description": "Snooker"
+}
