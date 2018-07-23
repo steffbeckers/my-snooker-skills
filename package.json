@@ -7,7 +7,7 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "start": "npm run kill && forever -l forever.log -o output.log -e error.log --minUptime 3000 --spinSleepTime 3000 --verbose --uid \"snooker\" --watch server/server.js",
+    "start": "npm run kill && forever -l forever.log -o output.log -e error.log --minUptime 3000 --spinSleepTime 3000 --verbose --uid \"snooker\" --watch --watchIgnore client/ server/server.js",
     "posttest": "npm run lint && nsp check",
     "build.sdk": "node ./../loopback-sdk-builder/bin/lb-sdk ./server/server ../angular/src/client/app/shared/sdk -d ng2web",
     "kill": "powershell.exe If (Get-NetTCPConnection -LocalPort 3000) { Stop-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess -Force }",
