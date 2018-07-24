@@ -1,6 +1,9 @@
 {
   "name": "my-snooker-skills-loopback",
   "version": "2.0.0",
+  "description": "Track your snooker skills, compare with friends and use a real-time scoreboard.",
+  "author": "Steff Beckers <steff@steffbeckers.eu>",
+  "private": true,
   "main": "server/server.js",
   "engines": {
     "node": ">=4"
@@ -9,9 +12,7 @@
     "lint": "eslint .",
     "start": "npm run kill && forever -l forever.log -o output.log -e error.log --minUptime 3000 --spinSleepTime 3000 --verbose --uid \"snooker\" --watch --watchIgnore client/ server/server.js",
     "posttest": "npm run lint && nsp check",
-    "build.sdk": "node ./../loopback-sdk-builder/bin/lb-sdk ./server/server ../angular/src/client/app/shared/sdk -d ng2web",
     "kill": "powershell.exe If (Get-NetTCPConnection -LocalPort 3000) { Stop-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess -Force }",
-    "deploy": "powershell git checkout master; git merge develop; git push; git push live; git checkout develop; pause; npm run kill; npm start"
   },
   "dependencies": {
     "@mean-expert/loopback-component-realtime": "^1.0.1",
@@ -39,7 +40,6 @@
     "xmlcreate": "^1.0.2"
   },
   "devDependencies": {
-    "@mean-expert/loopback-sdk-builder": "^2.3.1",
     "eslint": "^4.19.1",
     "eslint-config-loopback": "^10.0.0",
     "nsp": "^3.2.1"
@@ -47,7 +47,5 @@
   "repository": {
     "type": "",
     "url": ""
-  },
-  "license": "UNLICENSED",
-  "description": "Snooker"
+  }
 }

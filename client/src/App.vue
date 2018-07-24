@@ -2,16 +2,15 @@
   <v-app light>
     <v-navigation-drawer
       fixed
-      :mini-variant="miniVariant"
       :clipped="clipped"
-      v-model="drawer"
+      v-model="$store.state.drawer"
       app
     >
       <v-list>
         <v-list-tile
-          value="true"
-          v-for="(item, i) in items"
+          v-for="(item, i) in sideMenuItems"
           :key="i"
+          :to="item.page"
           exact
         >
           <v-list-tile-action>
@@ -23,52 +22,55 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar fixed app :clipped-left="clipped">
-      <v-toolbar-side-icon @click.stop="drawer = !drawer" light></v-toolbar-side-icon>
-      <v-btn
-        icon
-        light
-        @click.stop="miniVariant = !miniVariant"
-      >
-        <v-icon v-html="miniVariant ? 'chevron_right' : 'chevron_left'"></v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        light
-        @click.stop="clipped = !clipped"
-      >
-        <v-icon>web</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title"></v-toolbar-title>
+    <v-toolbar fixed app :clipped-left="clipped" color="primary white--text">
+      <v-toolbar-side-icon class="white--text" @click.stop="$store.commit('drawer', !$store.state.drawer)"></v-toolbar-side-icon>
+      <v-toolbar-title class="white--text mr-4" v-text="title"></v-toolbar-title>
+      <v-toolbar-items>
+        <v-btn exact class="white--text" :to="{ name: 'Root' }" flat><v-icon>dashboard</v-icon></v-btn>
+        <v-btn exact class="white--text" :to="{ name: 'Matches' }" flat>Matches</v-btn>
+      </v-toolbar-items>
       <v-spacer></v-spacer>
-      <v-btn
-        icon
-        light
-        @click.stop="rightDrawer = !rightDrawer"
-      >
-        <v-icon>menu</v-icon>
-      </v-btn>
+      <v-toolbar-items>
+        <v-btn class="white--text" :to="{ name: 'CameraComponent' }" flat>Camera</v-btn>
+      </v-toolbar-items>
     </v-toolbar>
     <v-content>
       <router-view></router-view>
     </v-content>
-    <v-navigation-drawer
-      temporary
-      :right="right"
-      v-model="rightDrawer"
-      fixed
+    <v-footer
+      :fixed="fixed"
+      app
     >
-      <v-list>
-        <v-list-tile @click="right = !right">
-          <v-list-tile-action>
-            <v-icon light>compare_arrows</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title>Switch drawer (click me)</v-list-tile-title>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
+      <div id="buildInfo" class="ml-2">Last update: {{ buildDateTime }}</div>
+      <div id="copyright" class="mr-2">&copy; <a href="https://steffbeckers.eu/">Steff</a></div>
+    </v-footer>
   </v-app>
 </template>
+
+<style scoped>
+main.content {
+  margin-bottom: 60px;
+}
+
+#buildInfo {
+  color: #ffffff;
+  font-size: 11px;
+  line-height: 11px;
+}
+
+#copyright {
+  color: #868e96;
+  margin-left: auto;
+}
+
+#copyright a {
+  text-decoration: none;
+}
+
+#copyright a:hover {
+  text-decoration: underline;
+}
+</style>
 
 <script>
   import Vue from 'vue'
@@ -77,15 +79,26 @@
       return {
         cordova: Vue.cordova,
         clipped: false,
-        drawer: true,
-        items: [{
-          icon: 'bubble_chart',
-          title: 'Inspire'
-        }],
-        miniVariant: false,
-        right: true,
-        rightDrawer: false,
-        title: 'Vuetify.js'
+        fixed: true,
+        sideMenuItems: [
+          {
+            icon: 'dashboard',
+            title: 'Dashboard',
+            page: {
+              name: 'Root'
+            }
+          },
+          {
+            icon: 'list',
+            title: 'Matches',
+            page: {
+              name: 'Matches'
+            }
+          }
+        ],
+        buildDateTime: process.env.BUILD_DATETIME,
+        nodeEnv: process.env.NODE_ENV,
+        title: 'My Snooker Skills'
       }
     },
     created () {
