@@ -1,4 +1,4 @@
-# my-snooker-skills
+# MySnookerSkills
 
 > Track your snooker skills, compare with friends and use a real-time scoreboard.
 
