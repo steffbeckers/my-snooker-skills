@@ -25,10 +25,10 @@
     <v-toolbar fixed app :clipped-left="clipped" color="primary white--text">
       <v-toolbar-side-icon class="white--text" @click.stop="$store.commit('drawer', !$store.state.drawer)"></v-toolbar-side-icon>
       <v-toolbar-title class="white--text mr-4" v-text="title"></v-toolbar-title>
-      <v-toolbar-items>
+      <!-- <v-toolbar-items>
         <v-btn exact class="white--text" :to="{ name: 'Root' }" flat><v-icon>dashboard</v-icon></v-btn>
         <v-btn exact class="white--text" :to="{ name: 'Matches' }" flat>Matches</v-btn>
-      </v-toolbar-items>
+      </v-toolbar-items> -->
       <v-spacer></v-spacer>
       <v-toolbar-items>
         <v-btn class="white--text" :to="{ name: 'CameraComponent' }" flat>Camera</v-btn>
