@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-lg fluid>
+  <v-container grid-list-lg fluid v-touch="{ down: () => reload }">
     <v-layout v-if="errors.length > 0" row>
       <v-flex>
         <v-alert :value="true" v-for="(error, index) in errors" :key="index" type="error">
@@ -19,6 +19,7 @@
         sm6
         xs12
       >
+      {{ debug }}
       </v-flex>
     </v-layout>
   </v-container>
@@ -28,7 +29,16 @@
 export default {
   data () {
     return {
+      debug: '',
       errors: []
+    }
+  },
+  methods: {
+    reload () {
+      console.log('reload')
+      this.debug += 'reload; '
+
+      location.reload(false)
     }
   },
   name: 'Dashboard'

@@ -9,6 +9,11 @@ var app = module.exports = loopback();
 // https://stackoverflow.com/a/33421044/5609891
 // app.use(loopback.token());
 
+// Social auth
+var loopbackPassport = require('loopback-component-passport');
+var PassportConfigurator = loopbackPassport.PassportConfigurator;
+var passportConfigurator = new PassportConfigurator(app);
+
 app.start = function() {
   // start the web server
   var server = app.listen(function() {
@@ -32,3 +37,30 @@ boot(app, __dirname, function(err) {
   if (require.main === module)
     app.start();
 });
+
+// Social auth
+// Build the providers/passport config
+var config = {};
+try {
+  config = require('./providers.json');
+} catch (err) {
+  console.trace(err);
+  process.exit(1); // fatal
+}
+
+// Initialize passport
+passportConfigurator.init();
+
+// Set up related models
+passportConfigurator.setupModels({
+  userModel: app.models.UserModel,
+  userIdentityModel: app.models.userIdentity,
+  userCredentialModel: app.models.userCredential,
+});
+
+// Configure passport strategies for third party auth providers
+for (var s in config) {
+  var c = config[s];
+  c.session = c.session !== false;
+  passportConfigurator.configureProvider(s, c);
+}

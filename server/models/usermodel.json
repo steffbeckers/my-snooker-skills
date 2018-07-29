@@ -69,6 +69,10 @@
       "model": "Role",
       "foreignKey": "principalId",
       "through": "RoleMapping"
+    },
+    "subscriptions": {
+      "type": "hasAndBelongsToMany",
+      "model": "Subscription"
     }
   },
   "acls": [

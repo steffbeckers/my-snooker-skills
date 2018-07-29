@@ -12,7 +12,7 @@
     "lint": "eslint .",
     "start": "npm run kill && forever -l forever.log -o output.log -e error.log --minUptime 3000 --spinSleepTime 3000 --verbose --uid \"snooker\" --watch --watchIgnore client/ server/server.js",
     "posttest": "npm run lint && nsp check",
-    "kill": "powershell.exe If (Get-NetTCPConnection -LocalPort 3000) { Stop-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess -Force }",
+    "kill": "powershell.exe If (Get-NetTCPConnection -LocalPort 3000) { Stop-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess -Force }"
   },
   "dependencies": {
     "@mean-expert/loopback-component-realtime": "^1.0.1",
@@ -35,6 +35,10 @@
     "loopback-softdelete-mixin4": "^1.0.8",
     "moment": "^2.22.2",
     "options": "0.0.6",
+    "passport-facebook": "^2.1.1",
+    "passport-google-oauth": "^1.0.0",
+    "passport-local": "^1.0.0",
+    "passport-twitter": "^1.0.4",
     "serve-favicon": "^2.5.0",
     "strong-error-handler": "^2.3.2",
     "xmlcreate": "^1.0.2"

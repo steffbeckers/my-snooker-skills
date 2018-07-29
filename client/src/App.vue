@@ -35,6 +35,7 @@
       </v-toolbar-items>
     </v-toolbar>
     <v-content>
+      {{ debug }}
       <router-view></router-view>
     </v-content>
     <v-footer
@@ -78,6 +79,7 @@ main.content {
     data () {
       return {
         cordova: Vue.cordova,
+        debug: '',
         clipped: false,
         fixed: true,
         sideMenuItems: [
@@ -108,7 +110,7 @@ main.content {
       })
     },
     methods: {
-      onDeviceReady: function () {
+      onDeviceReady () {
         // Handle the device ready event.
         this.cordova.on('pause', this.onPause, false)
         this.cordova.on('resume', this.onResume, false)
@@ -116,15 +118,23 @@ main.content {
           document.addEventListener('backbutton', this.onBackKeyDown, false)
         }
       },
+      reload () {
+        console.log('reload')
+        this.debug += 'reload; '
+
+        location.reload(false)
+      },
       onPause () {
         // Handle the pause lifecycle event.
         console.log('pause')
+        this.debug += 'pause; '
       },
       onResume () {
         // Handle the resume lifecycle event.
         // SetTimeout required for iOS.
         setTimeout(function () {
           console.log('resume')
+          this.debug += 'resume; '
         }, 0)
       },
       onBackKeyDown () {
