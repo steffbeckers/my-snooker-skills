@@ -25,19 +25,34 @@
     <v-toolbar fixed app :clipped-left="clipped" color="primary white--text">
       <v-toolbar-side-icon class="white--text" @click.stop="$store.commit('drawer', !$store.state.drawer)"></v-toolbar-side-icon>
       <v-toolbar-title class="white--text mr-4" v-text="title"></v-toolbar-title>
-      <!-- <v-toolbar-items>
-        <v-btn exact class="white--text" :to="{ name: 'Root' }" flat><v-icon>dashboard</v-icon></v-btn>
-        <v-btn exact class="white--text" :to="{ name: 'Matches' }" flat>Matches</v-btn>
-      </v-toolbar-items> -->
       <v-spacer></v-spacer>
-      <v-toolbar-items>
-        <v-btn class="white--text" :to="{ name: 'CameraComponent' }" flat>Camera</v-btn>
-      </v-toolbar-items>
+      <v-btn
+        class="white--text"
+        icon
+        light
+        @click.stop="$store.commit('rightDrawer', !$store.state.rightDrawer)"
+      >
+        <v-icon>person</v-icon>
+      </v-btn>
     </v-toolbar>
     <v-content>
-      {{ debug }}
       <router-view></router-view>
     </v-content>
+    <v-navigation-drawer
+      :right="true"
+      v-model="$store.state.rightDrawer"
+      fixed
+      app
+    >
+      <v-list>
+        <v-list-tile>
+          <v-list-tile-action>
+            <v-icon light>people</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title>Friends</v-list-tile-title>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
     <v-footer
       :fixed="fixed"
       app
@@ -74,84 +89,85 @@ main.content {
 </style>
 
 <script>
-  import Vue from 'vue'
-  export default {
-    data () {
-      return {
-        cordova: Vue.cordova,
-        debug: '',
-        clipped: false,
-        fixed: true,
-        sideMenuItems: [
-          {
-            icon: 'dashboard',
-            title: 'Dashboard',
-            page: {
-              name: 'Root'
-            }
-          },
-          {
-            icon: 'list',
-            title: 'Matches',
-            page: {
-              name: 'Matches'
-            }
+import Vue from 'vue'
+export default {
+  data() {
+    return {
+      cordova: Vue.cordova,
+      debug: '',
+      clipped: false,
+      fixed: true,
+      sideMenuItems: [
+        {
+          icon: 'dashboard',
+          title: 'Dashboard',
+          page: {
+            name: 'Root'
           }
-        ],
-        buildDateTime: process.env.BUILD_DATETIME,
-        nodeEnv: process.env.NODE_ENV,
-        title: 'My Snooker Skills'
-      }
-    },
-    created () {
-      var self = this
-      this.cordova.on('deviceready', () => {
-        self.onDeviceReady()
-      })
-    },
-    methods: {
-      onDeviceReady () {
-        // Handle the device ready event.
-        this.cordova.on('pause', this.onPause, false)
-        this.cordova.on('resume', this.onResume, false)
-        if (this.cordova.device.platform === 'Android') {
-          document.addEventListener('backbutton', this.onBackKeyDown, false)
+        },
+        {
+          icon: 'list',
+          title: 'Matches',
+          page: {
+            name: 'Matches'
+          }
         }
-      },
-      reload () {
-        console.log('reload')
-        this.debug += 'reload; '
-
-        location.reload(false)
-      },
-      onPause () {
-        // Handle the pause lifecycle event.
-        console.log('pause')
-        this.debug += 'pause; '
-      },
-      onResume () {
-        // Handle the resume lifecycle event.
-        // SetTimeout required for iOS.
-        setTimeout(function () {
-          console.log('resume')
-          this.debug += 'resume; '
-        }, 0)
-      },
-      onBackKeyDown () {
-        // Handle the back-button event on Android. By default it will exit the app.
-        navigator.app.exitApp()
+      ],
+      buildDateTime: process.env.BUILD_DATETIME,
+      nodeEnv: process.env.NODE_ENV,
+      title: 'My Snooker Skills'
+    }
+  },
+  created() {
+    var self = this
+    this.cordova.on('deviceready', () => {
+      self.onDeviceReady()
+    })
+  },
+  methods: {
+    onDeviceReady() {
+      // Handle the device ready event.
+      this.cordova.on('pause', this.onPause, false)
+      this.cordova.on('resume', this.onResume, false)
+      if (this.cordova.device.platform === 'Android') {
+        document.addEventListener('backbutton', this.onBackKeyDown, false)
       }
+    },
+    reload() {
+      console.log('reload')
+      this.debug += 'reload; '
+
+      location.reload(false)
+    },
+    onPause() {
+      // Handle the pause lifecycle event.
+      console.log('pause')
+      this.debug += 'pause; '
+    },
+    onResume() {
+      // Handle the resume lifecycle event.
+      // SetTimeout required for iOS.
+      setTimeout(function() {
+        console.log('resume')
+        this.debug += 'resume; '
+      }, 0)
+    },
+    onBackKeyDown() {
+      // Handle the back-button event on Android. By default it will exit the app.
+      navigator.app.exitApp()
     }
   }
+}
 </script>
 
 <style>
-	body {
-    padding-top: constant(safe-area-inset-top);
-    padding-top: env(safe-area-inset-top);
-	}
-  .footer{ /* Apply this to v-bottom-nav if necessary. */
-    margin-bottom: constant(safe-area-inset-bottom);
-    margin-bottom: env(safe-area-inset-bottom);
-  }
+body {
+  padding-top: constant(safe-area-inset-top);
+  padding-top: env(safe-area-inset-top);
+}
+.footer {
+  /* Apply this to v-bottom-nav if necessary. */
+  margin-bottom: constant(safe-area-inset-bottom);
+  margin-bottom: env(safe-area-inset-bottom);
+}
 </style>

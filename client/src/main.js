@@ -10,17 +10,28 @@ import App from './App'
 import router from './router'
 
 // Steff
+import Logger from './services/logger'
+import en from './i18n/en'
+import nl from './i18n/nl'
 import 'font-awesome/css/font-awesome.min.css'
 import axios from 'axios'
 import store from './store'
 import moment from 'moment'
 import VueCookie from 'vue-cookie'
 
-Vue.use(Vuetify)
+// Components
+import MatchesCardList from './components/matches/CardList.vue'
+Vue.component('MatchesCardList', MatchesCardList)
+
+const logger = new Logger()
+Vue.use(Vuetify, {
+  lang: {
+    locales: { en, nl },
+    current: 'en'
+  }
+})
 Vue.use(VueCordova)
 Vue.use(VueHead)
-
-// Steff
 Vue.use(VueCookie)
 Vue.prototype.$axios = axios
 
@@ -39,22 +50,38 @@ if (token) {
   Vue.prototype.$axios.defaults.headers.common['Authorization'] = token
 }
 
+// Global request interceptor
+Vue.prototype.$axios.interceptors.request.use(
+  function(config) {
+    // Loader
+    store.commit('loader', true)
+
+    return config
+  },
+  function(error) {
+    // Loader
+    store.commit('loader', false)
+
+    return Promise.reject(error)
+  }
+)
+
 // Global response interceptor
 var statusCode0Count = 0
 Vue.prototype.$axios.interceptors.response.use(
-  function (response) {
+  function(response) {
     // Loader
     store.commit('loader', false)
 
     // Logging
     if (process.env.NODE_ENV === 'development') {
-      console.log(response.request.responseURL)
-      console.log(response.status, JSON.parse(JSON.stringify(response.data)))
+      logger.log(response.request.responseURL)
+      logger.log(response.status, response.data)
     }
 
     return response
   },
-  function (error) {
+  function(error) {
     // Loader
     store.commit('loader', false)
 
@@ -62,15 +89,17 @@ Vue.prototype.$axios.interceptors.response.use(
     if (error.request.status === 0 && statusCode0Count === 0) {
       statusCode0Count++
       // Custom response
-      error.response = {data: {error: {message: 'Can\'t connect to API.'}}}
+      error.response = {data: {error: {message: "Can't connect to API."}}}
       return Promise.reject(error.response.data.error)
     } else if (error.request.status === 0) {
       return Promise.resolve(error)
     }
 
     // Logging
-    if (error.request) console.log(error.request.responseURL)
-    if (error.response) console.log(error.response.status, JSON.parse(JSON.stringify(error.response.data)))
+    if (error.request) logger.log(error.request.responseURL)
+    if (error.response) {
+      logger.log(error.response.status, error.response.data)
+    }
 
     // Log out on unauthorized
     if (error.response && error.response.status === 401) {
@@ -88,7 +117,7 @@ router.beforeEach((to, from, next) => {
     if (!store.state.isAdmin) {
       next({
         name: 'Root',
-        query: { redirect: to.fullPath }
+        query: {redirect: to.fullPath}
       })
     } else {
       next()
@@ -97,7 +126,7 @@ router.beforeEach((to, from, next) => {
     if (!store.state.authenticated) {
       next({
         name: 'Root',
-        query: { redirect: to.fullPath }
+        query: {redirect: to.fullPath}
       })
     } else {
       next()
@@ -108,22 +137,22 @@ router.beforeEach((to, from, next) => {
 })
 
 // Global filters
-Vue.filter('formatDate', function (value) {
+Vue.filter('formatDate', function(value) {
   if (value) {
     return moment(String(value)).format('DD/MM/YYYY')
   }
 })
-Vue.filter('formatTime', function (value) {
+Vue.filter('formatTime', function(value) {
   if (value) {
     return moment(String(value)).format('HH:mm')
   }
 })
-Vue.filter('formatDateTime', function (value) {
+Vue.filter('formatDateTime', function(value) {
   if (value) {
     return moment(String(value)).format('DD/MM/YYYY HH:mm')
   }
 })
-Vue.filter('formatWebsite', function (value) {
+Vue.filter('formatWebsite', function(value) {
   if (value) {
     var websiteUrl = String(value)
       .toLocaleLowerCase()
@@ -136,7 +165,7 @@ Vue.filter('formatWebsite', function (value) {
     return websiteUrl
   }
 })
-Vue.filter('formatMoney', function (value) {
+Vue.filter('formatMoney', function(value) {
   if (value && typeof value === 'number') {
     if (value === 0) {
       return ''
@@ -162,12 +191,13 @@ new Vue({
   router,
   store,
   template: '<App/>',
-  components: { App },
+  components: {App},
   head: {
     meta: [
       {
         name: 'viewport',
-        content: 'width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover'
+        content:
+          'width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover'
       }
     ]
   }

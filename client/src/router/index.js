@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 // Pages
 const Dashboard = () => import('@/pages/Dashboard')
-const MatchesList = () => import('@/pages/matches/MatchesList')
+const Matches = () => import('@/pages/Matches')
 
 // Components (for testing)
 const Camera = () => import('@/components/Camera')
@@ -14,6 +14,7 @@ const PageNotFound = () => import('@/errors/PageNotFound')
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/components/camera',
@@ -23,7 +24,7 @@ export default new Router({
     {
       path: '/matches',
       name: 'Matches',
-      component: MatchesList
+      component: Matches
     },
     {
       path: '/',
