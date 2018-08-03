@@ -3,6 +3,7 @@ node_modules/
 dist/
 platforms/
 plugins/
+www/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
