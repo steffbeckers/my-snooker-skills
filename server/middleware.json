@@ -1,7 +1,7 @@
 {
   "initial:before": {
     "loopback#favicon": {
-      "params": "$!../client/www/static/img/icons/SnookerBall.png"
+      "params": "$!../client/www/img/icons/SnookerBall.png"
     }
   },
   "initial": {
