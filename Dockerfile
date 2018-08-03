@@ -8,6 +8,12 @@ RUN npm install
 
 COPY . /app
 
+WORKDIR /app/client
+
+RUN npm install && npm run build
+
+WORKDIR /app
+
 CMD NODE_ENV=production node server/server.js
 
 EXPOSE 3000
