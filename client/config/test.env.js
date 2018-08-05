@@ -1,11 +1,7 @@
 var merge = require('webpack-merge')
-var devEnv = require('./dev.env')
+var prodEnv = require('./prod.env')
 
-// Steff
-const moment = require('moment')
-
-module.exports = merge(devEnv, {
+module.exports = merge(prodEnv, {
   NODE_ENV: '"test"',
-  API: '"http://test.mysnookerskills.com/api"',
-  BUILD_DATETIME: '"' + moment().format('DD/MM/YYYY HH:mm:ss') + '"'
+  API: '"http://test.mysnookerskills.com/api"'
 })

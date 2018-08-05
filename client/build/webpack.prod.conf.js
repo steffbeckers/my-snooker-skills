@@ -94,11 +94,29 @@ var webpackConfig = merge(baseWebpackConfig, {
     ]),
     // service worker caching
     new SWPrecacheWebpackPlugin({
-      cacheId: 'my-vue-app',
+      cacheId: 'my-snooker-skills',
       filename: 'service-worker.js',
-      staticFileGlobs: ['dist/**/*.{js,html,css}'],
+      staticFileGlobs: ['dist/**/*.{js,html,css,png,jpg,woff,woff2,ttf}'],
       minify: true,
-      stripPrefix: 'dist/'
+      stripPrefix: 'dist/',
+      runtimeCaching: [
+        {
+          // Google fonts
+          urlPattern: new RegExp('https://fonts.'),
+          handler: 'cacheFirst',
+          options: {
+            cacheName: 'fonts'
+          }
+        },
+        {
+          // API
+          urlPattern: new RegExp('https://app.mysnookerskills.com/api'),
+          handler: 'networkFirst',
+          options: {
+            cacheName: 'api'
+          }
+        }
+      ]
     })
   ]
 })

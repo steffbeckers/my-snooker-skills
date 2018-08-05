@@ -5,6 +5,10 @@ import Router from 'vue-router'
 const Dashboard = () => import('@/pages/Dashboard')
 const Matches = () => import('@/pages/Matches')
 
+// Account
+const Register = () => import('@/pages/account/Register')
+const Login = () => import('@/pages/account/Login')
+
 // Components (for testing)
 const Camera = () => import('@/components/Camera')
 
@@ -25,6 +29,16 @@ export default new Router({
       path: '/matches',
       name: 'Matches',
       component: Matches
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: Register
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login
     },
     {
       path: '/',

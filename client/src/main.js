@@ -1,49 +1,37 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import 'vuetify/dist/vuetify.css'
+import 'font-awesome/css/font-awesome.min.css'
 import Vue from 'vue'
 import Vuetify from 'vuetify'
-import 'vuetify/dist/vuetify.css'
 import VueCordova from 'vue-cordova'
 import VueHead from 'vue-head'
+import VueCookie from 'vue-cookie'
 
 import App from './App'
 import router from './router'
+import store from './store'
+import axios from 'axios'
+import moment from 'moment'
 
-// Steff
-import Logger from './services/logger'
+// i18n
 import en from './i18n/en'
 import nl from './i18n/nl'
-import 'font-awesome/css/font-awesome.min.css'
-import axios from 'axios'
-import store from './store'
-import moment from 'moment'
-import VueCookie from 'vue-cookie'
+
+// Services
+import Logger from './services/logger'
+import Authentication from './services/authentication'
+import Authorization from './services/authorization'
 
 // Components
 import MatchesCardList from './components/matches/CardList.vue'
 Vue.component('MatchesCardList', MatchesCardList)
 
-const logger = new Logger()
-Vue.use(Vuetify, {
-  lang: {
-    locales: { en, nl },
-    current: 'en'
-  }
-})
 Vue.use(VueCordova)
 Vue.use(VueHead)
 Vue.use(VueCookie)
 Vue.prototype.$axios = axios
 
-// add cordova.js only if serving the app through file://
-if (window.location.protocol === 'file:' || window.location.port === '3000') {
-  var cordovaScript = document.createElement('script')
-  cordovaScript.setAttribute('type', 'text/javascript')
-  cordovaScript.setAttribute('src', 'cordova.js')
-  document.body.appendChild(cordovaScript)
-}
-
-// Steff
 // Set Authorization header, if token exists
 var token = Vue.cookie.get('$MySnookerSkills$token')
 if (token) {
@@ -75,8 +63,8 @@ Vue.prototype.$axios.interceptors.response.use(
 
     // Logging
     if (process.env.NODE_ENV === 'development') {
-      logger.log(response.request.responseURL)
-      logger.log(response.status, response.data)
+      Vue.prototype.$logger.log(response.request.responseURL)
+      Vue.prototype.$logger.log(response.status, response.data)
     }
 
     return response
@@ -96,9 +84,9 @@ Vue.prototype.$axios.interceptors.response.use(
     }
 
     // Logging
-    if (error.request) logger.log(error.request.responseURL)
+    if (error.request) Vue.prototype.$logger.log(error.request.responseURL)
     if (error.response) {
-      logger.log(error.response.status, error.response.data)
+      Vue.prototype.$logger.log(error.response.status, error.response.data)
     }
 
     // Log out on unauthorized
@@ -175,12 +163,29 @@ Vue.filter('formatMoney', function(value) {
   return ''
 })
 
+// Services
+Vue.prototype.$logger = new Logger()
+Vue.prototype.$authentication = new Authentication()
+Vue.prototype.$authorization = new Authorization()
+
+// add cordova.js only if serving the app through file://
+if (window.location.protocol === 'file:' || window.location.port === '3000') {
+  var cordovaScript = document.createElement('script')
+  cordovaScript.setAttribute('type', 'text/javascript')
+  cordovaScript.setAttribute('src', 'cordova.js')
+  document.body.appendChild(cordovaScript)
+}
+
 // Vuetify
 Vue.use(Vuetify, {
   theme: {
     primary: '#007bff',
     secondary: '#0D47A1',
     accent: '#D50000'
+  },
+  lang: {
+    locales: { en, nl },
+    current: 'en'
   }
 })
 Vue.config.productionTip = false

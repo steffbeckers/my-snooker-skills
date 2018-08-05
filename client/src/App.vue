@@ -22,11 +22,32 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar fixed app :clipped-left="clipped" color="primary white--text">
+    <v-toolbar fixed app :clipped-left="clipped" color="primary" class="white--text">
       <v-toolbar-side-icon class="white--text" @click.stop="$store.commit('drawer', !$store.state.drawer)"></v-toolbar-side-icon>
       <v-toolbar-title class="white--text mr-4" v-text="title"></v-toolbar-title>
       <v-spacer></v-spacer>
+      <!-- <v-text-field
+        flat
+        solo-inverted
+        prepend-icon="search"
+        label="Search"
+        class="hidden-sm-and-down"
+      ></v-text-field>
+      <v-spacer></v-spacer> -->
+      <v-toolbar-items
+        v-if="!$store.state.authenticated"
+      >
+        <v-btn class="white--text" :to="{ name: 'Register' }" flat>Register</v-btn>
+        <v-btn class="white--text" :to="{ name: 'Login' }" flat>Login</v-btn>
+      </v-toolbar-items>
+      <v-btn class="white--text" v-if="$store.state.authenticated" icon>
+        <v-icon>notifications</v-icon>
+      </v-btn>
+      <v-btn class="white--text" v-if="$store.state.authenticated" icon>
+        <v-icon>apps</v-icon>
+      </v-btn>
       <v-btn
+        v-if="$store.state.authenticated"
         class="white--text"
         icon
         light
@@ -39,6 +60,7 @@
       <router-view></router-view>
     </v-content>
     <v-navigation-drawer
+      v-if="$store.state.authenticated"
       :right="true"
       v-model="$store.state.rightDrawer"
       fixed
@@ -57,7 +79,7 @@
       :fixed="fixed"
       app
     >
-      <div id="buildInfo" class="ml-2">Last update: {{ buildDateTime }}</div>
+      <div id="buildInfo" class="ml-2">Last update: {{ buildDateTime }} - Version: {{ version }}</div>
       <div id="copyright" class="mr-2">&copy; <a href="https://steffbeckers.eu/">Steff</a></div>
     </v-footer>
   </v-app>
@@ -114,6 +136,7 @@ export default {
         }
       ],
       buildDateTime: process.env.BUILD_DATETIME,
+      version: process.env.VERSION,
       nodeEnv: process.env.NODE_ENV,
       title: 'My Snooker Skills'
     }

@@ -12,7 +12,7 @@
         <div class="title">Recent matches</div>
       </v-flex>
     </v-layout>
-    <MatchesCardList></MatchesCardList>
+    <MatchesCardList v-if="listType === 'cards'" :matches="matches"></MatchesCardList>
   </v-container>
 </template>
 
@@ -20,7 +20,47 @@
 export default {
   data() {
     return {
-      errors: []
+      errors: [],
+      matches: [],
+      listType: 'cards'
+    }
+  },
+  created() {
+    this.listMatches()
+  },
+  methods: {
+    listMatches() {
+      let filter = {
+        order: 'startDateTime DESC',
+        limit: 200,
+        include: [
+          {
+            relation: 'players',
+            scope: {
+              fields: {
+                id: true,
+                firstName: true,
+                lastName: true
+              }
+            }
+          },
+          {
+            relation: 'frames',
+            scope: {
+              order: 'startDateTime DESC'
+            }
+          }
+        ]
+      }
+
+      this.$axios
+        .get(process.env.API + '/Matches?filter=' + JSON.stringify(filter))
+        .then(response => {
+          this.matches = response.data
+        })
+        .catch(error => {
+          this.errors.unshift(error)
+        })
     }
   },
   name: 'Matches'
