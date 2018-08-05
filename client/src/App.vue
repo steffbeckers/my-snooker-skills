@@ -165,7 +165,6 @@ export default {
     onPause() {
       // Handle the pause lifecycle event.
       console.log('pause')
-      this.debug += 'pause; '
     },
     onResume() {
       // Handle the resume lifecycle event.
