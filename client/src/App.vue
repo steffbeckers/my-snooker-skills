@@ -116,7 +116,6 @@ export default {
   data() {
     return {
       cordova: Vue.cordova,
-      debug: '',
       clipped: false,
       fixed: true,
       sideMenuItems: [
@@ -158,8 +157,6 @@ export default {
     },
     reload() {
       console.log('reload')
-      this.debug += 'reload; '
-
       location.reload(false)
     },
     onPause() {
@@ -171,7 +168,6 @@ export default {
       // SetTimeout required for iOS.
       setTimeout(function() {
         console.log('resume')
-        this.debug += 'resume; '
       }, 0)
     },
     onBackKeyDown() {
