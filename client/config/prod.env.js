@@ -2,7 +2,7 @@ const moment = require('moment')
 
 module.exports = {
   NODE_ENV: '"production"',
-  API: '"http://app.mysnookerskills.com/api"',
+  API: '"https://app.mysnookerskills.com/api"',
   BUILD_DATETIME: '"' + moment().format('DD/MM/YYYY HH:mm:ss') + '"',
   VERSION: '"2.0 ALPHA"'
 }

@@ -3,5 +3,5 @@ var prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"test"',
-  API: '"http://test.mysnookerskills.com/api"'
+  API: '"https://test.mysnookerskills.com/api"'
 })
