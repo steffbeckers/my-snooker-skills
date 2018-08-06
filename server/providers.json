@@ -5,12 +5,12 @@
     "usernameField": "username",
     "passwordField": "password",
     "authPath": "/auth/local",
-    "successRedirect": "/account"
+    "successRedirect": "https://app.mysnookerskills.com/login"
   },
   "facebook-login": {
     "provider": "facebook",
     "module": "passport-facebook",
-    "profileFields": ["gender", "link", "locale", "name", "timezone", "verified", "email", "updated_time"],
+    "profileFields": ["link", "locale", "name", "timezone", "verified", "email", "updated_time"],
     "clientID": "1888929744484257",
     "clientSecret": "579712137a66c1b9a51822829f32814e",
     "callbackURL": "https://app.mysnookerskills.com/auth/facebook/callback",
@@ -61,8 +61,8 @@
     "provider": "google",
     "module": "passport-google-oauth",
     "strategy": "OAuth2Strategy",
-    "clientID": "{google-client-id-2}",
-    "clientSecret": "{google-client-secret-2}",
+    "clientID": "952649996308-pj8fa8uq6o3bgl86ikg8aap9oddoheeu.apps.googleusercontent.com",
+    "clientSecret": "v_pjzJYfSKOTgroewTaSSzpE",
     "callbackURL": "https://app.mysnookerskills.com/link/google/callback",
     "authPath": "/link/google",
     "callbackPath": "/link/google/callback",

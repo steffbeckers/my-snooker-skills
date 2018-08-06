@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import VueCookie from 'vue-cookie'
+
 export default {
   data() {
     return {
@@ -30,6 +32,9 @@ export default {
       userNameOrEmail: '',
       password: ''
     }
+  },
+  created() {
+    // TODO
   },
   methods: {
     login() {
