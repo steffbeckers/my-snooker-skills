@@ -8,7 +8,6 @@
       v-for="match in matches" :key="match.id"
     >
       <v-card>
-        {{ $vuetify.t('user.firstName') }}
         <v-card-title primary-title>
           <h3 class="headline">{{ match.startDateTime | formatDateTime }}<span v-if="match.endDateTime"> - {{ match.endDateTime | formatDateTime }}</span></h3>
         </v-card-title>
