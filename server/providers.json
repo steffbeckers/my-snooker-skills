@@ -16,7 +16,7 @@
     "callbackURL": "https://app.mysnookerskills.com/auth/facebook/callback",
     "authPath": "/auth/facebook",
     "callbackPath": "/auth/facebook/callback",
-    "successRedirect": "/account",
+    "successRedirect": "https://app.mysnookerskills.com/login",
     "scope": ["email"],
     "authOptions": {
       "display": "popup"
@@ -31,7 +31,7 @@
     "callbackURL": "https://app.mysnookerskills.com/auth/google/callback",
     "authPath": "/auth/google",
     "callbackPath": "/auth/google/callback",
-    "successRedirect": "account",
+    "successRedirect": "https://app.mysnookerskills.com/login",
     "scope": ["email", "profile"]
   },
   "twitter-login": {
@@ -41,7 +41,7 @@
     "callbackURL": "https://app.mysnookerskills.com/auth/twitter/callback",
     "authPath": "/auth/twitter",
     "callbackPath": "/auth/twitter/callback",
-    "successRedirect": "/account",
+    "successRedirect": "https://app.mysnookerskills.com/login",
     "consumerKey": "{twitter-consumer-key}",
     "consumerSecret": "{twitter-consumer-secret}"
   },
@@ -53,7 +53,7 @@
     "callbackURL": "https://app.mysnookerskills.com/link/facebook/callback",
     "authPath": "/link/facebook",
     "callbackPath": "/link/facebook/callback",
-    "successRedirect": "/account",
+    "successRedirect": "https://app.mysnookerskills.com/account",
     "scope": ["email", "user_likes"],
     "link": true
   },
@@ -66,7 +66,7 @@
     "callbackURL": "https://app.mysnookerskills.com/link/google/callback",
     "authPath": "/link/google",
     "callbackPath": "/link/google/callback",
-    "successRedirect": "/account",
+    "successRedirect": "https://app.mysnookerskills.com/account",
     "scope": ["email", "profile"],
     "link": true
   }
