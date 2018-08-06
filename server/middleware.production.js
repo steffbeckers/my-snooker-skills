@@ -4,12 +4,15 @@ module.exports = {
   "final:after": {
     "strong-error-handler": {}
   },
-  "express-history-api-fallback": {
-    params: [
-      "index.html",
-      {
-        root: "$!../client/www"
-      }
-    ]
+  "final": {
+    "loopback#urlNotFound": {},
+    "express-history-api-fallback": {
+      params: [
+        "index.html",
+        {
+          root: "$!../client/www"
+        }
+      ]
+    }
   }
 };
