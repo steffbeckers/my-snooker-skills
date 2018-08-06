@@ -21,6 +21,7 @@
     "cors": "^2.5.2",
     "ejs": "^2.6.1",
     "elasticsearch": "^15.1.1",
+    "express-history-api-fallback": "^2.2.1",
     "helmet": "^3.13.0",
     "http-status": "^1.2.0",
     "lodash": "^4.17.10",
