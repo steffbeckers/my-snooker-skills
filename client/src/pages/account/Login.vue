@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import VueCookie from 'vue-cookie'
+// import VueCookie from 'vue-cookie'
 
 export default {
   data() {
