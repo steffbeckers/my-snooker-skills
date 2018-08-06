@@ -5,7 +5,6 @@ module.exports = {
     "strong-error-handler": {}
   },
   "final": {
-    "loopback#urlNotFound": {},
     "express-history-api-fallback": {
       params: [
         "index.html",
@@ -13,6 +12,7 @@ module.exports = {
           root: "$!../client/www"
         }
       ]
-    }
+    },
+    "loopback#urlNotFound": {}
   }
 };

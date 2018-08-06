@@ -48,8 +48,8 @@
     }
   },
   "final": {
-    "loopback#urlNotFound": {},
-    "express-history-api-fallback": {}
+    "express-history-api-fallback": {},
+    "loopback#urlNotFound": {}
   },
   "final:after": {
     "strong-error-handler": {
