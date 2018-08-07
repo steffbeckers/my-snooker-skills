@@ -178,11 +178,6 @@ if (window.location.protocol === 'file:' || window.location.port === '3000') {
 
 // Vuetify
 Vue.use(Vuetify, {
-  theme: {
-    primary: '#007bff',
-    secondary: '#0D47A1',
-    accent: '#D50000'
-  },
   lang: {
     locales: { en, nl },
     current: 'en'
