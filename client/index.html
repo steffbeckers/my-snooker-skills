@@ -27,6 +27,31 @@
           if (file.match(/\.(js|css)$/)) { %>
     <link rel="<%= chunk.initial?'preload':'prefetch' %>" href="<%= htmlWebpackPlugin.files.publicPath + file %>" as="<%= file.match(/\.css$/)?'style':'script' %>"><% }}} %>
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
+    <style type="text/css">
+      .google-fab {
+        background-color: #ffffff!important;
+      }
+      .google-fab img {
+        max-width: 24px;
+        max-height: 24px;
+      }
+
+      .facebook-fab {
+        background-color: #4267b2!important;
+      }
+      .facebook-fab img {
+        max-width: 24px;
+        max-height: 24px;
+      }
+
+      .twitter-fab {
+        background-color: #62a9e0!important;
+      }
+      .twitter-fab img {
+        max-width: 24px;
+        max-height: 24px;
+      }
+    </style>
   </head>
   <body>
     <noscript>

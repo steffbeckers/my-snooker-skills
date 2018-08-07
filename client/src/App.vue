@@ -24,7 +24,17 @@
     </v-navigation-drawer>
     <v-toolbar fixed app :clipped-left="clipped" color="primary" class="white--text">
       <v-toolbar-side-icon class="white--text" @click.stop="$store.commit('drawer', !$store.state.drawer)"></v-toolbar-side-icon>
-      <v-toolbar-title class="white--text mr-4" v-text="title"></v-toolbar-title>
+      <img class="ml-2" src="static/img/icons/SnookerBall-48px.png" alt="Logo" width="25" height="25" />
+      <v-toolbar-title :to="{ name: 'Dashboard' }" exact class="white--text ml-3 mr-4">
+        {{ title }}
+      </v-toolbar-title>
+      <v-toolbar-items
+        v-if="$vuetify.breakpoint.mdAndUp"
+      >
+        <v-btn class="white--text" :to="{ name: 'Matches' }" exact flat>Matches</v-btn>
+        <v-btn class="white--text" exact flat>Tournaments</v-btn>
+        <v-btn class="white--text" exact flat>Players</v-btn>
+      </v-toolbar-items>
       <v-spacer></v-spacer>
       <!-- <v-text-field
         flat
@@ -35,10 +45,16 @@
       ></v-text-field>
       <v-spacer></v-spacer> -->
       <v-toolbar-items
-        v-if="!$store.state.authenticated"
+        v-if="!$store.state.authenticated && $vuetify.breakpoint.smAndUp"
       >
-        <v-btn class="white--text" :to="{ name: 'Register' }" flat>Register</v-btn>
-        <v-btn class="white--text" :to="{ name: 'Login' }" flat>Login</v-btn>
+        <v-btn class="white--text" :to="{ name: 'Register' }" exact flat><v-icon class="mr-2">person_add</v-icon>Register</v-btn>
+        <v-btn class="white--text" :to="{ name: 'Login' }" exact flat><v-icon class="mr-2">exit_to_app</v-icon>Login</v-btn>
+      </v-toolbar-items>
+      <v-toolbar-items
+        v-if="!$store.state.authenticated && $vuetify.breakpoint.xs"
+      >
+        <v-btn class="white--text" :to="{ name: 'Register' }" exact icon><v-icon>person_add</v-icon></v-btn>
+        <v-btn class="white--text" :to="{ name: 'Login' }" exact icon><v-icon>exit_to_app</v-icon></v-btn>
       </v-toolbar-items>
       <v-btn class="white--text" v-if="$store.state.authenticated" icon>
         <v-icon>notifications</v-icon>

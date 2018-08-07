@@ -3,9 +3,6 @@
 var app = require('../../server/server');
 var path = require('path');
 var qs = require('querystring');
-var ObjectId = require('mongodb').ObjectId;
-
-var senderAddress = 'steff@steffbeckers.eu';
 
 module.exports = function(UserModel) {
   // Send verification email after registration
@@ -17,7 +14,7 @@ module.exports = function(UserModel) {
       port: app.get('port') || 3000,
       type: 'email',
       to: userInstance.email,
-      from: senderAddress,
+      from: 'registration@mysnookerskills.com',
       subject: 'My Snooker Skills - Thanks for registering',
       template: path.join(
         __dirname,
@@ -67,7 +64,7 @@ module.exports = function(UserModel) {
 
     UserModel.app.models.Email.send({
       to: info.email,
-      from: senderAddress,
+      from: 'account@mysnookerskills.com',
       subject: 'My Snooker Skills - Reset password',
       html: html,
     }, function(err) {
@@ -109,7 +106,7 @@ module.exports = function(UserModel) {
           port: app.get('port') || 3000,
           type: 'email',
           to: user.email,
-          from: senderAddress,
+          from: 'registration@mysnookerskills.com',
           subject: 'My Snooker Skills - Thanks for registering',
           template: path.join(
             __dirname,
