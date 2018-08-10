@@ -19,3 +19,4 @@ npm-debug.log
 .vs/
 server/*.local.js
 server/*.local.json
+client/config/dev.env.js
