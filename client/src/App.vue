@@ -24,13 +24,11 @@
     </v-navigation-drawer>
     <v-toolbar fixed app :clipped-left="clipped" color="primary" class="white--text">
       <v-toolbar-side-icon class="white--text" @click.stop="$store.commit('drawer', !$store.state.drawer)"></v-toolbar-side-icon>
-      <img class="ml-2" src="static/img/icons/SnookerBall-48px.png" alt="Logo" width="25" height="25" />
+      <img class="ml-2" src="img/icons/SnookerBall-48px.png" alt="Logo" width="25" height="25" />
       <v-toolbar-title :to="{ name: 'Dashboard' }" exact class="white--text ml-3 mr-4">
         {{ title }}
       </v-toolbar-title>
-      <v-toolbar-items
-        v-if="$vuetify.breakpoint.mdAndUp"
-      >
+      <v-toolbar-items v-if="$vuetify.breakpoint.mdAndUp">
         <v-btn class="white--text" :to="{ name: 'Matches' }" exact flat>Matches</v-btn>
         <v-btn class="white--text" exact flat>Tournaments</v-btn>
         <v-btn class="white--text" exact flat>Players</v-btn>
