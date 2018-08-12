@@ -5,7 +5,7 @@
     "usernameField": "username",
     "passwordField": "password",
     "authPath": "/auth/local",
-    "successRedirect": "https://app.mysnookerskills.com/login"
+    "successRedirect": "https://app.mysnookerskills.com/account"
   },
   "facebook-login": {
     "provider": "facebook",
@@ -16,7 +16,7 @@
     "callbackURL": "https://app.mysnookerskills.com/auth/facebook/callback",
     "authPath": "/auth/facebook",
     "callbackPath": "/auth/facebook/callback",
-    "successRedirect": "https://app.mysnookerskills.com/login",
+    "successRedirect": "https://app.mysnookerskills.com/account",
     "scope": ["email"],
     "authOptions": {
       "display": "popup"
@@ -31,7 +31,7 @@
     "callbackURL": "https://app.mysnookerskills.com/auth/google/callback",
     "authPath": "/auth/google",
     "callbackPath": "/auth/google/callback",
-    "successRedirect": "https://app.mysnookerskills.com/login",
+    "successRedirect": "https://app.mysnookerskills.com/account",
     "scope": ["email", "profile"]
   },
   "twitter-login": {
@@ -41,7 +41,7 @@
     "callbackURL": "https://app.mysnookerskills.com/auth/twitter/callback",
     "authPath": "/auth/twitter",
     "callbackPath": "/auth/twitter/callback",
-    "successRedirect": "https://app.mysnookerskills.com/login",
+    "successRedirect": "https://app.mysnookerskills.com/account",
     "consumerKey": "LUUO4Js2bfidabZkiD0e9QSBe",
     "consumerSecret": "c3SfkLmR78TtoPIb9UgeLWlZjwEllLerLOIc296ilZMX8ZQGQ2"
   },

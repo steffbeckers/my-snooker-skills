@@ -96,9 +96,9 @@ var webpackConfig = merge(baseWebpackConfig, {
     new SWPrecacheWebpackPlugin({
       cacheId: 'my-snooker-skills',
       filename: 'service-worker.js',
-      staticFileGlobs: ['dist/**/*.{js,html,css,png,jpg,woff,woff2,ttf}'],
+      staticFileGlobs: ['www/**/*.{js,html,css,png,jpg,woff,woff2,ttf}'],
       minify: true,
-      stripPrefix: 'dist/',
+      stripPrefix: 'www/',
       runtimeCaching: [
         {
           // Google fonts
