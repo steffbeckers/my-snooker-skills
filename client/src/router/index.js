@@ -6,6 +6,7 @@ const Dashboard = () => import('@/pages/Dashboard')
 const Matches = () => import('@/pages/Matches')
 
 // Account
+const Account = () => import('@/pages/account/Account')
 const Register = () => import('@/pages/account/Register')
 const Login = () => import('@/pages/account/Login')
 
@@ -20,15 +21,23 @@ Vue.use(Router)
 export default new Router({
   mode: 'history',
   routes: [
+    // Tools
     {
       path: '/components/camera',
       name: 'CameraComponent',
       component: Camera
     },
+    // Matches
     {
       path: '/matches',
       name: 'Matches',
       component: Matches
+    },
+    // Account
+    {
+      path: '/account',
+      name: 'Account',
+      component: Account
     },
     {
       path: '/register',
@@ -40,6 +49,7 @@ export default new Router({
       name: 'Login',
       component: Login
     },
+    // Root
     {
       path: '/',
       name: 'Root',

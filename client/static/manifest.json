@@ -1,14 +1,14 @@
 {
-  "name": "MySnookerSkills",
+  "name": "My Snooker Skills",
   "short_name": "Snooker",
   "icons": [
     {
-      "src": "img/icons/android-chrome-192x192.png",
+      "src": "img/icons/SnookerBall-192px.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "img/icons/android-chrome-512x512.png",
+      "src": "img/icons/SnookerBall-512px.png",
       "sizes": "512x512",
       "type": "image/png"
     }
