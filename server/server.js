@@ -42,7 +42,7 @@ boot(app, __dirname, function(err) {
 // Build the providers/passport config
 var config = {};
 try {
-  config = require('./providers.json');
+  config = require('./providers' + (process.env.NODE_ENV === 'local' ? '.local' : '') + '.json');
 } catch (err) {
   console.trace(err);
   process.exit(1); // fatal
