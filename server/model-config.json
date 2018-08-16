@@ -20,16 +20,20 @@
   "Email": {
     "dataSource": "email"
   },
-  "User": {
-    "dataSource": "mongodb",
-    "public": false
-  },
-  "UserModel": {
+  "user": {
     "dataSource": "mongodb",
     "public": true,
     "options": {
       "emailVerificationRequired": true
     }
+  },
+  "userCredential": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "userIdentity": {
+    "dataSource": "mongodb",
+    "public": false
   },
   "AccessToken": {
     "dataSource": "mongodb",
@@ -50,15 +54,7 @@
     "dataSource": "mongodb",
     "public": false
   },
-  "ApplicationCredential": {
-    "dataSource": "mongodb",
-    "public": true
-  },
-  "UserCredential": {
-    "dataSource": "mongodb",
-    "public": true
-  },
-  "UserIdentity": {
+  "Subscription": {
     "dataSource": "mongodb",
     "public": true
   },
@@ -91,10 +87,6 @@
     "public": true
   },
   "Break": {
-    "dataSource": "mongodb",
-    "public": true
-  },
-  "Subscription": {
     "dataSource": "mongodb",
     "public": true
   }

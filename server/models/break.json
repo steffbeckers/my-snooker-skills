@@ -33,19 +33,19 @@
   },
   "validations": [],
   "relations": {
-    "userModel": {
+    "user": {
       "type": "belongsTo",
-      "model": "UserModel",
+      "model": "user",
       "foreignKey": "ownerId"
     },
     "createdByUser": {
       "type": "belongsTo",
-      "model": "UserModel",
+      "model": "user",
       "foreignKey": "createdBy"
     },
     "updatedByUser": {
       "type": "belongsTo",
-      "model": "UserModel",
+      "model": "user",
       "foreignKey": "updatedBy"
     },
     "frame": {
@@ -54,7 +54,7 @@
     },
     "player": {
       "type": "belongsTo",
-      "model": "UserModel"
+      "model": "user"
     }
   },
   "acls": [

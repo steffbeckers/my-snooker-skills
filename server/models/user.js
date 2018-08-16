@@ -4,10 +4,10 @@ var app = require('../../server/server');
 var path = require('path');
 var qs = require('querystring');
 
-module.exports = function(UserModel) {
+module.exports = function(user) {
   // Send verification email after registration
-  UserModel.afterRemote('create', function(ctx, userInstance, next) {
-    console.log('> UserModel.afterRemote.create triggered');
+  user.afterRemote('create', function(ctx, userInstance, next) {
+    console.log('> user.afterRemote.create triggered');
 
     var options = {
       host: app.get('host') || '0.0.0.0',
@@ -35,7 +35,7 @@ module.exports = function(UserModel) {
     userInstance.verify(options, function(err, response) {
       if (err) {
         console.log('> Error verifying, deleting user');
-        UserModel.deleteById(userInstance.id);
+        user.deleteById(userInstance.id);
         return next(err);
       }
 
@@ -46,8 +46,8 @@ module.exports = function(UserModel) {
   });
 
   // Send password reset email
-  UserModel.on('resetPasswordRequest', function(info) {
-    console.log('> UserModel.on.resetPasswordRequest triggered');
+  user.on('resetPasswordRequest', function(info) {
+    console.log('> user.on.resetPasswordRequest triggered');
     console.log('> info');
     console.log(info);
 
@@ -62,7 +62,7 @@ module.exports = function(UserModel) {
     html += '</a>';
     html += '</p>';
 
-    UserModel.app.models.Email.send({
+    user.app.models.Email.send({
       to: info.email,
       from: 'account@mysnookerskills.com',
       subject: 'My Snooker Skills - Reset password',
@@ -74,8 +74,8 @@ module.exports = function(UserModel) {
   });
 
   // Resend verification email
-  UserModel.resendVerificationEmail = function(usernameOrEmail, cb) {
-    console.log('> UserModel.resendVerificationEmail triggered');
+  user.resendVerificationEmail = function(usernameOrEmail, cb) {
+    console.log('> user.resendVerificationEmail triggered');
 
     var isEmailAddress = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(usernameOrEmail);
 
@@ -88,24 +88,24 @@ module.exports = function(UserModel) {
     }
 
     // Find the user by username or email address
-    UserModel.findOne(filter, function(err, user) {
+    user.findOne(filter, function(err, userInstance) {
       if (err) {
         console.log('> Error identifying user by username or email address');
         return cb(err);
       }
 
       // If there is no user found
-      if (user == null) {
+      if (userInstance == null) {
         return cb(null, {code: 'USERNAME_OR_EMAIL_NOT_FOUND'});
       }
 
       // If the user isn't verified already resend a verification email
-      if (!user.emailVerified) {
+      if (!userInstance.emailVerified) {
         var options = {
           host: app.get('host') || '0.0.0.0',
           port: app.get('port') || 3000,
           type: 'email',
-          to: user.email,
+          to: userInstance.email,
           from: 'registration@mysnookerskills.com',
           subject: 'My Snooker Skills - Thanks for registering',
           template: path.join(
@@ -118,9 +118,9 @@ module.exports = function(UserModel) {
             'verify.ejs'
           ),
           redirect: null,
-          user: user,
+          user: userInstance,
           verifyHref: app.get('confirmHrefApp') + '?' + qs.stringify({
-            uid: String(user.id),
+            uid: String(userInstance.id),
           }),
         };
 
@@ -139,7 +139,7 @@ module.exports = function(UserModel) {
       }
     });
   };
-  UserModel.remoteMethod(
+  user.remoteMethod(
     'resendVerificationEmail',
     {
       http: {path: '/resendVerificationEmailTo/:usernameOrEmail', verb: 'post'},
@@ -153,8 +153,8 @@ module.exports = function(UserModel) {
   );
 
   // Include roles, remove fields on login
-  UserModel.afterRemote('login', function(ctx, userInstance, next) {
-    console.log('> UserModel.afterRemote.login triggered');
+  user.afterRemote('login', function(ctx, userInstance, next) {
+    console.log('> user.afterRemote.login triggered');
 
     var resultJSON = ctx.result.toJSON();
 
@@ -169,8 +169,8 @@ module.exports = function(UserModel) {
       },
       include: 'roles',
     };
-    UserModel.findById(ctx.result.userId, filter, function(err, user) {
-      var userJSON = user.toJSON();
+    user.findById(ctx.result.userId, filter, function(err, userInstance) {
+      var userJSON = userInstance.toJSON();
       // Simplify roles in string array
       var simpleRoleArray = [];
       userJSON.roles.forEach(role => {
@@ -186,7 +186,7 @@ module.exports = function(UserModel) {
   });
 
   // Search a by fullname or username
-  UserModel.searchByFullnameOrUsername = function(name, cb) {
+  user.searchByFullnameOrUsername = function(name, cb) {
     var filter = {};
 
     if (name === '' || name == null || name == undefined) {
@@ -220,32 +220,30 @@ module.exports = function(UserModel) {
       };
     }
 
-    UserModel.find(filter, function(err, users) {
+    user.find(filter, function(err, users) {
       cb(null, users);
     });
   };
-  UserModel.remoteMethod('searchByFullnameOrUsername',
-    {
+  user.remoteMethod('searchByFullnameOrUsername', {
+    http: {
+      path: '/searchByFullnameOrUsername',
+      verb: 'get',
+    },
+    accepts: {
+      arg: 'name',
+      type: 'string',
       http: {
-        path: '/searchByFullnameOrUsername',
-        verb: 'get',
+        source: 'query',
       },
-      accepts: {
-        arg: 'name',
-        type: 'string',
-        http: {
-          source: 'query',
-        },
-      },
-      returns: {
-        type: 'array',
-        root: true,
-      },
-    }
-  );
+    },
+    returns: {
+      type: 'array',
+      root: true,
+    },
+  });
 
   // List players, with filter
-  UserModel.listPlayers = function(orderBy, orderDirection, skip, take, cb) {
+  user.listPlayers = function(orderBy, orderDirection, skip, take, cb) {
     // Check on input
     if (orderBy !== 'firstName' && orderBy !== 'lastName') {
       orderBy = 'firstName';
@@ -267,57 +265,55 @@ module.exports = function(UserModel) {
       limit: take,
     };
 
-    UserModel.find(filter, function(err, users) {
+    user.find(filter, function(err, users) {
       cb(null, users);
     });
   };
-  UserModel.remoteMethod('listPlayers',
-    {
-      http: {
-        path: '/listPlayers',
-        verb: 'get',
+  user.remoteMethod('listPlayers', {
+    http: {
+      path: '/listPlayers',
+      verb: 'get',
+    },
+    accepts: [
+      {
+        arg: 'orderBy',
+        type: 'string',
+        http: {
+          source: 'query',
+        },
       },
-      accepts: [
-        {
-          arg: 'orderBy',
-          type: 'string',
-          http: {
-            source: 'query',
-          },
+      {
+        arg: 'orderDirection',
+        type: 'string',
+        http: {
+          source: 'query',
         },
-        {
-          arg: 'orderDirection',
-          type: 'string',
-          http: {
-            source: 'query',
-          },
-        },
-        {
-          arg: 'skip',
-          type: 'number',
-          http: {
-            source: 'query',
-          },
-        },
-        {
-          arg: 'take',
-          type: 'number',
-          http: {
-            source: 'query',
-          },
-        },
-      ],
-      returns: {
-        type: 'array',
-        root: true,
       },
-    }
-  );
+      {
+        arg: 'skip',
+        type: 'number',
+        http: {
+          source: 'query',
+        },
+      },
+      {
+        arg: 'take',
+        type: 'number',
+        http: {
+          source: 'query',
+        },
+      },
+    ],
+    returns: {
+      type: 'array',
+      root: true,
+    },
+  });
 
   // Statistics
   // Refresh calculations (MapReduces, ..)
-  // UserModel.calculateStatistics = function(cb) {
-  //   UserModel.getDataSource().connector.connect((err, db) => {
+  // user.calculateStatistics = function(cb) {
+  //   user.getDataSource().connector.connect((err, db) => {
   //     // Error
   //     if (err != null) { return cb(err, null); };
 
@@ -336,7 +332,7 @@ module.exports = function(UserModel) {
   //         return Array.sum(count);
   //       },
   //       {
-  //         out: {merge: 'UserModel'},
+  //         out: {merge: 'user'},
   //         finalize: function(key, reducedVal) {
   //           return {framesWon: reducedVal};
   //         },
@@ -379,7 +375,7 @@ module.exports = function(UserModel) {
   //     // );
   //   });
   // };
-  // UserModel.remoteMethod('calculateStatistics',
+  // user.remoteMethod('calculateStatistics',
   //   {
   //     http: {path: '/statistics', verb: 'get'},
   //     returns: {type: 'object', root: true},
@@ -387,7 +383,7 @@ module.exports = function(UserModel) {
   // );
 
   // // Get statistics of user
-  // UserModel.statistics = function(id, cb) {
+  // user.statistics = function(id, cb) {
   //   // Check on input
   //   if (!ObjectId.isValid(id)) {
   //     return cb(null, {error: 'Invalid User ID'});
@@ -395,7 +391,7 @@ module.exports = function(UserModel) {
 
   //   var stats = {};
 
-  //   UserModel.getDataSource().connector.connect((err, db) => {
+  //   user.getDataSource().connector.connect((err, db) => {
   //     // Matches Played
   //     db.collection('MatchUserModel').count({userModelId: id}, function(err, matchesPlayed) {
   //       stats.matchesPlayed = matchesPlayed || 0;
@@ -420,7 +416,7 @@ module.exports = function(UserModel) {
   //     });
   //   });
   // };
-  // UserModel.remoteMethod('statistics',
+  // user.remoteMethod('statistics',
   //   {
   //     http: {path: '/:id/statistics', verb: 'get'},
   //     accepts: {arg: 'id', type: 'string'},

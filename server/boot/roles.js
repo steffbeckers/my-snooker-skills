@@ -5,7 +5,7 @@ var ObjectId = require('mongodb').ObjectId;
 module.exports = function(app) {
   var Role = app.models.Role;
   var RoleMapping = app.models.RoleMapping;
-  var UserModel = app.models.UserModel;
+  var user = app.models.user;
 
   Role.registerResolver('matchPlayer', function(role, context, cb) {
     // Q: Is the current request accessing a Match?
@@ -162,9 +162,9 @@ module.exports = function(app) {
   });
 
   // Role relations
-  RoleMapping.belongsTo(UserModel);
-  UserModel.hasMany(RoleMapping, {foreignKey: 'principalId'});
-  Role.hasMany(UserModel, {through: RoleMapping, foreignKey: 'roleId'});
+  RoleMapping.belongsTo(user);
+  user.hasMany(RoleMapping, {foreignKey: 'principalId'});
+  Role.hasMany(user, {through: RoleMapping, foreignKey: 'roleId'});
 
   // Administrators
   // Role.create({

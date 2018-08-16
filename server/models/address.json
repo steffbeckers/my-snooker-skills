@@ -33,7 +33,7 @@
     },
     "user": {
       "type": "belongsTo",
-      "model": "UserModel"
+      "model": "user"
     }
   },
   "acls": [],

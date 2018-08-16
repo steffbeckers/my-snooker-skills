@@ -32,7 +32,7 @@
     },
     "players": {
       "type": "hasMany",
-      "model": "UserModel"
+      "model": "user"
     },
     "teams": {
       "type": "hasMany",

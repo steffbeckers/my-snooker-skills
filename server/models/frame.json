@@ -45,19 +45,19 @@
   },
   "validations": [],
   "relations": {
-    "userModel": {
+    "user": {
       "type": "belongsTo",
-      "model": "UserModel",
+      "model": "user",
       "foreignKey": "ownerId"
     },
     "createdByUser": {
       "type": "belongsTo",
-      "model": "UserModel",
+      "model": "user",
       "foreignKey": "createdBy"
     },
     "updatedByUser": {
       "type": "belongsTo",
-      "model": "UserModel",
+      "model": "user",
       "foreignKey": "updatedBy"
     },
     "match": {
@@ -66,23 +66,23 @@
     },
     "players": {
       "type": "hasAndBelongsToMany",
-      "model": "UserModel"
+      "model": "user"
     },
     "breakOffBy": {
       "type": "belongsTo",
-      "model": "UserModel"
+      "model": "user"
     },
     "tossWonBy": {
       "type": "belongsTo",
-      "model": "UserModel"
+      "model": "user"
     },
     "turnOf": {
       "type": "belongsTo",
-      "model": "UserModel"
+      "model": "user"
     },
     "winner": {
       "type": "belongsTo",
-      "model": "UserModel"
+      "model": "user"
     },
     "breaks": {
       "type": "hasMany",
@@ -90,7 +90,7 @@
     },
     "referee": {
       "type": "belongsTo",
-      "model": "UserModel"
+      "model": "user"
     }
   },
   "acls": [
