@@ -1,12 +1,12 @@
 {
   "name": "user",
   "base": "User",
-  "mongodb": {
-    "collection": "User"
-  },
   "idInjection": true,
   "options": {
     "validateUpsert": true
+  },
+  "mongodb": {
+    "collection": "User"
   },
   "mixins": {
     "TimeStamp": {

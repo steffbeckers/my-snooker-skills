@@ -89,5 +89,9 @@
   "Break": {
     "dataSource": "mongodb",
     "public": true
+  },
+  "Setting": {
+    "dataSource": "mongodb",
+    "public": false
   }
 }
