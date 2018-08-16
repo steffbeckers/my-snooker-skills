@@ -35,7 +35,7 @@
     "dataSource": "mongodb",
     "public": false
   },
-  "AccessToken": {
+  "accessToken": {
     "dataSource": "mongodb",
     "public": false
   },

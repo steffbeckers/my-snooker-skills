@@ -10,8 +10,10 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "start": "npm run kill && forever -l forever.log -o output.log -e error.log --minUptime 3000 --spinSleepTime 3000 --verbose --uid \"snooker\" --watch --watchIgnore client/ server/server.js",
+    "start": "node .",
+    "forever": "npm run kill && forever -l forever.log -o output.log -e error.log --minUptime 3000 --spinSleepTime 3000 --verbose --uid \"snooker\" --watch --watchIgnore client/ server/server.js",
     "posttest": "npm run lint && nsp check",
+    "console": "loopback-console",
     "kill": "powershell.exe If (Get-NetTCPConnection -LocalPort 3000) { Stop-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess -Force }"
   },
   "dependencies": {
@@ -31,6 +33,7 @@
     "loopback-component-passport": "^3.10.0",
     "loopback-component-storage": "^3.5.0",
     "loopback-connector-mongodb": "^3.5.0",
+    "loopback-console": "^1.1.0",
     "loopback-ds-timestamp-mixin": "^3.4.1",
     "loopback-softdelete-mixin3": "0.0.12",
     "loopback-softdelete-mixin4": "^1.0.8",

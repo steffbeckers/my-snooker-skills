@@ -1,8 +1,8 @@
 {
-  "name": "userCredential",
-  "base": "UserCredential",
+  "name": "accessToken",
+  "base": "AccessToken",
   "mongodb": {
-    "collection": "UserCredential"
+    "collection": "AccessToken"
   },
   "properties": {},
   "validations": [],

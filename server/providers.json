@@ -32,7 +32,29 @@
     "authPath": "/auth/google",
     "callbackPath": "/auth/google/callback",
     "successRedirect": "https://app.mysnookerskills.com/account",
-    "scope": ["email", "profile"]
+    "scope": ["email", "profile"],
+    "profileMapping": [
+      {
+        "userField": "firstName",
+        "providerField": "name.givenName"
+      },
+      {
+        "userField": "lastName",
+        "providerField": "name.givenName"
+      },
+      {
+        "userField": "username",
+        "providerField": "displayName"
+      },
+      {
+        "userField": "email",
+        "providerField": "emails[0].value"
+      },
+      {
+        "userField": "profilePicture",
+        "providerField": "photos[0].value"
+      }
+    ]
   },
   "twitter-login": {
     "provider": "twitter",
@@ -68,6 +90,28 @@
     "callbackPath": "/link/google/callback",
     "successRedirect": "https://app.mysnookerskills.com/account",
     "scope": ["email", "profile"],
+    "profileMapping": [
+      {
+        "userField": "firstName",
+        "providerField": "name.givenName"
+      },
+      {
+        "userField": "lastName",
+        "providerField": "name.givenName"
+      },
+      {
+        "userField": "username",
+        "providerField": "displayName"
+      },
+      {
+        "userField": "email",
+        "providerField": "emails[0].value"
+      },
+      {
+        "userField": "profilePicture",
+        "providerField": "photos[0].value"
+      }
+    ],
     "link": true
   }
 }

@@ -32,12 +32,12 @@ module.exports = function enableLogging(server) {
         // Request
         // Params
         if (req) {
-          console.log('REQUEST: ', req);
+          // console.log('REQUEST: ', req);
         }
 
         // Response
         if (req && req.remotingContext && req.remotingContext.result) {
-          console.log('RESPONSE: ', req.remotingContext.result);
+          console.log('ERROR RESPONSE: ', req.remotingContext.result);
         }
       }
     });
