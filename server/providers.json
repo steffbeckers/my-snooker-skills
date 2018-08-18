@@ -40,7 +40,7 @@
       },
       {
         "userField": "lastName",
-        "providerField": "name.givenName"
+        "providerField": "name.familyName"
       },
       {
         "userField": "username",
@@ -97,7 +97,7 @@
       },
       {
         "userField": "lastName",
-        "providerField": "name.givenName"
+        "providerField": "name.familyName"
       },
       {
         "userField": "username",

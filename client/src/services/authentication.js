@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 export default class Authentication {
   isAuthenticated() {
     // TODO
@@ -5,7 +7,7 @@ export default class Authentication {
 
   login(usernameOrEmail, password) {
     this.$axios
-      .post(process.env.API + '/UserModels/login', { email: this.email })
+      .post(process.env.API + '/Users/login', { email: this.email })
       .then(response => {
         // Show message
         if (response.data.code === 'AUTH_EMAIL_SENT') {
@@ -23,12 +25,16 @@ export default class Authentication {
           })
         }
       })
-      .catch(() => {
-        this.emailError = true
-      })
   }
 
   logout() {
     // TODO
+  }
+
+  me() {
+    return Vue.prototype.$axios.get(process.env.API + '/Users/me')
+      .then(user => {
+        return user.data
+      })
   }
 }

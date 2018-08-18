@@ -162,21 +162,27 @@ module.exports = function(user) {
     var filter = {
       fields: {
         emailVerified: false,
-        email: false,
-        telephone: false,
         createdOn: false,
         updatedOn: false,
       },
-      include: 'roles',
+      include: ['roles', 'subscriptions'],
     };
     user.findById(ctx.result.userId, filter, function(err, userInstance) {
       var userJSON = userInstance.toJSON();
+
       // Simplify roles in string array
       var simpleRoleArray = [];
       userJSON.roles.forEach(role => {
         simpleRoleArray.push(role.name);
       });
       userJSON.roles = simpleRoleArray;
+
+      // Simplify subscriptions in string array
+      var simpleSubscriptionArray = [];
+      userJSON.subscriptions.forEach(subscription => {
+        simpleSubscriptionArray.push(subscription.name);
+      });
+      userJSON.subscriptions = simpleSubscriptionArray;
 
       // Replace user
       resultJSON.user = userJSON;
@@ -306,6 +312,51 @@ module.exports = function(user) {
     ],
     returns: {
       type: 'array',
+      root: true,
+    },
+  });
+
+  // Me
+  user.me = function(options, cb) {
+    console.log('> user.me triggered');
+
+    var filter = {
+      include: ['roles', 'subscriptions', 'club', 'address'],
+    };
+    user.findById(options.accessToken.userId, filter, function(err, userInstance) {
+      var userJSON = userInstance.toJSON();
+
+      // Simplify roles in string array
+      var simpleRoleArray = [];
+      userJSON.roles.forEach(role => {
+        simpleRoleArray.push(role.name);
+      });
+      userJSON.roles = simpleRoleArray;
+
+      // Simplify subscriptions in string array
+      var simpleSubscriptionArray = [];
+      userJSON.subscriptions.forEach(subscription => {
+        simpleSubscriptionArray.push(subscription.name);
+      });
+      userJSON.subscriptions = simpleSubscriptionArray;
+
+      cb(null, userJSON);
+    });
+  };
+  user.remoteMethod('me', {
+    http: {
+      path: '/me',
+      verb: 'get',
+    },
+    accepts: [
+      {
+        arg: 'options',
+        type: 'object',
+        http: 'optionsFromRequest',
+      },
+    ],
+    returns: {
+      type: 'object',
       root: true,
     },
   });

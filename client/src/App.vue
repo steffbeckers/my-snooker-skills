@@ -24,9 +24,24 @@
     </v-navigation-drawer>
     <v-toolbar fixed app :clipped-left="clipped" color="primary" class="white--text">
       <v-toolbar-side-icon class="white--text" @click.stop="$store.commit('drawer', !$store.state.drawer)"></v-toolbar-side-icon>
-      <img class="ml-2" src="img/icons/SnookerBall-48px.png" alt="Logo" width="25" height="25" />
-      <v-toolbar-title :to="{ name: 'Dashboard' }" exact class="white--text ml-3 mr-4">
-        {{ title }}
+      <v-progress-circular
+        class="ml-2"
+        :size="24"
+        :width="8"
+        indeterminate
+        color="red"
+      >
+        <img
+          v-if="!$store.state.loading"
+          style="position: relative; top: 3px;"
+          :src="($store.state.env === 'development' ? 'static/' : '') + 'img/icons/SnookerBall-48px.png'"
+          alt="Logo"
+          width="25"
+          height="25"
+        />
+      </v-progress-circular>
+      <v-toolbar-title class="ml-3 mr-4">
+        <router-link style="text-decoration: none;" class="white--text" :to="{ name: 'Root' }">{{ title }}</router-link>
       </v-toolbar-title>
       <v-toolbar-items v-if="$vuetify.breakpoint.mdAndUp">
         <v-btn class="white--text" :to="{ name: 'Matches' }" exact flat>Matches</v-btn>
@@ -80,7 +95,25 @@
       fixed
       app
     >
-      <v-list>
+      <v-toolbar flat class="transparent">
+        <v-list class="pa-0">
+          <v-list-tile avatar>
+            <v-list-tile-avatar>
+              <img v-if="$store.state.user.profilePicture" :src="$store.state.user.profilePicture">
+              <v-icon class="primary white--text" v-else>person</v-icon>
+            </v-list-tile-avatar>
+            <v-list-tile-content>
+              <v-list-tile-title>{{ $store.state.user.firstName }} {{ $store.state.user.lastName }}</v-list-tile-title>
+              <v-list-tile-sub-title v-if="$store.state.user.username">@{{ $store.state.user.username }}</v-list-tile-sub-title>
+            </v-list-tile-content>
+            <v-list-tile-action @click.stop="$store.commit('signOut'); this.$router.push({ name: 'Root' })">
+              <v-icon>fa-sign-out</v-icon>
+            </v-list-tile-action>
+          </v-list-tile>
+        </v-list>
+      </v-toolbar>
+      <v-list class="pt-0" dense>
+        <v-divider></v-divider>
         <v-list-tile>
           <v-list-tile-action>
             <v-icon light>people</v-icon>

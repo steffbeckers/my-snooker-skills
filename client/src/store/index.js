@@ -7,6 +7,7 @@ Vue.use(VueCookie)
 
 export default new Vuex.Store({
   state: {
+    env: process.env.NODE_ENV,
     loading: false,
     loadingCounter: 0,
     drawer: false,

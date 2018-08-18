@@ -1,5 +1,5 @@
 export default class Logger {
-  debug = process.env.NODE_ENV === 'development'
+  debug = process.env.NODE_ENV === 'development' || window.location.hostname === 'steff.mysnookerskills.com'
 
   log(...args) {
     if (this.debug) console.log.apply(console, JSON.parse(JSON.stringify(args)))

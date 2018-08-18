@@ -54,7 +54,7 @@ export default {
       }
 
       this.$axios
-        .get(process.env.API + '/Matches?filter=' + JSON.stringify(filter))
+        .get(process.env.API + '/Matches?filter=' + encodeURI(JSON.stringify(filter)))
         .then(response => {
           this.matches = response.data
         })

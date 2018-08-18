@@ -26,16 +26,45 @@
 </template>
 
 <script>
-// import Vue from 'vue'
+import Authentication from '../../services/authentication'
 
 export default {
   data() {
     return {
-      errors: []
+      errors: [],
+      auth: new Authentication()
     }
   },
-  created() {
-    // Vue.prototype.$logger.log(Vue.cookie.get('access_token'))
+  async created() {
+    // Check if the user authenticated from social logins
+    let userId = this.$cookie.get('userId')
+    this.$logger.log(userId)
+
+    let accessToken = this.$cookie.get('access_token')
+    this.$logger.log(accessToken)
+
+    if (accessToken) {
+      this.$logger.log('Authenticated with social auth')
+
+      // Sign out logged in user
+      this.$store.commit('signOut')
+
+      // Set Authorization token on request
+      this.$axios.defaults.headers.common['Authorization'] = accessToken
+
+      // Setup credentials
+      let credentials = {}
+      credentials.id = accessToken
+      credentials.ttl = 1209600
+      credentials.user = await this.auth.me()
+
+      // Authenticate with store
+      this.$store.commit('authenticate', credentials)
+
+      // Remove old cookies
+      this.$cookie.delete('userId')
+      this.$cookie.delete('access_token')
+    }
   },
   name: 'Account'
 }
