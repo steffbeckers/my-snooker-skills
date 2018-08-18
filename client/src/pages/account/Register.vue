@@ -28,7 +28,7 @@
                   @submit="register"
                 >
                   <v-layout row wrap>
-                    <v-flex class="pb-0" xs6>
+                    <v-flex xs6>
                       <v-text-field
                         prepend-icon="person"
                         @click:prepend="firstName = ''"
@@ -39,7 +39,7 @@
                         :rules="firstNameRules"
                       ></v-text-field>
                     </v-flex>
-                    <v-flex class="pb-0" xs6>
+                    <v-flex xs6>
                       <v-text-field
                         prepend-icon="perm_identity"
                         @click:prepend="lastName = ''"
@@ -52,7 +52,7 @@
                     </v-flex>
                   </v-layout>
                   <v-layout row wrap>
-                    <v-flex class="pt-0 pb-0" xs6>
+                    <v-flex xs6>
                       <v-text-field
                         prepend-icon="email"
                         @click:prepend="email = ''"
@@ -61,9 +61,11 @@
                         type="text"
                         v-model="email"
                         :rules="emailRules"
+                        :error-messages="emailErrors"
+                        @input="emailErrors = []"
                       ></v-text-field>
                     </v-flex>
-                    <v-flex class="pt-0 pb-0" xs6>
+                    <v-flex xs6>
                       <v-text-field
                         prepend-icon="alternate_email"
                         @click:prepend="username = ''"
@@ -72,11 +74,13 @@
                         type="text"
                         v-model="username"
                         :rules="usernameRules"
+                        :error-messages="usernameErrors"
+                        @input="usernameErrors = []"
                       ></v-text-field>
                     </v-flex>
                   </v-layout>
                   <v-layout row wrap>
-                    <v-flex class="pt-0" xs6>
+                    <v-flex xs6>
                       <v-text-field
                         prepend-icon="lock"
                         @click:prepend="password = ''"
@@ -85,14 +89,12 @@
                         :type="passwordShowPlain ? 'text' : 'password'"
                         v-model="password"
                         :rules="passwordRules"
-                        hint="Minimum 10 characters, at least 1 uppercase letter, 1 lowercase letter and 1 number"
-                        persistent-hint
                         counter
                         :append-icon="passwordShowPlain ? 'visibility_off' : 'visibility'"
                         @click:append="passwordShowPlain = !passwordShowPlain"
                       ></v-text-field>
                     </v-flex>
-                    <v-flex class="pt-0" xs6>
+                    <v-flex xs6>
                       <v-text-field
                         prepend-icon="refresh"
                         @click:prepend="repeatPassword = ''"
@@ -150,12 +152,14 @@ export default {
           /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
           'Email has to be valid'
       ],
+      emailErrors: [],
       username: '',
       usernameAlreadyTaken: false,
       usernameRules: [
         v => !!v || 'Username is required',
         v => (v && v.length <= 25) || 'Username must be less than 25 characters'
       ],
+      usernameErrors: [],
       password: '',
       passwordShowPlain: false,
       passwordRules: [
@@ -169,7 +173,9 @@ export default {
       repeatPasswordRules: [
         v => !!v || 'Repeat password is required',
         v => (v && v === this.password) || 'Must match password'
-      ]
+      ],
+      registered: false,
+      tempUser: null
     }
   },
   created() {
@@ -197,6 +203,10 @@ export default {
     register(e) {
       e.preventDefault() // Submit
 
+      // Reset form errors
+      this.emailErrors = []
+      this.usernameErrors = []
+
       // Validation
       if (!this.$refs.registerForm.validate()) { return }
 
@@ -208,17 +218,30 @@ export default {
           username: this.username,
           password: this.password
         }).then(response => {
-          this.$logger.log('REGISTER RESPONSE', response)
+          this.$logger.log('REGISTER RESPONSE', response.data)
+
+          // Temp user
+          this.tempUser = response.data
+
+          // Registered alert
+          this.registered = true
         }).catch(error => {
           this.$logger.log('REGISTER ERROR', error)
 
           if (error.statusCode === 422 && error.details && error.details.codes) { // Validation error
             // Uniqueness
             // Email
+            error.details.codes.email.forEach(code => {
+              if (code === 'uniqueness') {
+                this.emailErrors.push('There is already an account registered with this email address. Try logging in or reset your password first')
+              }
+            })
             // Username
-            if (error.details.codes.username) {
-
-            }
+            error.details.codes.username.forEach(code => {
+              if (code === 'uniqueness') {
+                this.usernameErrors.push('This username is already taken')
+              }
+            })
           }
         })
     }

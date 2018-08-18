@@ -7,6 +7,7 @@ import Vuetify from 'vuetify'
 import VueCordova from 'vue-cordova'
 import VueHead from 'vue-head'
 import VueCookie from 'vue-cookie'
+import VueAnalytics from 'vue-analytics'
 
 import App from './App'
 import router from './router'
@@ -30,6 +31,11 @@ Vue.component('MatchesCardList', MatchesCardList)
 Vue.use(VueCordova)
 Vue.use(VueHead)
 Vue.use(VueCookie)
+if (process.env.NODE_ENV === 'production') {
+  Vue.use(VueAnalytics, {
+    id: 'UA-101766005-4'
+  })
+}
 Vue.prototype.$axios = axios
 
 // Set Authorization header, if token exists
