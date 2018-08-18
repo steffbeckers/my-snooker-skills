@@ -33,7 +33,8 @@ Vue.use(VueHead)
 Vue.use(VueCookie)
 if (process.env.NODE_ENV === 'production') {
   Vue.use(VueAnalytics, {
-    id: 'UA-101766005-4'
+    id: 'UA-101766005-4',
+    router
   })
 }
 Vue.prototype.$axios = axios
