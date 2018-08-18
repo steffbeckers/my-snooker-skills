@@ -1,0 +1,117 @@
+{
+  "local": {
+    "provider": "local",
+    "module": "passport-local",
+    "usernameField": "username",
+    "passwordField": "password",
+    "authPath": "/auth/local",
+    "successRedirect": "http://steff.mysnookerskills.com:3000/account"
+  },
+  "facebook-login": {
+    "provider": "facebook",
+    "module": "passport-facebook",
+    "profileFields": ["link", "locale", "name", "timezone", "verified", "email", "updated_time"],
+    "clientID": "1888929744484257",
+    "clientSecret": "579712137a66c1b9a51822829f32814e",
+    "callbackURL": "http://steff.mysnookerskills.com:3000/auth/facebook/callback",
+    "authPath": "/auth/facebook",
+    "callbackPath": "/auth/facebook/callback",
+    "successRedirect": "http://steff.mysnookerskills.com:3000/account",
+    "scope": ["email"],
+    "authOptions": {
+      "display": "popup"
+    }
+  },
+  "google-login": {
+    "provider": "google",
+    "module": "passport-google-oauth",
+    "strategy": "OAuth2Strategy",
+    "clientID": "952649996308-2rebq76ibpt3v334kudj723j7gdv0t67.apps.googleusercontent.com",
+    "clientSecret": "DCLImEuZysnP-ivzu8RDKEyu",
+    "callbackURL": "http://steff.mysnookerskills.com:3000/auth/google/callback",
+    "authPath": "/auth/google",
+    "callbackPath": "/auth/google/callback",
+    "successRedirect": "http://steff.mysnookerskills.com:3000/account",
+    "scope": ["email", "profile"],
+    "profileMapping": [
+      {
+        "userField": "firstName",
+        "providerField": "name.givenName"
+      },
+      {
+        "userField": "lastName",
+        "providerField": "name.familyName"
+      },
+      {
+        "userField": "username",
+        "providerField": "displayName"
+      },
+      {
+        "userField": "email",
+        "providerField": "emails[0].value"
+      },
+      {
+        "userField": "profilePicture",
+        "providerField": "photos[0].value"
+      }
+    ]
+  },
+  "twitter-login": {
+    "provider": "twitter",
+    "authScheme": "oauth",
+    "module": "passport-twitter",
+    "callbackURL": "http://steff.mysnookerskills.com:3000/auth/twitter/callback",
+    "authPath": "/auth/twitter",
+    "callbackPath": "/auth/twitter/callback",
+    "successRedirect": "http://steff.mysnookerskills.com:3000/account",
+    "consumerKey": "LUUO4Js2bfidabZkiD0e9QSBe",
+    "consumerSecret": "c3SfkLmR78TtoPIb9UgeLWlZjwEllLerLOIc296ilZMX8ZQGQ2"
+  },
+  "facebook-link": {
+    "provider": "facebook",
+    "module": "passport-facebook",
+    "clientID": "1888929744484257",
+    "clientSecret": "579712137a66c1b9a51822829f32814e",
+    "callbackURL": "http://steff.mysnookerskills.com:3000/link/facebook/callback",
+    "authPath": "/link/facebook",
+    "callbackPath": "/link/facebook/callback",
+    "successRedirect": "http://steff.mysnookerskills.com:3000/account",
+    "scope": ["email", "user_likes"],
+    "link": true
+  },
+  "google-link": {
+    "provider": "google",
+    "module": "passport-google-oauth",
+    "strategy": "OAuth2Strategy",
+    "clientID": "952649996308-2rebq76ibpt3v334kudj723j7gdv0t67.apps.googleusercontent.com",
+    "clientSecret": "DCLImEuZysnP-ivzu8RDKEyu",
+    "callbackURL": "http://steff.mysnookerskills.com:3000/link/google/callback",
+    "authPath": "/link/google",
+    "callbackPath": "/link/google/callback",
+    "successRedirect": "http://steff.mysnookerskills.com:3000/account",
+    "scope": ["email", "profile"],
+    "profileMapping": [
+      {
+        "userField": "firstName",
+        "providerField": "name.givenName"
+      },
+      {
+        "userField": "lastName",
+        "providerField": "name.familyName"
+      },
+      {
+        "userField": "username",
+        "providerField": "displayName"
+      },
+      {
+        "userField": "email",
+        "providerField": "emails[0].value"
+      },
+      {
+        "userField": "profilePicture",
+        "providerField": "photos[0].value"
+      }
+    ],
+    "link": true
+  }
+}

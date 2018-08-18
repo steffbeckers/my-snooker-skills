@@ -21,33 +21,100 @@
                 </v-btn>
               </v-flex>
               <v-flex class="mt-3" xs12 md6>
-                <p class="mb-0 text-xs-center">Or create a My Snooker Skills account right here.</p>
-                <v-form>
+                <p class="mb-2 text-xs-center">Or create a My Snooker Skills account right here.</p>
+                <v-form
+                  ref="registerForm"
+                  v-model="registerFormValid"
+                  @submit="register"
+                >
                   <v-layout row wrap>
                     <v-flex class="pb-0" xs6>
-                      <v-text-field prepend-icon="person" name="firstName" label="First name" type="text"></v-text-field>
+                      <v-text-field
+                        prepend-icon="person"
+                        @click:prepend="firstName = ''"
+                        name="firstName"
+                        label="First name"
+                        type="text"
+                        v-model="firstName"
+                        :rules="firstNameRules"
+                      ></v-text-field>
                     </v-flex>
                     <v-flex class="pb-0" xs6>
-                      <v-text-field prepend-icon="perm_identity" name="lastName" label="Last name" type="text"></v-text-field>
+                      <v-text-field
+                        prepend-icon="perm_identity"
+                        @click:prepend="lastName = ''"
+                        name="lastName"
+                        label="Last name"
+                        type="text"
+                        v-model="lastName"
+                        :rules="lastNameRules"
+                      ></v-text-field>
                     </v-flex>
                   </v-layout>
                   <v-layout row wrap>
                     <v-flex class="pt-0 pb-0" xs6>
-                      <v-text-field prepend-icon="email" name="email" label="Email" type="text"></v-text-field>
+                      <v-text-field
+                        prepend-icon="email"
+                        @click:prepend="email = ''"
+                        name="email"
+                        label="Email"
+                        type="text"
+                        v-model="email"
+                        :rules="emailRules"
+                      ></v-text-field>
                     </v-flex>
                     <v-flex class="pt-0 pb-0" xs6>
-                      <v-text-field prepend-icon="alternate_email" name="username" label="Username" type="text"></v-text-field>
+                      <v-text-field
+                        prepend-icon="alternate_email"
+                        @click:prepend="username = ''"
+                        name="username"
+                        label="Username"
+                        type="text"
+                        v-model="username"
+                        :rules="usernameRules"
+                      ></v-text-field>
                     </v-flex>
                   </v-layout>
                   <v-layout row wrap>
                     <v-flex class="pt-0" xs6>
-                      <v-text-field prepend-icon="lock" name="password" label="Password" type="password"></v-text-field>
+                      <v-text-field
+                        prepend-icon="lock"
+                        @click:prepend="password = ''"
+                        name="password"
+                        label="Password"
+                        :type="passwordShowPlain ? 'text' : 'password'"
+                        v-model="password"
+                        :rules="passwordRules"
+                        hint="Minimum 10 characters, at least 1 uppercase letter, 1 lowercase letter and 1 number"
+                        persistent-hint
+                        counter
+                        :append-icon="passwordShowPlain ? 'visibility_off' : 'visibility'"
+                        @click:append="passwordShowPlain = !passwordShowPlain"
+                      ></v-text-field>
                     </v-flex>
                     <v-flex class="pt-0" xs6>
-                      <v-text-field prepend-icon="refresh" name="repeat-password" label="Repeat password" type="password"></v-text-field>
+                      <v-text-field
+                        prepend-icon="refresh"
+                        @click:prepend="repeatPassword = ''"
+                        name="repeatPassword"
+                        label="Repeat password"
+                        :type="repeatPasswordShowPlain ? 'text' : 'password'"
+                        v-model="repeatPassword"
+                        :rules="repeatPasswordRules"
+                        counter
+                        :append-icon="repeatPasswordShowPlain ? 'visibility_off' : 'visibility'"
+                        @click:append="repeatPasswordShowPlain = !repeatPasswordShowPlain"
+                      ></v-text-field>
                     </v-flex>
                   </v-layout>
-                  <v-btn color="primary" block>Register</v-btn>
+                  <v-btn
+                    color="primary"
+                    block
+                    :disabled="!registerFormValid"
+                    type="submit"
+                  >
+                    Register
+                  </v-btn>
                 </v-form>
               </v-flex>
             </v-layout>
@@ -62,7 +129,98 @@
 export default {
   data() {
     return {
-      errors: []
+      errors: [],
+      registerFormValid: false,
+      firstName: '',
+      firstNameRules: [
+        v => !!v || 'First name is required',
+        v => (v && v.length <= 50) || 'First name must be less than 50 characters'
+      ],
+      lastName: '',
+      lastNameRules: [
+        v => !!v || 'Last name is required',
+        v => (v && v.length <= 50) || 'Last name must be less than 50 characters'
+      ],
+      email: '',
+      emailAlreadyRegistered: false,
+      emailRules: [
+        v => !!v || 'Email is required',
+        v => (v && v.length <= 100) || 'Email must be less than 100 characters',
+        v =>
+          /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
+          'Email has to be valid'
+      ],
+      username: '',
+      usernameAlreadyTaken: false,
+      usernameRules: [
+        v => !!v || 'Username is required',
+        v => (v && v.length <= 25) || 'Username must be less than 25 characters'
+      ],
+      password: '',
+      passwordShowPlain: false,
+      passwordRules: [
+        v => !!v || 'Password is required',
+        v =>
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d!$%@#£€*?&+-_~]{10,}$/.test(v) ||
+          'Minimum 10 characters, at least 1 uppercase letter, 1 lowercase letter and 1 number'
+      ],
+      repeatPassword: '',
+      repeatPasswordShowPlain: false,
+      repeatPasswordRules: [
+        v => !!v || 'Repeat password is required',
+        v => (v && v === this.password) || 'Must match password'
+      ]
+    }
+  },
+  created() {
+    // Development
+    if (process.env.NODE_ENV === 'development') {
+      // Settings
+      let fillData = true
+
+      if (fillData) {
+        let fillDataNumber = 1
+        switch (fillDataNumber) {
+          case 1:
+            this.firstName = 'Steff'
+            this.lastName = 'Beckers'
+            this.email = 'beckerssteff@gmail.com'
+            this.username = 'beckerssteff'
+            this.password = 'SteffBeckers123'
+            this.repeatPassword = 'SteffBeckers123'
+            break
+        }
+      }
+    }
+  },
+  methods: {
+    register(e) {
+      e.preventDefault() // Submit
+
+      // Validation
+      if (!this.$refs.registerForm.validate()) { return }
+
+      this.$axios
+        .post(process.env.API + '/Users', {
+          firstName: this.firstName,
+          lastName: this.lastName,
+          email: this.email,
+          username: this.username,
+          password: this.password
+        }).then(response => {
+          this.$logger.log('REGISTER RESPONSE', response)
+        }).catch(error => {
+          this.$logger.log('REGISTER ERROR', error)
+
+          if (error.statusCode === 422 && error.details && error.details.codes) { // Validation error
+            // Uniqueness
+            // Email
+            // Username
+            if (error.details.codes.username) {
+
+            }
+          }
+        })
     }
   }
 }

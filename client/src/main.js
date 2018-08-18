@@ -92,7 +92,6 @@ Vue.prototype.$axios.interceptors.response.use(
     // Log out on unauthorized
     if (error.response && error.response.status === 401) {
       store.commit('signOut')
-      store.commit('drawer', true)
     }
 
     return Promise.reject(error.response.data.error)

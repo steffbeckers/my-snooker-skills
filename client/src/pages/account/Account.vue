@@ -26,13 +26,10 @@
 </template>
 
 <script>
-import Authentication from '../../services/authentication'
-
 export default {
   data() {
     return {
-      errors: [],
-      auth: new Authentication()
+      errors: []
     }
   },
   async created() {
@@ -56,7 +53,7 @@ export default {
       let credentials = {}
       credentials.id = accessToken
       credentials.ttl = 1209600
-      credentials.user = await this.auth.me()
+      credentials.user = await this.$authentication.me()
 
       // Authenticate with store
       this.$store.commit('authenticate', credentials)
