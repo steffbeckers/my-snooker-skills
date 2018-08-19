@@ -34,7 +34,7 @@
         <img
           v-if="!$store.state.loading"
           style="position: relative; top: 3px;"
-          :src="($store.state.env === 'development' ? '/static' : '') + '/img/icons/SnookerBall-48px.png'"
+          :src="($store.state.env === 'development' ? 'static/' : '') + 'img/icons/SnookerBall-48px.png'"
           alt="Logo"
           width="25"
           height="25"
