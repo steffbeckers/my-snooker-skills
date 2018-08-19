@@ -106,7 +106,7 @@
               <v-list-tile-title>{{ $store.state.user.firstName }} {{ $store.state.user.lastName }}</v-list-tile-title>
               <v-list-tile-sub-title v-if="$store.state.user.username">@{{ $store.state.user.username }}</v-list-tile-sub-title>
             </v-list-tile-content>
-            <v-list-tile-action @click.stop="$store.commit('signOut'); this.$router.push({ name: 'Root' })">
+            <v-list-tile-action @click.stop="$store.commit('signOut'); $router.push({ name: 'Root' })">
               <v-icon>fa-sign-out</v-icon>
             </v-list-tile-action>
           </v-list-tile>
