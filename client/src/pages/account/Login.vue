@@ -163,8 +163,10 @@ export default {
         .post(process.env.API + '/Users/login', credentials)
         .then(response => {
           this.$logger.log('LOGIN RESPONSE', response.data)
+
           // Authenticate with store
           this.$store.commit('authenticate', response.data)
+
           // Redirect to Account
           this.$router.push(this.$route.query.redirect || '/account')
         }).catch(error => {
