@@ -62,6 +62,9 @@ export default new Vuex.Store({
       // Set Authorization token on request
       Vue.prototype.$axios.defaults.headers.common['Authorization'] =
         state.token
+
+      // Open right drawer
+      state.rightDrawer = true
     },
     signOut(state) {
       // Set state

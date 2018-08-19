@@ -6,6 +6,27 @@
       v-model="$store.state.drawer"
       app
     >
+      <v-toolbar color="primary">
+        <v-progress-circular
+        class="ml-2"
+        :size="24"
+        :width="8"
+        indeterminate
+        color="red"
+        >
+          <img
+            v-if="!$store.state.loading"
+            style="position: relative; top: 3px;"
+            :src="($store.state.env === 'development' ? 'static/' : '') + 'img/icons/SnookerBall-48px.png'"
+            alt="Logo"
+            width="25"
+            height="25"
+          />
+        </v-progress-circular>
+        <v-toolbar-title>
+          <router-link style="text-decoration: none;" class="white--text" :to="{ name: 'Root' }">{{ title }}</router-link>
+        </v-toolbar-title>
+      </v-toolbar>
       <v-list>
         <v-list-tile
           v-for="(item, i) in sideMenuItems"
@@ -30,6 +51,7 @@
         :width="8"
         indeterminate
         color="red"
+        v-if="!$store.state.drawer"
       >
         <img
           v-if="!$store.state.loading"
@@ -40,7 +62,10 @@
           height="25"
         />
       </v-progress-circular>
-      <v-toolbar-title class="ml-3 mr-4">
+      <v-toolbar-title
+        v-if="!$store.state.drawer"
+        class="ml-3 mr-4"
+      >
         <router-link style="text-decoration: none;" class="white--text" :to="{ name: 'Root' }">{{ title }}</router-link>
       </v-toolbar-title>
       <v-toolbar-items v-if="$vuetify.breakpoint.mdAndUp">
@@ -57,6 +82,9 @@
         class="hidden-sm-and-down"
       ></v-text-field>
       <v-spacer></v-spacer> -->
+      <v-btn class="white--text" v-if="!$store.state.authenticated" icon>
+        <v-icon>g_translate</v-icon>
+      </v-btn>
       <v-toolbar-items
         v-if="!$store.state.authenticated && $vuetify.breakpoint.smAndUp"
       >
@@ -75,15 +103,14 @@
       <v-btn class="white--text" v-if="$store.state.authenticated" icon>
         <v-icon>apps</v-icon>
       </v-btn>
-      <v-btn
+      <v-btn class="white--text" v-if="$store.state.isAdmin" icon>
+        <v-icon>supervised_user_circle</v-icon>
+      </v-btn>
+      <v-toolbar-side-icon
         v-if="$store.state.authenticated"
         class="white--text"
-        icon
-        light
         @click.stop="$store.commit('rightDrawer', !$store.state.rightDrawer)"
-      >
-        <v-icon>person</v-icon>
-      </v-btn>
+      ></v-toolbar-side-icon>
     </v-toolbar>
     <v-content>
       <router-view></router-view>
@@ -95,36 +122,82 @@
       fixed
       app
     >
-      <v-toolbar flat class="transparent">
+      <v-toolbar color="primary">
         <v-list class="pa-0">
-          <v-list-tile avatar>
-            <v-list-tile-avatar>
+          <v-list-tile class="white--text" avatar>
+            <v-list-tile-avatar color="white">
               <img v-if="$store.state.user.profilePicture" :src="$store.state.user.profilePicture">
-              <v-icon class="primary white--text" v-else>person</v-icon>
+              <v-icon class="primary--text" v-else>person</v-icon>
             </v-list-tile-avatar>
             <v-list-tile-content>
-              <v-list-tile-title>{{ $store.state.user.firstName }} {{ $store.state.user.lastName }}</v-list-tile-title>
-              <v-list-tile-sub-title v-if="$store.state.user.username">@{{ $store.state.user.username }}</v-list-tile-sub-title>
+              <v-list-tile-title class="white--text">{{ $store.state.user.firstName }} {{ $store.state.user.lastName }}</v-list-tile-title>
+              <v-list-tile-sub-title class="white--text" v-if="$store.state.user.username">@{{ $store.state.user.username }}</v-list-tile-sub-title>
             </v-list-tile-content>
             <v-list-tile-action @click.stop="$store.commit('signOut'); $router.push({ name: 'Root' })">
-              <v-icon>fa-sign-out</v-icon>
+              <v-icon class="white--text" style="cursor: pointer">power_settings_new</v-icon>
             </v-list-tile-action>
           </v-list-tile>
         </v-list>
       </v-toolbar>
-      <v-list class="pt-0" dense>
+      <v-list class="pt-0">
         <v-divider></v-divider>
+        <v-list-tile :to="{ name: 'Account' }" exact>
+          <v-list-tile-action>
+            <v-icon light>account_circle</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title>Account</v-list-tile-title>
+        </v-list-tile>
+        <v-list-tile>
+          <v-list-tile-action>
+            <v-icon light>account_box</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title>Profile</v-list-tile-title>
+        </v-list-tile>
         <v-list-tile>
           <v-list-tile-action>
             <v-icon light>people</v-icon>
           </v-list-tile-action>
           <v-list-tile-title>Friends</v-list-tile-title>
         </v-list-tile>
+        <v-list-tile>
+          <v-list-tile-action>
+            <v-icon light>settings</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title>Settings</v-list-tile-title>
+        </v-list-tile>
+        <v-subheader>
+          Training
+        </v-subheader>
+        <v-list-tile>
+          <v-list-tile-action>
+            <v-icon light>more_horiz</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title>Line Up</v-list-tile-title>
+        </v-list-tile>
+        <v-list-tile>
+          <v-list-tile-action>
+            <v-icon light>grain</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title>Random</v-list-tile-title>
+        </v-list-tile>
+        <v-list-tile>
+          <v-list-tile-action>
+            <v-icon color="black">fiber_manual_record</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title>Blacky</v-list-tile-title>
+        </v-list-tile>
+        <v-list-tile>
+          <v-list-tile-action>
+            <v-icon class="pink--text accent-1">fiber_manual_record</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title>Pink</v-list-tile-title>
+        </v-list-tile>
       </v-list>
     </v-navigation-drawer>
     <v-footer
       :fixed="fixed"
       app
+      style="padding-right: 0px;"
     >
       <div id="buildInfo" class="ml-2">Last update: {{ buildDateTime }} - Version: {{ version }}</div>
       <div id="copyright" class="mr-2">&copy; <a href="https://steffbeckers.eu/">Steff</a></div>
@@ -179,6 +252,14 @@ export default {
           page: {
             name: 'Matches'
           }
+        },
+        {
+          icon: 'line_style',
+          title: 'Tournaments'
+        },
+        {
+          icon: 'people',
+          title: 'Players'
         }
       ],
       buildDateTime: process.env.BUILD_DATETIME,
