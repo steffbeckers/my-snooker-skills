@@ -91,12 +91,24 @@
         <v-btn class="white--text" :to="{ name: 'Register' }" exact flat><v-icon class="mr-2">person_add</v-icon>Register</v-btn>
         <v-btn class="white--text" :to="{ name: 'Login' }" exact flat><v-icon class="mr-2">exit_to_app</v-icon>Login</v-btn>
       </v-toolbar-items>
-      <v-toolbar-items
+      <v-btn
         v-if="!$store.state.authenticated && $vuetify.breakpoint.xs"
+        class="white--text"
+        :to="{ name: 'Register' }"
+        exact
+        icon
       >
-        <v-btn class="white--text" :to="{ name: 'Register' }" exact icon><v-icon>person_add</v-icon></v-btn>
-        <v-btn class="white--text" :to="{ name: 'Login' }" exact icon><v-icon>exit_to_app</v-icon></v-btn>
-      </v-toolbar-items>
+        <v-icon>person_add</v-icon>
+      </v-btn>
+      <v-btn
+        v-if="!$store.state.authenticated && $vuetify.breakpoint.xs"
+        class="white--text"
+        :to="{ name: 'Login' }"
+        exact
+        icon
+      >
+        <v-icon>exit_to_app</v-icon>
+      </v-btn>
       <v-btn class="white--text" v-if="$store.state.authenticated" icon>
         <v-icon>notifications</v-icon>
       </v-btn>
