@@ -22,14 +22,73 @@
               </v-flex>
               <v-flex class="mt-3" xs12 md6>
                 <p class="mb-0 text-xs-center">Or with your My Snooker Skills account right here.</p>
-                <v-form>
+                <v-alert
+                  :value="verified"
+                  class="mt-3 mb-3"
+                  type="success"
+                  dismissible
+                  transition="scale-transition"
+                >
+                  Successfully verified your account!<br />
+                  You can login now.
+                </v-alert>
+                <v-alert
+                  :value="alreadyVerified"
+                  class="mt-3 mb-3"
+                  type="info"
+                  dismissible
+                  transition="scale-transition"
+                >
+                  Your account is already verified.
+                </v-alert>
+                <v-alert
+                  :value="failed"
+                  class="mt-3 mb-3"
+                  type="error"
+                  dismissible
+                  transition="scale-transition"
+                >
+                  Something went wrong during the registration. Please try again or contact <a class="white--text" href="mailto:support@mysnookerskills.com?subject=Registration failed&body=Hi, something went wrong during the registration of my new My Snooker Skills account. EXTRA INFO:">support@mysnookerskills.com</a>.
+                </v-alert>
+                <v-form
+                  ref="loginForm"
+                  v-model="loginFormValid"
+                  @submit="login"
+                >
                   <v-layout column wrap>
                     <v-flex xs12>
-                      <v-text-field prepend-icon="person" name="usernameOrEmail" label="Username or email" type="text"></v-text-field>
-                      <v-text-field prepend-icon="lock" name="password" label="Password" type="password"></v-text-field>
+                      <v-text-field
+                        prepend-icon="person"
+                        @click:prepend="usernameOrEmail = ''"
+                        name="usernameOrEmail"
+                        label="Username or email"
+                        type="text"
+                        v-model="usernameOrEmail"
+                        :rules="usernameOrEmailRules"
+                        :error-messages="usernameOrEmailErrors"
+                        @input="usernameOrEmailErrors = []"
+                      ></v-text-field>
+                      <v-text-field
+                        prepend-icon="lock"
+                        @click:prepend="password = ''"
+                        name="password"
+                        label="Password"
+                        :type="passwordShowPlain ? 'text' : 'password'"
+                        v-model="password"
+                        :rules="passwordRules"
+                        :append-icon="passwordShowPlain ? 'visibility_off' : 'visibility'"
+                        @click:append="passwordShowPlain = !passwordShowPlain"
+                      ></v-text-field>
                     </v-flex>
                   </v-layout>
-                  <v-btn color="primary" block>Login</v-btn>
+                  <v-btn
+                    color="primary"
+                    block
+                    :disabled="!loginFormValid || $store.state.loading"
+                    type="submit"
+                  >
+                    Login
+                  </v-btn>
                 </v-form>
               </v-flex>
             </v-layout>
@@ -41,22 +100,90 @@
 </template>
 
 <script>
-// import VueCookie from 'vue-cookie'
-
 export default {
   data() {
     return {
       errors: [],
-      usernameOrEmail: '',
-      password: ''
+      loginFormValid: false,
+      usernameOrEmail: localStorage.getItem('login:usernameOrEmail') || '',
+      usernameOrEmailRules: [
+        v => !!v || 'Username or email is required',
+        v => (v && v.length <= 100) || 'Username or email must be less than 100 characters'
+      ],
+      usernameOrEmailErrors: [],
+      password: '',
+      passwordShowPlain: false,
+      passwordRules: [
+        v => !!v || 'Password is required',
+        v =>
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d!$%@#£€*?&+-_~]{10,}$/.test(v) ||
+          'Minimum 10 characters, at least 1 uppercase letter, 1 lowercase letter and 1 number'
+      ],
+      verified: false,
+      alreadyVerified: false,
+      failed: false
     }
   },
-  created() {
-    // TODO
+  mounted() {
+    // Alerts
+    // verified
+    if (localStorage.getItem('login:verified')) {
+      this.verified = true
+      localStorage.removeItem('login:verified')
+    }
+    // already-verified
+    if (localStorage.getItem('login:already-verified')) {
+      this.alreadyVerified = true
+      localStorage.removeItem('login:already-verified')
+    }
   },
   methods: {
-    login() {
-      this.$authentication.login(this.usernameOrEmail, this.password)
+    login(e) {
+      e.preventDefault() // Submit
+
+      // Reset form
+      this.usernameOrEmailErrors = []
+      this.failed = false
+
+      // Validation
+      if (!this.$refs.loginForm.validate()) { return }
+
+      // Credentials
+      let credentials = {
+        password: this.password
+      }
+
+      if (this.isEmail(this.usernameOrEmail)) {
+        credentials.email = this.usernameOrEmail
+      } else {
+        credentials.username = this.usernameOrEmail
+      }
+
+      this.$axios
+        .post(process.env.API + '/Users/login', credentials)
+        .then(response => {
+          this.$logger.log('LOGIN RESPONSE', response.data)
+          // Authenticate with store
+          this.$store.commit('authenticate', response.data)
+          // Redirect to Account
+          this.$router.push('/account')
+        }).catch(error => {
+          this.$logger.log('LOGIN ERROR', error)
+
+          this.failed = error.code === 'LOGIN_FAILED'
+        })
+    },
+    isEmail(text) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text)
+    }
+  },
+  watch: {
+    usernameOrEmail(val) {
+      if (val) {
+        localStorage.setItem('login:usernameOrEmail', val)
+      } else {
+        localStorage.removeItem('login:usernameOrEmail')
+      }
     }
   }
 }

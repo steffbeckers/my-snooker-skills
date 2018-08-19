@@ -6,6 +6,8 @@ const Dashboard = () => import('@/pages/Dashboard')
 const Matches = () => import('@/pages/Matches')
 
 // Account
+const AccountSocialSuccess = () => import('@/pages/account/social/Success')
+const AccountConfirmation = () => import('@/pages/account/Confirm')
 const Account = () => import('@/pages/account/Account')
 const Register = () => import('@/pages/account/Register')
 const Login = () => import('@/pages/account/Login')
@@ -33,11 +35,23 @@ export default new Router({
       name: 'Matches',
       component: Matches
     },
+    // Social auth
+    {
+      path: '/account/social/success',
+      name: 'AccountSocialSuccess',
+      component: AccountSocialSuccess
+    },
     // Account
+    {
+      path: '/account/confirm',
+      name: 'AccountConfirmation',
+      component: AccountConfirmation
+    },
     {
       path: '/account',
       name: 'Account',
-      component: Account
+      component: Account,
+      meta: { requiresAuth: true }
     },
     {
       path: '/register',

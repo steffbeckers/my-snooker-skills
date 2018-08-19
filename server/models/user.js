@@ -15,18 +15,19 @@ module.exports = function(user) {
       type: 'email',
       to: userInstance.email,
       from: 'registration@mysnookerskills.com',
-      subject: 'My Snooker Skills - Thanks for registering',
+      subject: 'Thanks for registering',
       template: path.join(
         __dirname,
         '..',
         '..',
         'server',
         'templates',
-        'usermodel',
+        'user',
         'verify.ejs'
       ),
       redirect: null,
       user: userInstance,
+      mailer: app.models.EmailFromRegistration,
       verifyHref: app.get('confirmHrefApp') + '?' + qs.stringify({
         uid: String(userInstance.id),
       }),
@@ -42,34 +43,6 @@ module.exports = function(user) {
       console.log('> Verification email sent: ', response);
 
       return next();
-    });
-  });
-
-  // Send password reset email
-  user.on('resetPasswordRequest', function(info) {
-    console.log('> user.on.resetPasswordRequest triggered');
-    console.log('> info');
-    console.log(info);
-
-    var html = '';
-    html += '<h1>My Snooker Skills </h1>';
-    html += '<p>Please follow the link below to reset your password.</p>';
-    html += '<p>';
-    html += '<a href="' + app.get('resetPasswordRequestHrefApp') +
-      '?access_token=' + info.accessToken.id + '">';
-    html += app.get('resetPasswordRequestHrefApp') +
-      '?access_token=' + info.accessToken.id;
-    html += '</a>';
-    html += '</p>';
-
-    user.app.models.Email.send({
-      to: info.email,
-      from: 'account@mysnookerskills.com',
-      subject: 'My Snooker Skills - Reset password',
-      html: html,
-    }, function(err) {
-      if (err) return console.log('> Error sending password reset email');
-      console.log('> Reset password email sent to:', info.email);
     });
   });
 
@@ -107,18 +80,19 @@ module.exports = function(user) {
           type: 'email',
           to: userInstance.email,
           from: 'registration@mysnookerskills.com',
-          subject: 'My Snooker Skills - Thanks for registering',
+          subject: 'Thanks for registering',
           template: path.join(
             __dirname,
             '..',
             '..',
             'server',
             'templates',
-            'usermodel',
+            'user',
             'verify.ejs'
           ),
           redirect: null,
           user: userInstance,
+          mailer: app.models.EmailFromRegistration,
           verifyHref: app.get('confirmHrefApp') + '?' + qs.stringify({
             uid: String(userInstance.id),
           }),
@@ -152,6 +126,35 @@ module.exports = function(user) {
     }
   );
 
+  // Send password reset email
+  user.on('resetPasswordRequest', function(info) {
+    console.log('> user.on.resetPasswordRequest triggered');
+    console.log('> info');
+    console.log(info);
+
+    var html = '';
+    html += '<h1>My Snooker Skills </h1>';
+    html += '<p>Please follow the link below to reset your password.</p>';
+    html += '<p>';
+    html += '<a href="' + app.get('resetPasswordRequestHrefApp') +
+      '?access_token=' + info.accessToken.id + '">';
+    html += app.get('resetPasswordRequestHrefApp') +
+      '?access_token=' + info.accessToken.id;
+    html += '</a>';
+    html += '</p>';
+
+    user.app.models.Email.send({
+      to: info.email,
+      from: 'account@mysnookerskills.com',
+      subject: 'Reset password',
+      mailer: app.models.EmailFromAccount,
+      html: html,
+    }, function(err) {
+      if (err) return console.log('> Error sending password reset email');
+      console.log('> Reset password email sent to:', info.email);
+    });
+  });
+
   // Include roles, remove fields on login
   user.afterRemote('login', function(ctx, userInstance, next) {
     console.log('> user.afterRemote.login triggered');
@@ -165,7 +168,7 @@ module.exports = function(user) {
         createdOn: false,
         updatedOn: false,
       },
-      include: ['roles', 'subscriptions'],
+      include: ['roles', 'subscriptions', 'club', 'address'],
     };
     user.findById(ctx.result.userId, filter, function(err, userInstance) {
       var userJSON = userInstance.toJSON();

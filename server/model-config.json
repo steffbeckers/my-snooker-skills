@@ -5,6 +5,7 @@
       "loopback/server/models",
       "../common/models",
       "./models",
+      "./emailAddresses",
       "../node_modules/loopback-component-passport/lib/models"
     ],
     "mixins": [
@@ -17,8 +18,26 @@
       "../node_modules/loopback-softdelete-mixin3"
     ]
   },
-  "Email": {
-    "dataSource": "email"
+  "EmailFromSteff": {
+    "dataSource": "emailFromSteff"
+  },
+  "EmailFromInfo": {
+    "dataSource": "emailFromInfo"
+  },
+  "EmailFromPrivacy": {
+    "dataSource": "emailFromPrivacy"
+  },
+  "EmailFromAdmin": {
+    "dataSource": "emailFromAdmin"
+  },
+  "EmailFromSupport": {
+    "dataSource": "emailFromSupport"
+  },
+  "EmailFromRegistration": {
+    "dataSource": "emailFromRegistration"
+  },
+  "EmailFromAccount": {
+    "dataSource": "emailFromAccount"
   },
   "user": {
     "dataSource": "mongodb",

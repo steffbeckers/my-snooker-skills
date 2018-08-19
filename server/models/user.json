@@ -29,7 +29,11 @@
       "type": "string"
     },
     "settings": {
-      "type": "object"
+      "type": "object",
+      "default": {
+        "lang": "en",
+        "itemsPerPage": 10
+      }
     },
     "profilePicture": {
       "type": "string"

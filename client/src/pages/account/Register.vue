@@ -1,6 +1,6 @@
 <template>
   <v-container grid-list-lg fluid>
-    <v-layout class="mt-3" justify-center>
+    <v-layout class="mt-3 mb-3" justify-center>
       <v-flex xs12 sm8 lg6>
         <v-card>
           <v-toolbar dark color="primary">
@@ -22,6 +22,25 @@
               </v-flex>
               <v-flex class="mt-3" xs12 md6>
                 <p class="mb-2 text-xs-center">Or create a My Snooker Skills account right here.</p>
+                <v-alert
+                  v-if="tempUser"
+                  :value="registered"
+                  class="mt-3 mb-3"
+                  type="success"
+                  dismissible
+                  transition="scale-transition"
+                >
+                  Hi {{ tempUser.firstName }}! Please verify your email address by clicking the link we sent to {{ tempUser.email }}.
+                </v-alert>
+                <v-alert
+                  :value="failed"
+                  class="mt-3 mb-3"
+                  type="error"
+                  dismissible
+                  transition="scale-transition"
+                >
+                  Something went wrong during the registration. Please try again or contact <a class="white--text" href="mailto:support@mysnookerskills.com?subject=Registration failed&body=Hi, something went wrong during the registration of my new My Snooker Skills account. EXTRA INFO:">support@mysnookerskills.com</a>.
+                </v-alert>
                 <v-form
                   ref="registerForm"
                   v-model="registerFormValid"
@@ -37,6 +56,7 @@
                         type="text"
                         v-model="firstName"
                         :rules="firstNameRules"
+                        @input="registered = false"
                       ></v-text-field>
                     </v-flex>
                     <v-flex xs6>
@@ -48,6 +68,7 @@
                         type="text"
                         v-model="lastName"
                         :rules="lastNameRules"
+                        @input="registered = false"
                       ></v-text-field>
                     </v-flex>
                   </v-layout>
@@ -62,7 +83,7 @@
                         v-model="email"
                         :rules="emailRules"
                         :error-messages="emailErrors"
-                        @input="emailErrors = []"
+                        @input="emailErrors = []; registered = false"
                       ></v-text-field>
                     </v-flex>
                     <v-flex xs6>
@@ -75,7 +96,7 @@
                         v-model="username"
                         :rules="usernameRules"
                         :error-messages="usernameErrors"
-                        @input="usernameErrors = []"
+                        @input="usernameErrors = []; registered = false"
                       ></v-text-field>
                     </v-flex>
                   </v-layout>
@@ -92,6 +113,7 @@
                         counter
                         :append-icon="passwordShowPlain ? 'visibility_off' : 'visibility'"
                         @click:append="passwordShowPlain = !passwordShowPlain"
+                        @input="registered = false"
                       ></v-text-field>
                     </v-flex>
                     <v-flex xs6>
@@ -106,13 +128,14 @@
                         counter
                         :append-icon="repeatPasswordShowPlain ? 'visibility_off' : 'visibility'"
                         @click:append="repeatPasswordShowPlain = !repeatPasswordShowPlain"
+                        @input="registered = false"
                       ></v-text-field>
                     </v-flex>
                   </v-layout>
                   <v-btn
                     color="primary"
                     block
-                    :disabled="!registerFormValid"
+                    :disabled="!registerFormValid || $store.state.loading || registered"
                     type="submit"
                   >
                     Register
@@ -157,7 +180,10 @@ export default {
       usernameAlreadyTaken: false,
       usernameRules: [
         v => !!v || 'Username is required',
-        v => (v && v.length <= 25) || 'Username must be less than 25 characters'
+        v => (v && v.length <= 25) || 'Username must be less than 25 characters',
+        v =>
+          /^((?!@).)*$/.test(v) ||
+          'Username can\'t contain an @-sign'
       ],
       usernameErrors: [],
       password: '',
@@ -175,7 +201,8 @@ export default {
         v => (v && v === this.password) || 'Must match password'
       ],
       registered: false,
-      tempUser: null
+      tempUser: null,
+      failed: false
     }
   },
   created() {
@@ -199,13 +226,24 @@ export default {
       }
     }
   },
+  mounted() {
+    // Alerts
+    // verification-failed
+    if (localStorage.getItem('register:verification-failed')) {
+      this.failed = true
+      localStorage.removeItem('register:verification-failed')
+    }
+  },
   methods: {
     register(e) {
       e.preventDefault() // Submit
 
-      // Reset form errors
+      // Reset form
       this.emailErrors = []
       this.usernameErrors = []
+      this.registered = false
+      this.tempUser = null
+      this.failed = false
 
       // Validation
       if (!this.$refs.registerForm.validate()) { return }
@@ -244,6 +282,15 @@ export default {
             })
           }
         })
+    }
+  },
+  watch: {
+    username(val) {
+      if (val) {
+        localStorage.setItem('login:usernameOrEmail', val)
+      } else {
+        localStorage.removeItem('login:usernameOrEmail')
+      }
     }
   }
 }
