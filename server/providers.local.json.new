@@ -5,7 +5,7 @@
     "usernameField": "username",
     "passwordField": "password",
     "authPath": "/auth/local",
-    "successRedirect": "http://steff.mysnookerskills.com:3000/account/social/success"
+    "successRedirect": "http://steff.mysnookerskills.com:3000/#/account/social/success"
   },
   "facebook-login": {
     "provider": "facebook",
@@ -16,7 +16,7 @@
     "callbackURL": "http://steff.mysnookerskills.com:3000/auth/facebook/callback",
     "authPath": "/auth/facebook",
     "callbackPath": "/auth/facebook/callback",
-    "successRedirect": "http://steff.mysnookerskills.com:3000/account/social/success",
+    "successRedirect": "http://steff.mysnookerskills.com:3000/#/account/social/success",
     "scope": ["email"],
     "authOptions": {
       "display": "popup"
@@ -31,7 +31,7 @@
     "callbackURL": "http://steff.mysnookerskills.com:3000/auth/google/callback",
     "authPath": "/auth/google",
     "callbackPath": "/auth/google/callback",
-    "successRedirect": "http://steff.mysnookerskills.com:3000/account/social/success",
+    "successRedirect": "http://steff.mysnookerskills.com:3000/#/account/social/success",
     "scope": ["email", "profile"],
     "profileMapping": [
       {
@@ -63,7 +63,7 @@
     "callbackURL": "http://steff.mysnookerskills.com:3000/auth/twitter/callback",
     "authPath": "/auth/twitter",
     "callbackPath": "/auth/twitter/callback",
-    "successRedirect": "http://steff.mysnookerskills.com:3000/account/social/success",
+    "successRedirect": "http://steff.mysnookerskills.com:3000/#/account/social/success",
     "consumerKey": "LUUO4Js2bfidabZkiD0e9QSBe",
     "consumerSecret": "c3SfkLmR78TtoPIb9UgeLWlZjwEllLerLOIc296ilZMX8ZQGQ2"
   },
@@ -75,7 +75,7 @@
     "callbackURL": "http://steff.mysnookerskills.com:3000/link/facebook/callback",
     "authPath": "/link/facebook",
     "callbackPath": "/link/facebook/callback",
-    "successRedirect": "http://steff.mysnookerskills.com:3000/account/social/success",
+    "successRedirect": "http://steff.mysnookerskills.com:3000/#/account/social/success",
     "scope": ["email", "user_likes"],
     "link": true
   },
@@ -88,7 +88,7 @@
     "callbackURL": "http://steff.mysnookerskills.com:3000/link/google/callback",
     "authPath": "/link/google",
     "callbackPath": "/link/google/callback",
-    "successRedirect": "http://steff.mysnookerskills.com:3000/account/social/success",
+    "successRedirect": "http://steff.mysnookerskills.com:3000/#/account/social/success",
     "scope": ["email", "profile"],
     "profileMapping": [
       {
