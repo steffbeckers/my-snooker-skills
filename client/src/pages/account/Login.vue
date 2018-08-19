@@ -166,7 +166,7 @@ export default {
           // Authenticate with store
           this.$store.commit('authenticate', response.data)
           // Redirect to Account
-          this.$router.push($route.query.redirect || '/account')
+          this.$router.push(this.$route.query.redirect || '/account')
         }).catch(error => {
           this.$logger.log('LOGIN ERROR', error)
 
