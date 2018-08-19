@@ -110,7 +110,7 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAdmin)) {
     if (!store.state.isAdmin) {
       next({
-        name: 'Root',
+        name: 'Login',
         query: {redirect: to.fullPath}
       })
     } else {
@@ -119,7 +119,7 @@ router.beforeEach((to, from, next) => {
   } else if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!store.state.authenticated) {
       next({
-        name: 'Root',
+        name: 'Login',
         query: {redirect: to.fullPath}
       })
     } else {
