@@ -42,6 +42,16 @@
                   Your account is already verified.
                 </v-alert>
                 <v-alert
+                  :value="failedNotVerifiedYet"
+                  class="mt-3 mb-3"
+                  type="warning"
+                  dismissible
+                  transition="scale-transition"
+                >
+                  Your email address is not verified yet.<br />
+                  Please check your mailbox and verify your email address by clicking the link we sent.
+                </v-alert>
+                <v-alert
                   :value="failed"
                   class="mt-3 mb-3"
                   type="error"
@@ -121,7 +131,8 @@ export default {
       ],
       verified: false,
       alreadyVerified: false,
-      failed: false
+      failed: false,
+      failedNotVerifiedYet: false
     }
   },
   mounted() {
@@ -144,6 +155,7 @@ export default {
       // Reset form
       this.usernameOrEmailErrors = []
       this.failed = false
+      this.failedNotVerifiedYet = false
 
       // Validation
       if (!this.$refs.loginForm.validate()) { return }
@@ -173,6 +185,7 @@ export default {
           this.$logger.log('LOGIN ERROR', error)
 
           this.failed = error.code === 'LOGIN_FAILED'
+          this.failedNotVerifiedYet = error.code === 'LOGIN_FAILED_EMAIL_NOT_VERIFIED'
         })
     },
     isEmail(text) {
