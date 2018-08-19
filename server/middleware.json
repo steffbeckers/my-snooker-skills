@@ -48,14 +48,6 @@
     }
   },
   "final": {
-    "express-history-api-fallback": {
-      "params": [
-        "index.html",
-        {
-          "root": "$!../client/www"
-        }
-      ]
-    },
     "loopback#urlNotFound": {}
   },
   "final:after": {
