@@ -29,8 +29,7 @@
                   dismissible
                   transition="scale-transition"
                 >
-                  Successfully verified your account!<br />
-                  You can login now.
+                  Successfully verified your account!<br />You can login now.
                 </v-alert>
                 <v-alert
                   :value="alreadyVerified"
@@ -48,11 +47,19 @@
                   dismissible
                   transition="scale-transition"
                 >
-                  Your email address is not verified yet.<br />
-                  Please check your mailbox and verify your email address by clicking the link we sent.
+                  Your email address is not verified yet.<br />Please check your mailbox and verify your email address by clicking the link we sent.
                 </v-alert>
                 <v-alert
                   :value="failed"
+                  class="mt-3 mb-3"
+                  type="error"
+                  dismissible
+                  transition="scale-transition"
+                >
+                  Login failed. Wrong username or email and password.
+                </v-alert>
+                <v-alert
+                  :value="failedWrongRegistration"
                   class="mt-3 mb-3"
                   type="error"
                   dismissible
@@ -132,7 +139,8 @@ export default {
       verified: false,
       alreadyVerified: false,
       failed: false,
-      failedNotVerifiedYet: false
+      failedNotVerifiedYet: false,
+      failedWrongRegistration: false
     }
   },
   mounted() {
@@ -156,6 +164,7 @@ export default {
       this.usernameOrEmailErrors = []
       this.failed = false
       this.failedNotVerifiedYet = false
+      this.failedWrongRegistration = false
 
       // Validation
       if (!this.$refs.loginForm.validate()) { return }
@@ -184,8 +193,9 @@ export default {
         }).catch(error => {
           this.$logger.log('LOGIN ERROR', error)
 
-          this.failed = error.code === 'LOGIN_FAILED'
+          this.failed = error.code === 'LOGIN_FAILED' && error.statusCode === 401
           this.failedNotVerifiedYet = error.code === 'LOGIN_FAILED_EMAIL_NOT_VERIFIED'
+          this.failedWrongRegistration = error.code === 'LOGIN_FAILED' && error.statusCode > 401
         })
     },
     isEmail(text) {

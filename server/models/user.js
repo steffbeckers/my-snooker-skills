@@ -168,7 +168,7 @@ module.exports = function(user) {
         createdOn: false,
         updatedOn: false,
       },
-      include: ['roles', 'subscriptions', 'club', 'address'],
+      include: ['roles', 'subscriptions', 'identities', 'club', 'address'],
     };
     user.findById(ctx.result.userId, filter, function(err, userInstance) {
       var userJSON = userInstance.toJSON();
@@ -324,7 +324,7 @@ module.exports = function(user) {
     console.log('> user.me triggered');
 
     var filter = {
-      include: ['roles', 'subscriptions', 'club', 'address'],
+      include: ['roles', 'subscriptions', 'identities', 'club', 'address'],
     };
     user.findById(options.accessToken.userId, filter, function(err, userInstance) {
       var userJSON = userInstance.toJSON();
