@@ -119,11 +119,13 @@ export default {
           if (error.statusCode === 422 && error.details && error.details.codes) { // Validation error
             // Uniqueness
             // Username
-            error.details.codes.username.forEach(code => {
-              if (code === 'uniqueness') {
-                this.usernameErrors.push('This username is already taken')
-              }
-            })
+            if (error.details.codes.username) {
+              error.details.codes.username.forEach(code => {
+                if (code === 'uniqueness') {
+                  this.usernameErrors.push('This username is already taken')
+                }
+              })
+            }
           }
         })
     }

@@ -269,17 +269,21 @@ export default {
           if (error.statusCode === 422 && error.details && error.details.codes) { // Validation error
             // Uniqueness
             // Email
-            error.details.codes.email.forEach(code => {
-              if (code === 'uniqueness') {
-                this.emailErrors.push('There is already an account registered with this email address. Try logging in or reset your password first')
-              }
-            })
+            if (error.details.codes.email) {
+              error.details.codes.email.forEach(code => {
+                if (code === 'uniqueness') {
+                  this.emailErrors.push('There is already an account registered with this email address. Try logging in or reset your password first')
+                }
+              })
+            }
             // Username
-            error.details.codes.username.forEach(code => {
-              if (code === 'uniqueness') {
-                this.usernameErrors.push('This username is already taken')
-              }
-            })
+            if (error.details.codes.username) {
+              error.details.codes.username.forEach(code => {
+                if (code === 'uniqueness') {
+                  this.usernameErrors.push('This username is already taken')
+                }
+              })
+            }
           }
         })
     }

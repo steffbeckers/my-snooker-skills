@@ -6,8 +6,28 @@ var qs = require('querystring');
 
 module.exports = function(user) {
   // Validations
-  user.validatesUniquenessOf('username', {ignoreCase: false});
-  user.validatesUniquenessOf('email', {ignoreCase: false});
+  user.validatesUniquenessOf('username', {ignoreCase: true});
+  user.validatesUniquenessOf('email', {ignoreCase: true});
+
+  // Before save
+  user.observe('before save', function(ctx, next) {
+    console.log('> user.observe.before save triggered');
+
+    // Clean input
+    if (ctx.instance) {
+      if (ctx.instance.username) ctx.instance.username = ctx.instance.username.trim();
+      if (ctx.instance.firstName) ctx.instance.firstName = ctx.instance.firstName.trim();
+      if (ctx.instance.lastName) ctx.instance.lastName = ctx.instance.lastName.trim();
+      if (ctx.instance.email) ctx.instance.email = ctx.instance.email.trim();
+    } else {
+      if (ctx.data.username) ctx.data.username = ctx.data.username.trim();
+      if (ctx.data.firstName) ctx.data.firstName = ctx.data.firstName.trim();
+      if (ctx.data.lastName) ctx.data.lastName = ctx.data.lastName.trim();
+      if (ctx.data.email) ctx.data.email = ctx.data.email.trim();
+    }
+
+    next();
+  });
 
   // Send verification email after registration
   user.afterRemote('create', function(ctx, userInstance, next) {
