@@ -5,6 +5,10 @@ var path = require('path');
 var qs = require('querystring');
 
 module.exports = function(user) {
+  // Validations
+  user.validatesUniquenessOf('username', {ignoreCase: false});
+  user.validatesUniquenessOf('email', {ignoreCase: false});
+
   // Send verification email after registration
   user.afterRemote('create', function(ctx, userInstance, next) {
     console.log('> user.afterRemote.create triggered');

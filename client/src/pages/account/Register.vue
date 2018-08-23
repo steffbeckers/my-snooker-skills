@@ -95,6 +95,8 @@
                         type="text"
                         v-model="username"
                         :rules="usernameRules"
+                        counter
+                        maxlength="25"
                         :error-messages="usernameErrors"
                         @input="usernameErrors = []; registered = false"
                       ></v-text-field>
@@ -167,7 +169,6 @@ export default {
         v => (v && v.length <= 50) || 'Last name must be less than 50 characters'
       ],
       email: '',
-      emailAlreadyRegistered: false,
       emailRules: [
         v => !!v || 'Email is required',
         v => (v && v.length <= 100) || 'Email must be less than 100 characters',
@@ -177,7 +178,6 @@ export default {
       ],
       emailErrors: [],
       username: '',
-      usernameAlreadyTaken: false,
       usernameRules: [
         v => !!v || 'Username is required',
         v => (v && v.length <= 25) || 'Username must be less than 25 characters',

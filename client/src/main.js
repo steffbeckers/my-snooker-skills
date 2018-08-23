@@ -40,7 +40,7 @@ if (process.env.NODE_ENV === 'production') {
 Vue.prototype.$axios = axios
 
 // Set Authorization header, if token exists
-var token = Vue.cookie.get('$MySnookerSkills$token')
+var token = Vue.cookie.get('token')
 if (token) {
   Vue.prototype.$axios.defaults.headers.common['Authorization'] = token
 }

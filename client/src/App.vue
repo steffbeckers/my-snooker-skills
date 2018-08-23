@@ -138,7 +138,7 @@
         <v-list class="pa-0">
           <v-list-tile class="white--text" avatar>
             <v-list-tile-avatar color="white">
-              <img v-if="$store.state.user.profilePicture" :src="$store.state.user.profilePicture">
+              <img v-if="$store.state.user && $store.state.user.profilePicture" :src="$store.state.user.profilePicture">
               <v-icon class="primary--text" v-else>person</v-icon>
             </v-list-tile-avatar>
             <v-list-tile-content>

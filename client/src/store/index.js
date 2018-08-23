@@ -12,13 +12,13 @@ export default new Vuex.Store({
     loadingCounter: 0,
     drawer: false,
     rightDrawer: false,
-    authenticated: Vue.cookie.get('$MySnookerSkills$token') !== null,
-    token: Vue.cookie.get('$MySnookerSkills$token'),
-    user: JSON.parse(Vue.cookie.get('$MySnookerSkills$user')),
+    authenticated: Vue.cookie.get('token') !== null,
+    token: Vue.cookie.get('token'),
+    user: JSON.parse(localStorage.getItem('user')),
     isAdmin:
-      JSON.parse(Vue.cookie.get('$MySnookerSkills$user')) &&
-      JSON.parse(Vue.cookie.get('$MySnookerSkills$user')).roles
-        ? JSON.parse(Vue.cookie.get('$MySnookerSkills$user')).roles.includes(
+      JSON.parse(localStorage.getItem('user')) &&
+      JSON.parse(localStorage.getItem('user')).roles
+        ? JSON.parse(localStorage.getItem('user')).roles.includes(
           'Administrator'
         ) : false
   },
@@ -47,24 +47,21 @@ export default new Vuex.Store({
       state.user = credentials.user
       state.isAdmin = credentials.user.roles.includes('Administrator')
 
-      // Save cookies
-      Vue.cookie.set('$MySnookerSkills$token', credentials.id, {
+      // Save user
+      localStorage.setItem('user', JSON.stringify(state.user))
+
+      // Save token
+      Vue.cookie.set('token', credentials.id, {
         expires: credentials.ttl + 's'
       })
-      Vue.cookie.set(
-        '$MySnookerSkills$user',
-        JSON.stringify(credentials.user),
-        {
-          expires: credentials.ttl + 's'
-        }
-      )
 
       // Set Authorization token on request
-      Vue.prototype.$axios.defaults.headers.common['Authorization'] =
-        state.token
+      Vue.prototype.$axios.defaults.headers.common['Authorization'] = state.token
 
-      // Open right drawer
-      state.rightDrawer = true
+      // Open right drawer on sm and up
+      if (Vue.prototype.$vuetify.breakpoint.smAndUp) {
+        state.rightDrawer = true
+      }
     },
     signOut(state) {
       // Set state
@@ -75,15 +72,20 @@ export default new Vuex.Store({
       // Set roles
       state.isAdmin = false
 
-      // Remove cookies
-      Vue.cookie.delete('$MySnookerSkills$token')
-      Vue.cookie.delete('$MySnookerSkills$user')
+      // Remove token cookie
+      Vue.cookie.delete('token')
 
-      // Remove local storage
-      localStorage.clear()
+      // Remove user
+      localStorage.removeItem('user')
 
       // Remove Authorization token on header
       delete Vue.prototype.$axios.defaults.headers.common['Authorization']
+    },
+    changeUsername(state, username) {
+      state.user.username = username
+
+      // Save user
+      localStorage.setItem('user', JSON.stringify(state.user))
     }
   }
 })

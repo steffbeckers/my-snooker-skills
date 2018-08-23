@@ -84,6 +84,7 @@
                         :rules="usernameOrEmailRules"
                         :error-messages="usernameOrEmailErrors"
                         @input="usernameOrEmailErrors = []"
+                        clearable
                       ></v-text-field>
                       <v-text-field
                         prepend-icon="lock"
@@ -95,6 +96,7 @@
                         :rules="passwordRules"
                         :append-icon="passwordShowPlain ? 'visibility_off' : 'visibility'"
                         @click:append="passwordShowPlain = !passwordShowPlain"
+                        clearable
                       ></v-text-field>
                     </v-flex>
                   </v-layout>
