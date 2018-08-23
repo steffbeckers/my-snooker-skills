@@ -32,6 +32,10 @@
       <v-flex xs12 sm4>
         <p class="title">Change username</p>
         <p>A username must be unique.</p>
+        <p>
+          Current profile URL:<br />
+          <router-link :to="{ name: 'Profile', params: { username: username }}">https://app.mysnookerskills.com/#/@/{{ username }}</router-link>
+        </p>
       </v-flex>
       <v-flex xs12 sm8>
         <v-form
@@ -56,9 +60,6 @@
               ></v-text-field>
             </v-flex>
           </v-layout>
-          <p class="text-xs-center">
-            <router-link :to="{ name: 'Profile', params: { username: username }}">https://app.mysnookerskills.com/#/@/{{ username }}</router-link>
-          </p>
           <v-btn
             color="primary"
             :disabled="!changeUsernameFormValid || $store.state.loading || $store.state.user.username === this.username"
@@ -67,6 +68,44 @@
             Update username
           </v-btn>
         </v-form>
+      </v-flex>
+    </v-layout>
+    <v-layout class="pt-3" row wrap>
+      <v-flex xs12 sm4>
+        <p class="title">Delete your account</p>
+        <p>Deleting your account means that ...</p>
+      </v-flex>
+      <v-flex xs12 sm8>
+        <!-- <v-form
+          ref="changeUsernameForm"
+          v-model="changeUsernameFormValid"
+          @submit="changeUsername"
+        >
+          <v-layout row wrap>
+            <v-flex xs12>
+              <v-text-field
+                prepend-icon="alternate_email"
+                @click:prepend="username = ''"
+                name="username"
+                label="Username"
+                type="text"
+                v-model="username"
+                :rules="usernameRules"
+                counter
+                maxlength="25"
+                :error-messages="usernameErrors"
+                @input="usernameErrors = []"
+              ></v-text-field>
+            </v-flex>
+          </v-layout>
+          <v-btn
+            color="primary"
+            :disabled="!changeUsernameFormValid || $store.state.loading || $store.state.user.username === this.username"
+            type="submit"
+          >
+            Update username
+          </v-btn>
+        </v-form> -->
       </v-flex>
     </v-layout>
   </v-container>
