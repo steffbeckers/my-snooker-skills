@@ -9,13 +9,6 @@
         Account
       </v-breadcrumbs-item>
     </v-breadcrumbs>
-    <v-layout v-if="errors.length > 0" row>
-      <v-flex>
-        <v-alert :value="true" v-for="(error, index) in errors" :key="index" type="error">
-          {{ error.message }}
-        </v-alert>
-      </v-flex>
-    </v-layout>
     <v-layout :class="$vuetify.breakpoint.smAndUp ? 'pt-3' : ''" row wrap>
       <v-flex xs12 sm4>
         <p class="title">Social sign-in</p>
@@ -56,8 +49,6 @@
                 type="text"
                 v-model="username"
                 :rules="usernameRules"
-                :hint="'https://app.mysnookerskills.com/u/' + this.username"
-                persistent-hint
                 counter
                 maxlength="25"
                 :error-messages="usernameErrors"
@@ -65,6 +56,9 @@
               ></v-text-field>
             </v-flex>
           </v-layout>
+          <p class="text-xs-center">
+            <router-link :to="{ name: 'Profile', params: { username: username }}">https://app.mysnookerskills.com/#/@/{{ username }}</router-link>
+          </p>
           <v-btn
             color="primary"
             :disabled="!changeUsernameFormValid || $store.state.loading || $store.state.user.username === this.username"
@@ -82,7 +76,6 @@
 export default {
   data() {
     return {
-      errors: [],
       changeUsernameFormValid: false,
       username: this.$store.state.user.username,
       usernameRules: [

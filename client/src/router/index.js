@@ -3,11 +3,13 @@ import Router from 'vue-router'
 
 // Pages
 const Dashboard = () => import('@/pages/Dashboard')
+const Profile = () => import('@/pages/Profile')
 const Matches = () => import('@/pages/Matches')
 
 // Account
 const AccountSocialSuccess = () => import('@/pages/account/social/Success')
 const AccountConfirmation = () => import('@/pages/account/Confirm')
+const AccountProfile = () => import('@/pages/account/Profile')
 const Account = () => import('@/pages/account/Account')
 const Register = () => import('@/pages/account/Register')
 const Login = () => import('@/pages/account/Login')
@@ -41,11 +43,22 @@ export default new Router({
       name: 'AccountSocialSuccess',
       component: AccountSocialSuccess
     },
+    // Profile
+    {
+      path: '/@/:username',
+      name: 'Profile',
+      component: Profile
+    },
     // Account
     {
       path: '/account/confirm',
       name: 'AccountConfirmation',
       component: AccountConfirmation
+    },
+    {
+      path: '/account/profile',
+      name: 'AccountProfile',
+      component: AccountProfile
     },
     {
       path: '/account',

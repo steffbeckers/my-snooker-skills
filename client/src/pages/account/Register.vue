@@ -156,7 +156,6 @@
 export default {
   data() {
     return {
-      errors: [],
       registerFormValid: false,
       firstName: '',
       firstNameRules: [

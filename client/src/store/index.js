@@ -7,11 +7,20 @@ Vue.use(VueCookie)
 
 export default new Vuex.Store({
   state: {
+    // Env
     env: process.env.NODE_ENV,
+    // Messages
+    infos: [],
+    successes: [],
+    warnings: [],
+    errors: [],
+    // Loading
     loading: false,
     loadingCounter: 0,
+    // Drawers
     drawer: false,
     rightDrawer: false,
+    // Auth
     authenticated: Vue.cookie.get('token') !== null,
     token: Vue.cookie.get('token'),
     user: JSON.parse(localStorage.getItem('user')),
@@ -23,6 +32,22 @@ export default new Vuex.Store({
         ) : false
   },
   mutations: {
+    message(state, type, message) {
+      switch (type) {
+        case 'info':
+          state.infos.push({message: message})
+          break
+        case 'success':
+          state.successes.push({message: message})
+          break
+        case 'warning':
+          state.warnings.push({message: message})
+          break
+        case 'errors':
+          state.errors.push({message: message})
+          break
+      }
+    },
     loader(state, bool) {
       if (bool) {
         state.loadingCounter++

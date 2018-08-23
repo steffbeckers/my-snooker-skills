@@ -125,6 +125,60 @@
       ></v-toolbar-side-icon>
     </v-toolbar>
     <v-content>
+      <!-- Global messages -->
+      <v-layout v-if="$store.state.errors.length > 0" row>
+        <v-flex>
+          <v-alert
+            :value="true"
+            v-for="(error, index) in $store.state.errors"
+            :key="index"
+            type="error"
+            dismissable
+          >
+            {{ error.message }}
+          </v-alert>
+        </v-flex>
+      </v-layout>
+      <v-layout v-if="$store.state.warnings.length > 0" row>
+        <v-flex>
+          <v-alert
+            :value="true"
+            v-for="(warning, index) in $store.state.warnings"
+            :key="index"
+            type="warning"
+            dismissable
+          >
+            {{ warning.message }}
+          </v-alert>
+        </v-flex>
+      </v-layout>
+      <v-layout v-if="$store.state.successes.length > 0" row>
+        <v-flex>
+          <v-alert
+            :value="true"
+            v-for="(success, index) in $store.state.successes"
+            :key="index"
+            type="success"
+            dismissable
+          >
+            {{ success.message }}
+          </v-alert>
+        </v-flex>
+      </v-layout>
+      <v-layout v-if="$store.state.infos.length > 0" row>
+        <v-flex>
+          <v-alert
+            :value="true"
+            v-for="(info, index) in $store.state.infos"
+            :key="index"
+            type="info"
+            dismissable
+          >
+            {{ info.message }}
+          </v-alert>
+        </v-flex>
+      </v-layout>
+      <!-- Router outlet -->
       <router-view></router-view>
     </v-content>
     <v-navigation-drawer
@@ -159,7 +213,7 @@
           </v-list-tile-action>
           <v-list-tile-title>Account</v-list-tile-title>
         </v-list-tile>
-        <v-list-tile>
+        <v-list-tile :to="{ name: 'AccountProfile' }" exact>
           <v-list-tile-action>
             <v-icon light>account_box</v-icon>
           </v-list-tile-action>

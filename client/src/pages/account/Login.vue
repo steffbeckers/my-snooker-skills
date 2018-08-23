@@ -122,7 +122,6 @@
 export default {
   data() {
     return {
-      errors: [],
       loginFormValid: false,
       usernameOrEmail: localStorage.getItem('login:usernameOrEmail') || '',
       usernameOrEmailRules: [

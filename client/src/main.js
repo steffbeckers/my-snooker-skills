@@ -85,6 +85,10 @@ Vue.prototype.$axios.interceptors.response.use(
       statusCode0Count++
       // Custom response
       error.response = {data: {error: {message: "Can't connect to API."}}}
+
+      // Global message
+      store.commit('message', 'error', 'Are you offline?')
+
       return Promise.reject(error.response.data.error)
     } else if (error.request.status === 0) {
       return Promise.resolve(error)
