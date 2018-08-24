@@ -6,11 +6,13 @@ const Dashboard = () => import('@/pages/Dashboard')
 const Profile = () => import('@/pages/Profile')
 const Matches = () => import('@/pages/Matches')
 
+// Settings
+const AccountSettings = () => import('@/pages/settings/Account')
+const ProfileSettings = () => import('@/pages/settings/Profile')
+
 // Account
 const AccountSocialSuccess = () => import('@/pages/account/social/Success')
 const AccountConfirmation = () => import('@/pages/account/Confirm')
-const AccountProfile = () => import('@/pages/account/Profile')
-const Account = () => import('@/pages/account/Account')
 const Register = () => import('@/pages/account/Register')
 const Login = () => import('@/pages/account/Login')
 
@@ -45,6 +47,12 @@ export default new Router({
     },
     // Profile
     {
+      path: '/profile',
+      name: 'ProfileSettings',
+      component: ProfileSettings,
+      meta: { requiresAuth: true }
+    },
+    {
       path: '/@/:username',
       name: 'Profile',
       component: Profile
@@ -56,14 +64,9 @@ export default new Router({
       component: AccountConfirmation
     },
     {
-      path: '/account/profile',
-      name: 'AccountProfile',
-      component: AccountProfile
-    },
-    {
       path: '/account',
-      name: 'Account',
-      component: Account,
+      name: 'AccountSettings',
+      component: AccountSettings,
       meta: { requiresAuth: true }
     },
     {

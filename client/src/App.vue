@@ -207,57 +207,63 @@
       </v-toolbar>
       <v-list class="pt-0">
         <v-divider></v-divider>
-        <v-list-tile :to="{ name: 'Account' }" exact>
-          <v-list-tile-action>
-            <v-icon light>account_circle</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title>Account</v-list-tile-title>
-        </v-list-tile>
-        <v-list-tile :to="{ name: 'AccountProfile' }" exact>
-          <v-list-tile-action>
-            <v-icon light>account_box</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title>Profile</v-list-tile-title>
-        </v-list-tile>
         <v-list-tile>
           <v-list-tile-action>
             <v-icon light>people</v-icon>
           </v-list-tile-action>
           <v-list-tile-title>Friends</v-list-tile-title>
         </v-list-tile>
-        <v-list-tile>
-          <v-list-tile-action>
-            <v-icon light>settings</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title>Settings</v-list-tile-title>
-        </v-list-tile>
-        <v-subheader>
-          Training
-        </v-subheader>
-        <v-list-tile>
-          <v-list-tile-action>
-            <v-icon light>more_horiz</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title>Line Up</v-list-tile-title>
-        </v-list-tile>
-        <v-list-tile>
-          <v-list-tile-action>
-            <v-icon light>grain</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title>Random</v-list-tile-title>
-        </v-list-tile>
-        <v-list-tile>
-          <v-list-tile-action>
-            <v-icon color="black">fiber_manual_record</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title>Blacky</v-list-tile-title>
-        </v-list-tile>
-        <v-list-tile>
-          <v-list-tile-action>
-            <v-icon class="pink--text accent-1">fiber_manual_record</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title>Pink</v-list-tile-title>
-        </v-list-tile>
+        <v-list-group
+          prepend-icon="assignment"
+          value="true"
+        >
+          <v-list-tile slot="activator">
+            <v-list-tile-title>Training</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile>
+            <v-list-tile-action>
+              <v-icon light>more_horiz</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-title>Line Up</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile>
+            <v-list-tile-action>
+              <v-icon light>grain</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-title>Random</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile>
+            <v-list-tile-action>
+              <v-icon color="black">fiber_manual_record</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-title>Blacky</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile>
+            <v-list-tile-action>
+              <v-icon class="pink--text accent-1">fiber_manual_record</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-title>Pink</v-list-tile-title>
+          </v-list-tile>
+        </v-list-group>
+        <v-list-group
+          prepend-icon="settings"
+        >
+          <v-list-tile slot="activator">
+            <v-list-tile-title>Settings</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile :to="{ name: 'AccountSettings' }" exact>
+            <v-list-tile-action>
+              <v-icon light>account_circle</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-title>Account</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile :to="{ name: 'ProfileSettings' }" exact>
+            <v-list-tile-action>
+              <v-icon light>account_box</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-title>Profile</v-list-tile-title>
+          </v-list-tile>
+        </v-list-group>
       </v-list>
     </v-navigation-drawer>
     <v-footer
@@ -304,6 +310,7 @@ export default {
       cordova: Vue.cordova,
       clipped: false,
       fixed: true,
+      settingsDropdown: localStorage.getItem('app:settingsDropdown') || true,
       sideMenuItems: [
         {
           icon: 'dashboard',
@@ -368,7 +375,13 @@ export default {
       // Handle the back-button event on Android. By default it will exit the app.
       navigator.app.exitApp()
     }
-  }
+  },
+  watch: {
+    settingsDropdown(bool) {
+      localStorage.setItem('login:settingsDropdown', bool)
+    }
+  },
+  name: 'App'
 }
 </script>
 

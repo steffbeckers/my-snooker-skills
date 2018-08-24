@@ -211,6 +211,7 @@ export default {
         localStorage.removeItem('login:usernameOrEmail')
       }
     }
-  }
+  },
+  name: 'Login'
 }
 </script>

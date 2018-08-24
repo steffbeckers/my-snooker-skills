@@ -3,7 +3,7 @@
     <v-breadcrumbs v-if="$vuetify.breakpoint.smAndUp">
       <v-icon slot="divider">fiber_manual_record</v-icon>
       <v-breadcrumbs-item>
-        User Settings
+        Settings
       </v-breadcrumbs-item>
       <v-breadcrumbs-item>
         Account
@@ -12,7 +12,7 @@
     <v-layout :class="$vuetify.breakpoint.smAndUp ? 'pt-3' : ''" row wrap>
       <v-flex xs12 sm4>
         <p class="title">Social sign-in</p>
-        <p class="sub-title">Activate sign-in with one of the following services.</p>
+        <p :class="$vuetify.breakpoint.xs ? 'sub-title mb-0' : 'sub-title'">Activate sign-in with one of the following services.</p>
       </v-flex>
       <v-flex xs12 sm8>
         <p class="body-2">Connected Accounts</p>
@@ -31,11 +31,7 @@
     <v-layout class="pt-3" row wrap>
       <v-flex xs12 sm4>
         <p class="title">Change username</p>
-        <p>A username must be unique.</p>
-        <p>
-          Current profile URL:<br />
-          <router-link :to="{ name: 'Profile', params: { username: username }}">https://app.mysnookerskills.com/#/@/{{ username }}</router-link>
-        </p>
+        <p :class="$vuetify.breakpoint.xs ? 'mb-0' : ''">A username must be unique.</p>
       </v-flex>
       <v-flex xs12 sm8>
         <v-form
@@ -58,12 +54,16 @@
                 :error-messages="usernameErrors"
                 @input="usernameErrors = []"
               ></v-text-field>
+              <p v-if="$vuetify.breakpoint.smAndUp" class="text-xs-center mb-0">
+                <span v-if="$store.state.user.username !== this.username">https://app.mysnookerskills.com/#/@/{{ username }}</span><router-link :to="{ name: 'Profile', params: { username: username }}" v-else>https://app.mysnookerskills.com/#/@/{{ username }}</router-link>
+              </p>
             </v-flex>
           </v-layout>
           <v-btn
             color="primary"
             :disabled="!changeUsernameFormValid || $store.state.loading || $store.state.user.username === this.username"
             type="submit"
+            :block="$vuetify.breakpoint.xs"
           >
             Update username
           </v-btn>
@@ -162,6 +162,6 @@ export default {
         })
     }
   },
-  name: 'Account'
+  name: 'AccountSettings'
 }
 </script>

@@ -295,6 +295,7 @@ export default {
         localStorage.removeItem('login:usernameOrEmail')
       }
     }
-  }
+  },
+  name: 'Register'
 }
 </script>

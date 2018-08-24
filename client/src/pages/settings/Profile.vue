@@ -3,7 +3,7 @@
     <v-breadcrumbs v-if="$vuetify.breakpoint.smAndUp">
       <v-icon slot="divider">fiber_manual_record</v-icon>
       <v-breadcrumbs-item>
-        User Settings
+        Settings
       </v-breadcrumbs-item>
       <v-breadcrumbs-item>
         Profile
@@ -19,6 +19,6 @@
 
 <script>
 export default {
-  name: 'AccountProfile'
+  name: 'ProfileSettings'
 }
 </script>
