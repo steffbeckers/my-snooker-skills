@@ -190,7 +190,7 @@
     >
       <v-toolbar color="primary">
         <v-list class="pa-0">
-          <v-list-tile class="white--text" avatar>
+          <v-list-tile :to="{ name: 'Profile', params: { username: $store.state.user.username }}" class="white--text" avatar>
             <v-list-tile-avatar color="white">
               <img v-if="$store.state.user && $store.state.user.profilePicture" :src="$store.state.user.profilePicture">
               <v-icon class="primary--text" v-else>person</v-icon>
@@ -240,7 +240,7 @@
           </v-list-tile>
           <v-list-tile>
             <v-list-tile-action>
-              <v-icon class="pink--text accent-1">fiber_manual_record</v-icon>
+              <v-icon class="pink--text accent-2">fiber_manual_record</v-icon>
             </v-list-tile-action>
             <v-list-tile-title>Pink</v-list-tile-title>
           </v-list-tile>

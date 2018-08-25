@@ -111,6 +111,9 @@ export default new Vuex.Store({
 
       // Save user
       localStorage.setItem('user', JSON.stringify(state.user))
+
+      // Update login username
+      localStorage.setItem('login:usernameOrEmail', state.user.username)
     }
   }
 })

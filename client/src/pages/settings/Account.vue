@@ -72,6 +72,79 @@
     </v-layout>
     <v-layout class="pt-3" row wrap>
       <v-flex xs12 sm4>
+        <p class="title">Change password</p>
+        <p :class="$vuetify.breakpoint.xs ? 'mb-0' : ''">Minimum 10 characters, at least 1 uppercase letter, 1 lowercase letter and 1 number</p>
+      </v-flex>
+      <v-flex xs12 sm8>
+        <v-alert
+          :value="passwordChanged"
+          class="mt-3 mb-3"
+          type="success"
+          dismissible
+          transition="scale-transition"
+        >
+          Successfully changed your password! You must use this new password on your next login.
+        </v-alert>
+        <v-form
+          ref="changePasswordForm"
+          v-model="changePasswordFormValid"
+          @submit="changePassword"
+        >
+          <v-layout row wrap>
+            <v-flex xs12>
+              <v-text-field
+                prepend-icon="lock"
+                @click:prepend="currentPassword = ''"
+                name="currentPassword"
+                label="Current password"
+                :type="currentPasswordShowPlain ? 'text' : 'password'"
+                v-model="currentPassword"
+                :rules="passwordRules"
+                counter
+                :append-icon="currentPasswordShowPlain ? 'visibility_off' : 'visibility'"
+                @click:append="currentPasswordShowPlain = !currentPasswordShowPlain"
+                :error-messages="currentPasswordErrors"
+                @input="currentPasswordErrors = []; passwordChanged = false"
+                validate-on-blur
+              ></v-text-field>
+              <v-text-field
+                prepend-icon="lock"
+                @click:prepend="password = ''"
+                name="password"
+                label="New password"
+                :type="passwordShowPlain ? 'text' : 'password'"
+                v-model="password"
+                :rules="passwordRules"
+                counter
+                :append-icon="passwordShowPlain ? 'visibility_off' : 'visibility'"
+                @click:append="passwordShowPlain = !passwordShowPlain"
+              ></v-text-field>
+              <v-text-field
+                prepend-icon="refresh"
+                @click:prepend="repeatPassword = ''"
+                name="repeatPassword"
+                label="Repeat new password"
+                :type="repeatPasswordShowPlain ? 'text' : 'password'"
+                v-model="repeatPassword"
+                :rules="repeatPasswordRules"
+                counter
+                :append-icon="repeatPasswordShowPlain ? 'visibility_off' : 'visibility'"
+                @click:append="repeatPasswordShowPlain = !repeatPasswordShowPlain"
+              ></v-text-field>
+            </v-flex>
+          </v-layout>
+          <v-btn
+            color="primary"
+            :disabled="!changePasswordFormValid || $store.state.loading"
+            type="submit"
+          >
+            Update password
+          </v-btn>
+        </v-form>
+      </v-flex>
+    </v-layout>
+    <v-layout class="pt-3" row wrap>
+      <v-flex xs12 sm4>
         <p class="title">Delete your account</p>
         <p>Deleting your account means that ...</p>
       </v-flex>
@@ -116,6 +189,7 @@ export default {
   data() {
     return {
       changeUsernameFormValid: false,
+      changePasswordFormValid: false,
       username: this.$store.state.user.username,
       usernameRules: [
         v => !!v || 'Username is required',
@@ -125,7 +199,24 @@ export default {
           'Username can\'t contain an @-sign'
       ],
       usernameErrors: [],
-      usernameChanged: false
+      currentPassword: '',
+      currentPasswordShowPlain: false,
+      currentPasswordErrors: [],
+      password: '',
+      passwordShowPlain: false,
+      passwordRules: [
+        v => !!v || 'Password is required',
+        v =>
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d!$%@#£€*?&+-_~]{10,}$/.test(v) ||
+          'Minimum 10 characters, at least 1 uppercase letter, 1 lowercase letter and 1 number'
+      ],
+      repeatPassword: '',
+      repeatPasswordShowPlain: false,
+      repeatPasswordRules: [
+        v => !!v || 'Repeat password is required',
+        v => (v && v === this.password) || 'Must match password'
+      ],
+      passwordChanged: false
     }
   },
   methods: {
@@ -158,6 +249,35 @@ export default {
                 }
               })
             }
+          }
+        })
+    },
+    changePassword(e) {
+      e.preventDefault() // Submit
+
+      // Reset form
+      this.currentPasswordErrors = []
+      this.passwordChanged = false
+
+      // Validation
+      if (!this.$refs.changePasswordForm.validate()) { return }
+
+      this.$axios
+        .post(process.env.API + '/Users/change-password', {
+          oldPassword: this.currentPassword,
+          newPassword: this.password
+        }).then(response => {
+          this.$logger.log('CHANGE PASSWORD RESPONSE', response.data)
+          // Message
+          this.passwordChanged = true
+          // Reset the form
+          this.$refs.changePasswordForm.reset()
+        }).catch(error => {
+          this.$logger.log('CHANGE PASSWORD ERROR', error)
+
+          // Invalid current password
+          if (error.code === 'INVALID_PASSWORD') {
+            this.currentPasswordErrors.push('Current password is invalid')
           }
         })
     }
