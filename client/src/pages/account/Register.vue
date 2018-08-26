@@ -50,25 +50,25 @@
                     <v-flex xs6>
                       <v-text-field
                         prepend-icon="person"
-                        @click:prepend="firstName = ''"
                         name="firstName"
                         label="First name"
                         type="text"
                         v-model="firstName"
                         :rules="firstNameRules"
                         @input="registered = false"
+                        clearable
                       ></v-text-field>
                     </v-flex>
                     <v-flex xs6>
                       <v-text-field
                         prepend-icon="perm_identity"
-                        @click:prepend="lastName = ''"
                         name="lastName"
                         label="Last name"
                         type="text"
                         v-model="lastName"
                         :rules="lastNameRules"
                         @input="registered = false"
+                        clearable
                       ></v-text-field>
                     </v-flex>
                   </v-layout>
@@ -76,7 +76,6 @@
                     <v-flex xs6>
                       <v-text-field
                         prepend-icon="email"
-                        @click:prepend="email = ''"
                         name="email"
                         label="Email"
                         type="text"
@@ -84,12 +83,12 @@
                         :rules="emailRules"
                         :error-messages="emailErrors"
                         @input="emailErrors = []; registered = false"
+                        clearable
                       ></v-text-field>
                     </v-flex>
                     <v-flex xs6>
                       <v-text-field
                         prepend-icon="alternate_email"
-                        @click:prepend="username = ''"
                         name="username"
                         label="Username"
                         type="text"
@@ -99,6 +98,7 @@
                         maxlength="25"
                         :error-messages="usernameErrors"
                         @input="usernameErrors = []; registered = false"
+                        clearable
                       ></v-text-field>
                     </v-flex>
                   </v-layout>
@@ -106,7 +106,6 @@
                     <v-flex xs6>
                       <v-text-field
                         prepend-icon="lock"
-                        @click:prepend="password = ''"
                         name="password"
                         label="Password"
                         :type="passwordShowPlain ? 'text' : 'password'"
@@ -116,12 +115,12 @@
                         :append-icon="passwordShowPlain ? 'visibility_off' : 'visibility'"
                         @click:append="passwordShowPlain = !passwordShowPlain"
                         @input="registered = false"
+                        clearable
                       ></v-text-field>
                     </v-flex>
                     <v-flex xs6>
                       <v-text-field
                         prepend-icon="refresh"
-                        @click:prepend="repeatPassword = ''"
                         name="repeatPassword"
                         label="Repeat password"
                         :type="repeatPasswordShowPlain ? 'text' : 'password'"
@@ -131,6 +130,7 @@
                         :append-icon="repeatPasswordShowPlain ? 'visibility_off' : 'visibility'"
                         @click:append="repeatPasswordShowPlain = !repeatPasswordShowPlain"
                         @input="registered = false"
+                        clearable
                       ></v-text-field>
                     </v-flex>
                   </v-layout>

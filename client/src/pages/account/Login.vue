@@ -76,7 +76,6 @@
                     <v-flex xs12>
                       <v-text-field
                         prepend-icon="person"
-                        @click:prepend="usernameOrEmail = ''"
                         name="usernameOrEmail"
                         label="Username or email"
                         type="text"
@@ -88,7 +87,6 @@
                       ></v-text-field>
                       <v-text-field
                         prepend-icon="lock"
-                        @click:prepend="password = ''"
                         name="password"
                         label="Password"
                         :type="passwordShowPlain ? 'text' : 'password'"

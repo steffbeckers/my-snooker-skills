@@ -3,7 +3,7 @@
 
 <script>
 export default {
-  async created() {
+  created() {
     // Confirm the newly created account from link in email
 
     // User

@@ -388,6 +388,34 @@ module.exports = function(user) {
     },
   });
 
+  // Profile
+  user.profileByUsername = function(username, cb) {
+    var filter = {
+      where: {
+        username: username,
+      },
+      fields: {
+        settings: false,
+        email: false,
+        emailVerified: false,
+        updatedOn: false,
+      },
+    };
+    user.findOne(filter, function(err, userInstance) {
+      // On error
+      if (err) {
+        cb(err);
+      }
+
+      cb(null, userInstance);
+    });
+  };
+  user.remoteMethod('profileByUsername', {
+    http: {path: '/:username/profile', verb: 'get'},
+    accepts: {arg: 'username', type: 'string'},
+    returns: {type: 'object', root: true},
+  });
+
   // Statistics
   // Refresh calculations (MapReduces, ..)
   // user.calculateStatistics = function(cb) {

@@ -125,6 +125,13 @@
     {
       "accessType": "EXECUTE",
       "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "profileByUsername"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
       "principalId": "$authenticated",
       "permission": "ALLOW",
       "property": "me"

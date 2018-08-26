@@ -43,7 +43,6 @@
             <v-flex xs12>
               <v-text-field
                 prepend-icon="alternate_email"
-                @click:prepend="username = ''"
                 name="username"
                 label="Username"
                 type="text"
@@ -53,6 +52,7 @@
                 maxlength="25"
                 :error-messages="usernameErrors"
                 @input="usernameErrors = []"
+                clearable
               ></v-text-field>
               <p v-if="$vuetify.breakpoint.smAndUp" class="text-xs-center mb-0">
                 <span v-if="$store.state.user.username !== this.username">https://app.mysnookerskills.com/#/@/{{ username }}</span><router-link :to="{ name: 'Profile', params: { username: username }}" v-else>https://app.mysnookerskills.com/#/@/{{ username }}</router-link>
@@ -78,12 +78,11 @@
       <v-flex xs12 sm8>
         <v-alert
           :value="passwordChanged"
-          class="mt-3 mb-3"
           type="success"
           dismissible
           transition="scale-transition"
         >
-          Successfully changed your password! You must use this new password on your next login.
+          Successfully changed your password! You must use this new password during your next login.
         </v-alert>
         <v-form
           ref="changePasswordForm"
@@ -94,7 +93,6 @@
             <v-flex xs12>
               <v-text-field
                 prepend-icon="lock"
-                @click:prepend="currentPassword = ''"
                 name="currentPassword"
                 label="Current password"
                 :type="currentPasswordShowPlain ? 'text' : 'password'"
@@ -106,10 +104,10 @@
                 :error-messages="currentPasswordErrors"
                 @input="currentPasswordErrors = []; passwordChanged = false"
                 validate-on-blur
+                clearable
               ></v-text-field>
               <v-text-field
                 prepend-icon="lock"
-                @click:prepend="password = ''"
                 name="password"
                 label="New password"
                 :type="passwordShowPlain ? 'text' : 'password'"
@@ -118,10 +116,11 @@
                 counter
                 :append-icon="passwordShowPlain ? 'visibility_off' : 'visibility'"
                 @click:append="passwordShowPlain = !passwordShowPlain"
+                @input="passwordChanged = false"
+                clearable
               ></v-text-field>
               <v-text-field
                 prepend-icon="refresh"
-                @click:prepend="repeatPassword = ''"
                 name="repeatPassword"
                 label="Repeat new password"
                 :type="repeatPasswordShowPlain ? 'text' : 'password'"
@@ -130,13 +129,16 @@
                 counter
                 :append-icon="repeatPasswordShowPlain ? 'visibility_off' : 'visibility'"
                 @click:append="repeatPasswordShowPlain = !repeatPasswordShowPlain"
+                @input="passwordChanged = false"
+                clearable
               ></v-text-field>
             </v-flex>
           </v-layout>
           <v-btn
             color="primary"
-            :disabled="!changePasswordFormValid || $store.state.loading"
+            :disabled="!changePasswordFormValid || $store.state.loading || passwordChanged"
             type="submit"
+            :block="$vuetify.breakpoint.xs"
           >
             Update password
           </v-btn>
@@ -189,7 +191,6 @@ export default {
   data() {
     return {
       changeUsernameFormValid: false,
-      changePasswordFormValid: false,
       username: this.$store.state.user.username,
       usernameRules: [
         v => !!v || 'Username is required',
@@ -199,6 +200,7 @@ export default {
           'Username can\'t contain an @-sign'
       ],
       usernameErrors: [],
+      changePasswordFormValid: false,
       currentPassword: '',
       currentPasswordShowPlain: false,
       currentPasswordErrors: [],
@@ -268,10 +270,10 @@ export default {
           newPassword: this.password
         }).then(response => {
           this.$logger.log('CHANGE PASSWORD RESPONSE', response.data)
-          // Message
-          this.passwordChanged = true
           // Reset the form
           this.$refs.changePasswordForm.reset()
+          // Message
+          this.passwordChanged = true
         }).catch(error => {
           this.$logger.log('CHANGE PASSWORD ERROR', error)
 
