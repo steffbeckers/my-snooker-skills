@@ -28,6 +28,12 @@
     "telephone": {
       "type": "string"
     },
+    "website": {
+      "type": "string"
+    },
+    "bio": {
+      "type": "string"
+    },
     "settings": {
       "type": "object",
       "default": {
@@ -36,6 +42,9 @@
       }
     },
     "profilePicture": {
+      "type": "string"
+    },
+    "profileBanner": {
       "type": "string"
     }
   },

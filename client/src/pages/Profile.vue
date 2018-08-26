@@ -2,10 +2,15 @@
   <div>
     <v-container v-if="user" grid-list-lg fluid>
       <v-layout class="pt-2" align-center justify-space-around wrap>
-        <v-avatar size="90px" color="red">
+        <v-avatar size="90px" :color="!user.profilePicture ? 'red' : 'transparent'">
           <img v-if="user.profilePicture" :src="profilePicture(user.profilePicture, 90)">
           <v-icon style="font-size: 42px;" dark v-else>person</v-icon>
         </v-avatar>
+        <div v-if="$store.state.user.id === user.id" id="banner-buttons">
+          <v-btn :to="{ name: 'ProfileSettings' }" outline color="grey">
+            Edit profile
+          </v-btn>
+        </div>
       </v-layout>
       <v-layout class="headline mt-3" align-center justify-space-around wrap>
         {{ user.firstName }} {{ user.lastName }}
@@ -72,6 +77,15 @@
     </v-tabs-items>
   </div>
 </template>
+
+<style scoped>
+  #banner-buttons {
+    position: absolute;
+    right: 0px;
+    top: 5px;
+    display: block;
+  }
+</style>
 
 <script>
 export default {

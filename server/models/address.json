@@ -21,6 +21,9 @@
     "city": {
       "type": "string"
     },
+    "country": {
+      "type": "string"
+    },
     "location": {
       "type": "geopoint"
     }

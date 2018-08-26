@@ -9,7 +9,7 @@
         Account
       </v-breadcrumbs-item>
     </v-breadcrumbs>
-    <v-layout :class="$vuetify.breakpoint.smAndUp ? 'pt-3' : ''" row wrap>
+    <v-layout :class="$vuetify.breakpoint.smAndUp ? 'pt-3 bb-1px-s-eee pb-3' : 'bb-1px-s-eee pb-3'" row wrap>
       <v-flex xs12 sm4>
         <p class="title">Social sign-in</p>
         <p :class="$vuetify.breakpoint.xs ? 'sub-title mb-0' : 'sub-title'">Activate sign-in with one of the following services.</p>
@@ -28,7 +28,7 @@
         </v-btn>
       </v-flex>
     </v-layout>
-    <v-layout class="pt-3" row wrap>
+    <v-layout class="pt-3 pb-3 bb-1px-s-eee" row wrap>
       <v-flex xs12 sm4>
         <p class="title">Change username</p>
         <p :class="$vuetify.breakpoint.xs ? 'mb-0' : ''">A username must be unique.</p>
@@ -70,7 +70,7 @@
         </v-form>
       </v-flex>
     </v-layout>
-    <v-layout class="pt-3" row wrap>
+    <v-layout class="pt-3 pb-3 bb-1px-s-eee" row wrap>
       <v-flex xs12 sm4>
         <p class="title">Change password</p>
         <p :class="$vuetify.breakpoint.xs ? 'mb-0' : ''">Minimum 10 characters, at least 1 uppercase letter, 1 lowercase letter and 1 number</p>
@@ -145,7 +145,7 @@
         </v-form>
       </v-flex>
     </v-layout>
-    <v-layout class="pt-3" row wrap>
+    <v-layout class="pt-3 pb-3" row wrap>
       <v-flex xs12 sm4>
         <p class="title">Delete your account</p>
         <p>Deleting your account means that ...</p>

@@ -40,6 +40,7 @@
     "vue-head": "^2.0.12",
     "vue-router": "^3.0.1",
     "vuetify": "^1.1.11",
+    "vuetify-upload-button": "^1.1.0",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
