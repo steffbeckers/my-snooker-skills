@@ -29,7 +29,7 @@
                   dismissible
                   transition="scale-transition"
                 >
-                  Successfully verified your account!<br />You can login now.
+                  Successfully verified your email address!<br />You can login now.
                 </v-alert>
                 <v-alert
                   :value="alreadyVerified"
@@ -38,16 +38,34 @@
                   dismissible
                   transition="scale-transition"
                 >
-                  Your account is already verified.
+                  Your email address is already verified.
                 </v-alert>
                 <v-alert
                   :value="failedNotVerifiedYet"
                   class="mt-3 mb-3"
                   type="warning"
+                  transition="scale-transition"
+                >
+                  Your email address is not verified yet.<br />Please check your mailbox and verify your email address by clicking the verification link.
+                </v-alert>
+                <v-btn
+                  v-if="failedNotVerifiedYet"
+                  class="mt-0 mb-3 white--text"
+                  color="warning"
+                  block
+                  :disabled="$store.state.loading || !usernameOrEmail"
+                  @click="resendVerificationEmail"
+                >
+                  Resend verification email
+                </v-btn>
+                <v-alert
+                  :value="resentVerificationEmail"
+                  class="mt-3 mb-3"
+                  type="success"
                   dismissible
                   transition="scale-transition"
                 >
-                  Your email address is not verified yet.<br />Please check your mailbox and verify your email address by clicking the link we sent.
+                  We resent you a verification email. Please check your mailbox and verify your email address by clicking the verification link.
                 </v-alert>
                 <v-alert
                   :value="failed"
@@ -82,7 +100,7 @@
                         v-model="usernameOrEmail"
                         :rules="usernameOrEmailRules"
                         :error-messages="usernameOrEmailErrors"
-                        @input="usernameOrEmailErrors = []"
+                        @input="usernameOrEmailErrors = []; failedNotVerifiedYet = false"
                         clearable
                       ></v-text-field>
                       <v-text-field
@@ -137,6 +155,7 @@ export default {
       ],
       verified: false,
       alreadyVerified: false,
+      resentVerificationEmail: false,
       failed: false,
       failedNotVerifiedYet: false,
       failedWrongRegistration: false
@@ -164,6 +183,7 @@ export default {
       this.failed = false
       this.failedNotVerifiedYet = false
       this.failedWrongRegistration = false
+      this.resentVerificationEmail = false
 
       // Validation
       if (!this.$refs.loginForm.validate()) { return }
@@ -195,6 +215,23 @@ export default {
           this.failed = error.code === 'LOGIN_FAILED' && error.statusCode === 401
           this.failedNotVerifiedYet = error.code === 'LOGIN_FAILED_EMAIL_NOT_VERIFIED'
           this.failedWrongRegistration = error.code === 'LOGIN_FAILED' && error.statusCode > 401
+        })
+    },
+    resendVerificationEmail() {
+      // TODO Refactor same code on login and profile settings page
+
+      if (this.usernameOrEmail === '') { return }
+
+      this.$axios
+        .post(process.env.API + `/Users/resendVerificationEmailTo/${this.usernameOrEmail}`)
+        .then(response => {
+          this.$logger.log('RESEND VERIFICATION EMAIL RESPONSE', response.data)
+
+          // Message
+          this.failedNotVerifiedYet = false
+          this.resentVerificationEmail = response.data.code === 'RESENT_VERIFICATION_EMAIL'
+        }).catch(error => {
+          this.$logger.log('RESEND VERIFICATION EMAIL ERROR', error)
         })
     },
     isEmail(text) {

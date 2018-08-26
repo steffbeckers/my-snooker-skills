@@ -43,6 +43,33 @@
           @submit="changeProfile"
         >
           <v-layout row wrap>
+            <v-flex xs12>
+              <v-alert
+                :value="!$store.state.user.emailVerified && !resentVerificationEmail"
+                type="warning"
+                transition="scale-transition"
+              >
+                You changed your email address.<br />Please check your mailbox and verify your new email address by clicking the verification link.
+              </v-alert>
+              <v-btn
+                v-if="!$store.state.user.emailVerified && !resentVerificationEmail"
+                class="mt-3 mb-3 white--text"
+                color="warning"
+                block
+                :disabled="$store.state.loading || !email"
+                @click="resendVerificationEmail"
+              >
+                Resend verification email
+              </v-btn>
+              <v-alert
+                :value="resentVerificationEmail"
+                type="success"
+                dismissible
+                transition="scale-transition"
+              >
+                We resent you a verification email. Please check your mailbox and verify your email address by clicking the verification link.
+              </v-alert>
+            </v-flex>
             <v-flex xs6>
               <v-text-field
                 prepend-icon="person"
@@ -52,6 +79,7 @@
                 v-model="firstName"
                 :rules="firstNameRules"
                 @input="profileChanged = false"
+                :disabled="!$store.state.user.emailVerified"
                 clearable
               ></v-text-field>
             </v-flex>
@@ -64,6 +92,7 @@
                 v-model="lastName"
                 :rules="lastNameRules"
                 @input="profileChanged = false"
+                :disabled="!$store.state.user.emailVerified"
                 clearable
               ></v-text-field>
             </v-flex>
@@ -85,7 +114,13 @@
           </v-layout>
           <v-btn
             color="primary"
-            :disabled="!changeProfileFormValid || $store.state.loading"
+            :disabled="
+              !changeProfileFormValid ||
+              $store.state.loading ||
+              $store.state.user.firstName === this.firstName &&
+              $store.state.user.lastName === this.lastName &&
+              $store.state.user.email === this.email
+            "
             type="submit"
             :block="$vuetify.breakpoint.xs"
           >
@@ -130,7 +165,8 @@ export default {
           'Email has to be valid'
       ],
       emailErrors: [],
-      profileChanged: false
+      profileChanged: false,
+      resentVerificationEmail: false
     }
   },
   methods: {
@@ -150,7 +186,8 @@ export default {
       this.$axios
         .patch(process.env.API + '/Users/' + this.$store.state.user.id, {
           firstName: this.firstName,
-          lastName: this.lastName
+          lastName: this.lastName,
+          email: this.email
         }).then(response => {
           this.$logger.log('CHANGE PROFILE RESPONSE', response.data)
 
@@ -175,6 +212,22 @@ export default {
               })
             }
           }
+        })
+    },
+    resendVerificationEmail() {
+      // TODO Refactor same code on login and profile settings page
+
+      if (this.email === '') { return }
+
+      this.$axios
+        .post(process.env.API + `/Users/resendVerificationEmailTo/${this.email}`)
+        .then(response => {
+          this.$logger.log('RESEND VERIFICATION EMAIL RESPONSE', response.data)
+
+          // Message
+          this.resentVerificationEmail = response.data.code === 'RESENT_VERIFICATION_EMAIL'
+        }).catch(error => {
+          this.$logger.log('RESEND VERIFICATION EMAIL ERROR', error)
         })
     }
   },

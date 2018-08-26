@@ -6,7 +6,7 @@
           <img v-if="user.profilePicture" :src="profilePicture(user.profilePicture, 90)">
           <v-icon style="font-size: 42px;" dark v-else>person</v-icon>
         </v-avatar>
-        <div v-if="$store.state.user.id === user.id" id="banner-buttons">
+        <div v-if="$store.state.authenticated && $store.state.user.id === user.id" id="banner-buttons">
           <v-btn :to="{ name: 'ProfileSettings' }" outline color="grey">
             Edit profile
           </v-btn>

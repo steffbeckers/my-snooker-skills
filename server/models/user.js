@@ -18,12 +18,45 @@ module.exports = function(user) {
       if (ctx.instance.username) ctx.instance.username = ctx.instance.username.trim();
       if (ctx.instance.firstName) ctx.instance.firstName = ctx.instance.firstName.trim();
       if (ctx.instance.lastName) ctx.instance.lastName = ctx.instance.lastName.trim();
-      if (ctx.instance.email) ctx.instance.email = ctx.instance.email.trim();
+      if (ctx.instance.email) ctx.instance.email = ctx.instance.email.toLowerCase().trim(); // Also toLowerCase
     } else {
       if (ctx.data.username) ctx.data.username = ctx.data.username.trim();
       if (ctx.data.firstName) ctx.data.firstName = ctx.data.firstName.trim();
       if (ctx.data.lastName) ctx.data.lastName = ctx.data.lastName.trim();
-      if (ctx.data.email) ctx.data.email = ctx.data.email.trim();
+      if (ctx.data.email) ctx.data.email = ctx.data.email.toLowerCase().trim(); // Also toLowerCase
+    }
+
+    next();
+  });
+
+  // After save
+  user.observe('after save', function(ctx, next) {
+    console.log('> user.observe.after save triggered');
+
+    // TODO
+    // Send email verification after changing email address
+    // if (ctx.instance.email && !ctx.instance.emailVerified) {
+    //   user.resendVerificationEmail(ctx.instance.email, function(err, response) {
+    //     console.log(err, response);
+    //     next();
+    //   });
+    // } else {
+    //   next();
+    // }
+
+    next();
+  });
+
+  // Login logic
+  user.beforeRemote('login', function(ctx, userInstance, next) {
+    console.log('> user.beforeRemote.login triggered');
+
+    // Lower case email address and trim
+    if (ctx &&
+        ctx.req &&
+        ctx.req.body &&
+        ctx.req.body.email) {
+      ctx.req.body.email = ctx.req.body.email.toLowerCase().trim();
     }
 
     next();
@@ -103,8 +136,8 @@ module.exports = function(user) {
           port: app.get('port') || 3000,
           type: 'email',
           to: userInstance.email,
-          from: 'registration@mysnookerskills.com',
-          subject: 'Thanks for registering',
+          from: 'account@mysnookerskills.com',
+          subject: 'Verify your email address',
           template: path.join(
             __dirname,
             '..',
@@ -116,13 +149,13 @@ module.exports = function(user) {
           ),
           redirect: null,
           user: userInstance,
-          mailer: app.models.EmailFromRegistration,
+          mailer: app.models.EmailFromAccount,
           verifyHref: app.get('confirmHrefApp') + '?' + qs.stringify({
             uid: String(userInstance.id),
           }),
         };
 
-        user.verify(options, function(err, response) {
+        userInstance.verify(options, function(err, response) {
           if (err) {
             console.log('> Error verifying user');
             return cb(err);
@@ -187,11 +220,6 @@ module.exports = function(user) {
 
     // Overwrite user with roles
     var filter = {
-      fields: {
-        emailVerified: false,
-        createdOn: false,
-        updatedOn: false,
-      },
       include: ['roles', 'subscriptions', 'identities', 'club', 'address'],
     };
     user.findById(ctx.result.userId, filter, function(err, userInstance) {
