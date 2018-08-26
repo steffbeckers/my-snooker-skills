@@ -333,6 +333,10 @@ export default {
         {
           icon: 'people',
           title: 'Players'
+        },
+        {
+          icon: 'place',
+          title: 'Clubs'
         }
       ],
       buildDateTime: process.env.BUILD_DATETIME,
