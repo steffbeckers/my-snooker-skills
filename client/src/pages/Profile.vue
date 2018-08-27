@@ -78,15 +78,6 @@
   </div>
 </template>
 
-<style scoped>
-  #banner-buttons {
-    position: absolute;
-    right: 0px;
-    top: 5px;
-    display: block;
-  }
-</style>
-
 <script>
 export default {
   data() {

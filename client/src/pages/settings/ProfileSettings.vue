@@ -132,15 +132,6 @@
   </v-container>
 </template>
 
-<style scoped>
-  div.upload-btn {
-    padding: 0px;
-  }
-  div.upload-btn label[for='uploadFile'] {
-    margin-left: 0px!important;
-  }
-</style>
-
 <script>
 export default {
   data() {
