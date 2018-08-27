@@ -7,8 +7,8 @@ const Profile = () => import('@/pages/Profile')
 const Matches = () => import('@/pages/Matches')
 
 // Settings
-const AccountSettings = () => import('@/pages/settings/Account')
-const ProfileSettings = () => import('@/pages/settings/Profile')
+const AccountSettings = () => import('@/pages/settings/AccountSettings')
+const ProfileSettings = () => import('@/pages/settings/ProfileSettings')
 
 // Account
 const AccountSocialSuccess = () => import('@/pages/account/social/Success')

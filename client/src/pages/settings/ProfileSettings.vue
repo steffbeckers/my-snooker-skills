@@ -22,12 +22,12 @@
       </v-flex>
       <v-flex xs12 sm6>
         <p class="body-2 mb-2">Upload new avatar</p>
-        <upload-btn
+        <!-- <upload-btn
           accept="image/*"
           title="Choose new avatar"
           :fileChangedCallback="uploadNewAvatar"
         >
-        </upload-btn>
+        </upload-btn> -->
         <p class="mt-2">The maximum image size allowed is 500KB.</p>
       </v-flex>
     </v-layout>
