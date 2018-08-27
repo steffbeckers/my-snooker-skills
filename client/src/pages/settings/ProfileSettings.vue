@@ -15,9 +15,9 @@
         <p :class="$vuetify.breakpoint.xs ? 'sub-title mb-0' : 'sub-title'">You can upload an avatar here or change it at <a href="https://www.gravatar.com/" target="_blank">gravatar.com</a></p>
       </v-flex>
       <v-flex class="text-xs-center" xs12 sm3>
-        <v-avatar size="160px" :color="!$store.state.user.profilePicture ? 'red' : 'transparent'">
-          <img v-if="$store.state.user.profilePicture" :src="profilePicture($store.state.user.profilePicture, 90)">
-          <v-icon style="font-size: 42px;" dark v-else>person</v-icon>
+        <v-avatar size="90px" :color="!$store.state.user.profilePicture ? 'red' : 'transparent'">
+          <img v-if="$store.state.user.profilePicture" :src="$store.state.user.profilePicture">
+          <v-icon style="font-size: 26px;" dark v-else>person</v-icon>
         </v-avatar>
       </v-flex>
       <v-flex xs12 sm6>
@@ -161,9 +161,6 @@ export default {
     }
   },
   methods: {
-    uploadNewAvatar(file) {
-      this.$logger.log('uploadNewAvatar(file) => file', file)
-    },
     changeProfile(e) {
       e.preventDefault() // Submit
 
