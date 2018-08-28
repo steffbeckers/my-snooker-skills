@@ -13,6 +13,7 @@ const ProfileSettings = () => import('@/pages/settings/ProfileSettings')
 // Account
 const AccountSocialSuccess = () => import('@/pages/account/social/Success')
 const AccountConfirmation = () => import('@/pages/account/Confirm')
+const ResetPassword = () => import('@/pages/account/ResetPassword')
 const Register = () => import('@/pages/account/Register')
 const Login = () => import('@/pages/account/Login')
 
@@ -62,6 +63,11 @@ export default new Router({
       path: '/account/confirm',
       name: 'AccountConfirmation',
       component: AccountConfirmation
+    },
+    {
+      path: '/account/reset-password',
+      name: 'ResetPassword',
+      component: ResetPassword
     },
     {
       path: '/account',

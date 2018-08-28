@@ -71,7 +71,7 @@ module.exports = function(user) {
       port: app.get('port') || 3000,
       type: 'email',
       to: userInstance.email,
-      from: 'registration@mysnookerskills.com',
+      from: '🔴 My Snooker Skills <registration@mysnookerskills.com>',
       subject: 'Thanks for registering',
       template: path.join(
         __dirname,
@@ -136,7 +136,7 @@ module.exports = function(user) {
           port: app.get('port') || 3000,
           type: 'email',
           to: userInstance.email,
-          from: 'account@mysnookerskills.com',
+          from: '🔴 My Snooker Skills <account@mysnookerskills.com>',
           subject: 'Verify your email address',
           template: path.join(
             __dirname,
@@ -186,8 +186,8 @@ module.exports = function(user) {
   // Send password reset email
   user.on('resetPasswordRequest', function(info) {
     console.log('> user.on.resetPasswordRequest triggered');
-    console.log('> info');
-    console.log(info);
+    // console.log('> info');
+    // console.log(info);
 
     var html = '';
     html += '<h1>My Snooker Skills </h1>';
@@ -200,9 +200,9 @@ module.exports = function(user) {
     html += '</a>';
     html += '</p>';
 
-    user.app.models.Email.send({
+    user.app.models.EmailFromAccount.send({
       to: info.email,
-      from: 'account@mysnookerskills.com',
+      from: '🔴 My Snooker Skills <account@mysnookerskills.com>',
       subject: 'Reset password',
       mailer: app.models.EmailFromAccount,
       html: html,

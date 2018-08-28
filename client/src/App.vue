@@ -222,6 +222,12 @@
           </v-list-tile>
           <v-list-tile>
             <v-list-tile-action>
+              <v-icon light>drag_indicator</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-title>Scoreboard</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile>
+            <v-list-tile-action>
               <v-icon light>more_horiz</v-icon>
             </v-list-tile-action>
             <v-list-tile-title>Line Up</v-list-tile-title>

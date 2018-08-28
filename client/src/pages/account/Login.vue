@@ -129,6 +129,8 @@
             </v-layout>
           </v-card-text>
         </v-card>
+        <v-btn class="mt-3 grey--text" block :to="{ name: 'ResetPassword' }" flat>Forgot your password?</v-btn>
+        <v-btn class="grey--text" block :to="{ name: 'Register' }" flat>Register a new account</v-btn>
       </v-flex>
     </v-layout>
   </v-container>

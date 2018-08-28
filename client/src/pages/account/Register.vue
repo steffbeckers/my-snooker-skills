@@ -164,6 +164,7 @@
             </v-layout>
           </v-card-text>
         </v-card>
+        <v-btn class="mt-3 grey--text" block :to="{ name: 'Login' }" flat>Login with an existing account</v-btn>
       </v-flex>
     </v-layout>
   </v-container>
@@ -239,6 +240,7 @@ export default {
             this.username = 'beckerssteff'
             this.password = 'SteffBeckers123'
             this.repeatPassword = 'SteffBeckers123'
+            this.privacyPolicy = true
             break
         }
       }
