@@ -1,4 +1,11 @@
 <template>
+  <v-dialog persistent fullscreen>
+    <v-container fill-height>
+      <v-layout row justify-center align-center>
+        <v-progress-circular indeterminate :size="150" :width="10" color="primary"></v-progress-circular>
+      </v-layout>
+    </v-container>
+  </v-dialog>
 </template>
 
 <script>
@@ -13,6 +20,12 @@ export default {
     // Confirmation token
     let token = this.$route.query.token
     this.$logger.log(token)
+
+    // If something is wrong with the query params, redirect to register
+    if (!userId || !token) {
+      this.$router.push('/register')
+      return
+    }
 
     // Verify the user
     // Parameters

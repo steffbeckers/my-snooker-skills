@@ -85,6 +85,15 @@
                 >
                   Something went wrong during the registration. Please try again or contact <a class="white--text" href="mailto:support@mysnookerskills.com?subject=Registration failed&body=Hi, something went wrong during the registration of my new My Snooker Skills account. EXTRA INFO:">support@mysnookerskills.com</a>.
                 </v-alert>
+                <v-alert
+                  :value="passwordReset"
+                  class="mt-3 mb-3"
+                  type="success"
+                  dismissible
+                  transition="scale-transition"
+                >
+                  Successfully changed your password!<br />You can login now.
+                </v-alert>
                 <v-form
                   ref="loginForm"
                   v-model="loginFormValid"
@@ -160,7 +169,8 @@ export default {
       resentVerificationEmail: false,
       failed: false,
       failedNotVerifiedYet: false,
-      failedWrongRegistration: false
+      failedWrongRegistration: false,
+      passwordReset: false
     }
   },
   mounted() {
@@ -174,6 +184,11 @@ export default {
     if (localStorage.getItem('login:already-verified')) {
       this.alreadyVerified = true
       localStorage.removeItem('login:already-verified')
+    }
+    // password-reset
+    if (localStorage.getItem('login:password-reset')) {
+      this.passwordReset = true
+      localStorage.removeItem('login:password-reset')
     }
   },
   methods: {

@@ -88,6 +88,17 @@ export default new Vuex.Store({
         state.rightDrawer = true
       }
     },
+    changeToken(state, token, ttl = 1209600) {
+      state.token = token
+
+      // Save token
+      Vue.cookie.set('token', token, {
+        expires: ttl + 's'
+      })
+
+      // Set Authorization token on request
+      Vue.prototype.$axios.defaults.headers.common['Authorization'] = token
+    },
     signOut(state) {
       // Set state
       state.authenticated = false
