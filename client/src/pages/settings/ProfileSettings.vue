@@ -160,6 +160,10 @@ export default {
       resentVerificationEmail: false
     }
   },
+  async created() {
+    let user = await this.$authentication.me()
+    if (user) this.$store.commit('updateMe', user)
+  },
   methods: {
     changeProfile(e) {
       e.preventDefault() // Submit
@@ -177,8 +181,6 @@ export default {
           lastName: this.lastName,
           email: this.email
         }).then(response => {
-          this.$logger.log('CHANGE PROFILE RESPONSE', response.data)
-
           // Update user in store
           this.$store.commit('changeProfile', response.data)
 
@@ -187,8 +189,6 @@ export default {
           this.lastName = this.$store.state.user.lastName
           this.email = this.$store.state.user.email
         }).catch(error => {
-          this.$logger.log('CHANGE PROFILE ERROR', error)
-
           if (error.statusCode === 422 && error.details && error.details.codes) { // Validation error
             // Uniqueness
             // Email
@@ -210,12 +210,8 @@ export default {
       this.$axios
         .post(process.env.API + `/Users/resendVerificationEmailTo/${this.email}`)
         .then(response => {
-          this.$logger.log('RESEND VERIFICATION EMAIL RESPONSE', response.data)
-
           // Message
           this.resentVerificationEmail = response.data.code === 'RESENT_VERIFICATION_EMAIL'
-        }).catch(error => {
-          this.$logger.log('RESEND VERIFICATION EMAIL ERROR', error)
         })
     }
   },

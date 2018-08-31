@@ -190,7 +190,7 @@
     >
       <v-toolbar color="primary">
         <v-list class="pa-0">
-          <v-list-tile :to="{ name: 'Profile', params: { username: $store.state.user.username }}" class="white--text" avatar>
+          <v-list-tile @click="$router.push({name: 'Profile', params: {username: $store.state.user.username}})" class="white--text" avatar>
             <v-list-tile-avatar color="white">
               <img v-if="$store.state.user && $store.state.user.profilePicture" :src="$store.state.user.profilePicture">
               <v-icon class="primary--text" v-else>person</v-icon>
@@ -351,11 +351,17 @@ export default {
       title: 'My Snooker Skills'
     }
   },
-  created() {
+  async created() {
     var self = this
     this.cordova.on('deviceready', () => {
       self.onDeviceReady()
     })
+
+    // Authentication - Reload the user
+    if (this.$store.state.authenticated) {
+      let user = await this.$authentication.me()
+      if (user) this.$store.commit('updateMe', user)
+    }
   },
   methods: {
     onDeviceReady() {

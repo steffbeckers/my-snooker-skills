@@ -221,6 +221,10 @@ export default {
       passwordChanged: false
     }
   },
+  async created() {
+    let user = await this.$authentication.me()
+    if (user) this.$store.commit('updateMe', user)
+  },
   methods: {
     changeUsername(e) {
       e.preventDefault() // Submit
@@ -235,12 +239,9 @@ export default {
         .patch(process.env.API + '/Users/' + this.$store.state.user.id, {
           username: this.username
         }).then(response => {
-          this.$logger.log('CHANGE USERNAME RESPONSE', response.data)
           // Update user in store
           this.$store.commit('changeUsername', response.data.username)
         }).catch(error => {
-          this.$logger.log('CHANGE USERNAME ERROR', error)
-
           if (error.statusCode === 422 && error.details && error.details.codes) { // Validation error
             // Uniqueness
             // Username
@@ -269,14 +270,11 @@ export default {
           oldPassword: this.currentPassword,
           newPassword: this.password
         }).then(response => {
-          this.$logger.log('CHANGE PASSWORD RESPONSE', response.data)
           // Reset the form
           this.$refs.changePasswordForm.reset()
           // Message
           this.passwordChanged = true
         }).catch(error => {
-          this.$logger.log('CHANGE PASSWORD ERROR', error)
-
           // Invalid current password
           if (error.code === 'INVALID_PASSWORD') {
             this.currentPasswordErrors.push('Current password is invalid')

@@ -88,17 +88,6 @@ export default new Vuex.Store({
         state.rightDrawer = true
       }
     },
-    changeToken(state, token, ttl = 1209600) {
-      state.token = token
-
-      // Save token
-      Vue.cookie.set('token', token, {
-        expires: ttl + 's'
-      })
-
-      // Set Authorization token on request
-      Vue.prototype.$axios.defaults.headers.common['Authorization'] = token
-    },
     signOut(state) {
       // Set state
       state.authenticated = false
@@ -131,6 +120,23 @@ export default new Vuex.Store({
       state.user.lastName = user.lastName
       state.user.email = user.email
       state.user.emailVerified = user.emailVerified
+
+      // Save user
+      localStorage.setItem('user', JSON.stringify(state.user))
+    },
+    changeToken(state, token, ttl = 1209600) {
+      state.token = token
+
+      // Save token
+      Vue.cookie.set('token', token, {
+        expires: ttl + 's'
+      })
+
+      // Set Authorization token on request
+      Vue.prototype.$axios.defaults.headers.common['Authorization'] = token
+    },
+    updateMe(state, user) {
+      state.user = user
 
       // Save user
       localStorage.setItem('user', JSON.stringify(state.user))

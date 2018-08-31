@@ -219,16 +219,12 @@ export default {
       this.$axios
         .post(process.env.API + '/Users/login', credentials)
         .then(response => {
-          this.$logger.log('LOGIN RESPONSE', response.data)
-
           // Authenticate with store
           this.$store.commit('authenticate', response.data)
 
           // Redirect to Account
-          this.$router.push(this.$route.query.redirect || '/account')
+          this.$router.push(this.$route.query.redirect || localStorage.getItem('previous-page') || '/account')
         }).catch(error => {
-          this.$logger.log('LOGIN ERROR', error)
-
           this.failed = error.code === 'LOGIN_FAILED' && error.statusCode === 401
           this.failedNotVerifiedYet = error.code === 'LOGIN_FAILED_EMAIL_NOT_VERIFIED'
           this.failedWrongRegistration = error.code === 'LOGIN_FAILED' && error.statusCode > 401
@@ -242,13 +238,9 @@ export default {
       this.$axios
         .post(process.env.API + `/Users/resendVerificationEmailTo/${this.usernameOrEmail}`)
         .then(response => {
-          this.$logger.log('RESEND VERIFICATION EMAIL RESPONSE', response.data)
-
           // Message
           this.failedNotVerifiedYet = false
           this.resentVerificationEmail = response.data.code === 'RESENT_VERIFICATION_EMAIL'
-        }).catch(error => {
-          this.$logger.log('RESEND VERIFICATION EMAIL ERROR', error)
         })
     },
     isEmail(text) {

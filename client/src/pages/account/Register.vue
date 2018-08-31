@@ -276,16 +276,12 @@ export default {
           username: this.username,
           password: this.password
         }).then(response => {
-          this.$logger.log('REGISTER RESPONSE', response.data)
-
           // Temp user
           this.tempUser = response.data
 
           // Registered alert
           this.registered = true
         }).catch(error => {
-          this.$logger.log('REGISTER ERROR', error)
-
           if (error.statusCode === 422 && error.details && error.details.codes) { // Validation error
             // Uniqueness
             // Email

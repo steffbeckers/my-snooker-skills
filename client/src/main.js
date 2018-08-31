@@ -113,6 +113,9 @@ Vue.prototype.$axios.interceptors.response.use(
 
 // Route guards
 router.beforeEach((to, from, next) => {
+  // Last page
+  localStorage.setItem('previous-page', from.path)
+
   if (to.matched.some(record => record.meta.requiresAdmin)) {
     if (!store.state.isAdmin) {
       next({

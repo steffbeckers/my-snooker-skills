@@ -10,5 +10,8 @@ export default class Authentication {
       .then(user => {
         return user.data
       })
+      .catch(() => {
+        return null
+      })
   }
 }

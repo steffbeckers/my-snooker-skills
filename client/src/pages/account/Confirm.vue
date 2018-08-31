@@ -33,14 +33,10 @@ export default {
 
     this.$axios
       .get(process.env.API + '/Users/confirm' + params).then(response => {
-        this.$logger.log('CONFIRMATION RESPONSE', response)
-
         // Verified, redirect
         localStorage.setItem('login:verified', true)
         this.$router.push('/login')
       }).catch(error => {
-        this.$logger.log('CONFIRMATION ERROR', error)
-
         // Already verified
         if (error.code === 'INVALID_TOKEN') {
           localStorage.setItem('login:already-verified', true)

@@ -26,6 +26,13 @@ export default {
       credentials.ttl = 1209600
       credentials.user = await this.$authentication.me()
 
+      // Defensive error handling
+      if (!credentials.user) {
+        // Reset if problem with user
+        this.$store.commit('signOut')
+        return
+      }
+
       // Authenticate with store
       this.$store.commit('authenticate', credentials)
 
