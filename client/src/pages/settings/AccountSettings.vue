@@ -55,7 +55,7 @@
                 clearable
               ></v-text-field>
               <p v-if="$vuetify.breakpoint.smAndUp" class="text-xs-center mb-0">
-                <span v-if="$store.state.user.username !== this.username">https://app.mysnookerskills.com/#/@/{{ username }}</span><router-link :to="{ name: 'Profile', params: { username: username }}" v-else>https://app.mysnookerskills.com/#/@/{{ username }}</router-link>
+                <span v-if="$store.state.user.username !== this.username">https://app.mysnookerskills.com/#/@{{ username }}</span><router-link :to="{ name: 'Profile', params: { username: username }}" v-else>https://app.mysnookerskills.com/#/@{{ username }}</router-link>
               </p>
             </v-flex>
           </v-layout>

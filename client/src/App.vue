@@ -199,7 +199,7 @@
               <v-list-tile-title class="white--text">{{ $store.state.user.firstName }} {{ $store.state.user.lastName }}</v-list-tile-title>
               <v-list-tile-sub-title class="white--text" v-if="$store.state.user.username">@{{ $store.state.user.username }}</v-list-tile-sub-title>
             </v-list-tile-content>
-            <v-list-tile-action @click.stop="$store.commit('signOut')">
+            <v-list-tile-action @click.stop="logout()">
               <v-icon class="white--text" style="cursor: pointer">power_settings_new</v-icon>
             </v-list-tile-action>
           </v-list-tile>
@@ -268,6 +268,12 @@
               <v-icon light>account_box</v-icon>
             </v-list-tile-action>
             <v-list-tile-title>Profile</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile>
+            <v-list-tile-action>
+              <v-icon light>settings_applications</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-title>Application</v-list-tile-title>
           </v-list-tile>
         </v-list-group>
       </v-list>
@@ -390,6 +396,19 @@ export default {
     onBackKeyDown() {
       // Handle the back-button event on Android. By default it will exit the app.
       navigator.app.exitApp()
+    },
+    logout() {
+      this.$axios
+        .post(process.env.API + '/Users/logout')
+        .then(response => {
+          this.$store.commit('signOut')
+
+          // Redirect to Root when you need to be logged in to visit the current page
+          if (JSON.parse(localStorage.getItem('page-requiresAuth')) ||
+              JSON.parse(localStorage.getItem('page-requiresAdmin'))) {
+            this.$router.push({ name: 'Root' })
+          }
+        })
     }
   },
   watch: {

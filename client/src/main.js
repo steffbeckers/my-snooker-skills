@@ -123,6 +123,7 @@ router.beforeEach((to, from, next) => {
         query: {redirect: to.fullPath}
       })
     } else {
+      localStorage.setItem('page-requiresAdmin', true)
       next()
     }
   } else if (to.matched.some(record => record.meta.requiresAuth)) {
@@ -132,9 +133,12 @@ router.beforeEach((to, from, next) => {
         query: {redirect: to.fullPath}
       })
     } else {
+      localStorage.setItem('page-requiresAuth', true)
       next()
     }
   } else {
+    localStorage.setItem('page-requiresAdmin', false)
+    localStorage.setItem('page-requiresAuth', false)
     next()
   }
 })

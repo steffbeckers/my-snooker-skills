@@ -137,6 +137,7 @@ export default new Vuex.Store({
     },
     updateMe(state, user) {
       state.user = user
+      state.isAdmin = user.roles.includes('Administrator')
 
       // Save user
       localStorage.setItem('user', JSON.stringify(state.user))

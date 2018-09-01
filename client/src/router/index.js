@@ -54,7 +54,7 @@ export default new Router({
       meta: { requiresAuth: true }
     },
     {
-      path: '/@/:username',
+      path: '/@:username',
       name: 'Profile',
       component: Profile
     },
