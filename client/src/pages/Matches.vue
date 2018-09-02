@@ -50,9 +50,6 @@ export default {
         .then(response => {
           this.matches = response.data
         })
-        .catch(error => {
-          this.errors.unshift(error)
-        })
     }
   },
   name: 'Matches'

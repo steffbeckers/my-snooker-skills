@@ -6,17 +6,5 @@
       "description": "Powered by Steff!",
       "contact": "steff@steffbeckers.eu"
     }
-  },
-  "@mean-expert/loopback-component-realtime": {
-    "debug": true,
-    "auth": false,
-    "driver": {
-      "name": "socket.io",
-      "options": {}
-    },
-    "modules": [
-      "IO"
-    ],
-    "secure": false
   }
 }

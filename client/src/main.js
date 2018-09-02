@@ -23,7 +23,6 @@ import nl from './i18n/nl'
 // Services
 import Logger from './services/logger'
 import Authentication from './services/authentication'
-import Authorization from './services/authorization'
 
 // Components
 import MatchesCardList from './components/matches/CardList.vue'
@@ -86,10 +85,10 @@ Vue.prototype.$axios.interceptors.response.use(
     if (error.request.status === 0 && statusCode0Count === 0) {
       statusCode0Count++
       // Custom response
-      error.response = {data: {error: {message: "Can't connect to API."}}}
+      error.response = {data: {error: {message: 'You are offline. Please try to reconnect to the internet.'}}}
 
       // Global message
-      store.commit('message', 'error', 'Are you offline?')
+      store.commit('message', {type: 'warning', value: error.response.data.error.message})
 
       return Promise.reject(error.response.data.error)
     } else if (error.request.status === 0) {
@@ -115,6 +114,10 @@ Vue.prototype.$axios.interceptors.response.use(
 router.beforeEach((to, from, next) => {
   // Last page
   localStorage.setItem('previous-page', from.path)
+
+  // Reset global messages on navigate
+  store.commit('resetMessages')
+  statusCode0Count = 0
 
   if (to.matched.some(record => record.meta.requiresAdmin)) {
     if (!store.state.isAdmin) {
@@ -190,7 +193,6 @@ Vue.filter('formatMoney', function(value) {
 // Services
 Vue.prototype.$logger = new Logger()
 Vue.prototype.$authentication = new Authentication()
-Vue.prototype.$authorization = new Authorization()
 
 // add cordova.js only if serving the app through file://
 if (window.location.protocol === 'file:' || window.location.port === '3000') {
@@ -207,7 +209,7 @@ Vue.use(Vuetify, {
   },
   lang: {
     locales: { en, nl },
-    current: 'en'
+    current: store.state.authenticated ? store.state.user.settings.lang : 'en'
   }
 })
 Vue.config.productionTip = false

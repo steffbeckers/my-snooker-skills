@@ -17,6 +17,9 @@ const ResetPassword = () => import('@/pages/account/ResetPassword')
 const Register = () => import('@/pages/account/Register')
 const Login = () => import('@/pages/account/Login')
 
+// Training
+const Scoreboard = () => import('@/pages/training/Scoreboard')
+
 // Components (for testing)
 const Camera = () => import('@/components/Camera')
 
@@ -33,6 +36,12 @@ export default new Router({
       path: '/components/camera',
       name: 'CameraComponent',
       component: Camera
+    },
+    // Training
+    {
+      path: '/training/scoreboard',
+      name: 'TrainingScoreboard',
+      component: Scoreboard
     },
     // Matches
     {

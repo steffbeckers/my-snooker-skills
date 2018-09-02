@@ -105,6 +105,9 @@ export default {
             JSON.stringify(this.user)
           )
         })
+        .catch(error => {
+          this.$logger.error(error)
+        })
     },
     profilePicture(url, size) {
       // Google standard
