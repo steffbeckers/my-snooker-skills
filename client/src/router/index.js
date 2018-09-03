@@ -5,6 +5,7 @@ import Router from 'vue-router'
 const Dashboard = () => import('@/pages/Dashboard')
 const Profile = () => import('@/pages/Profile')
 const Matches = () => import('@/pages/Matches')
+const Clubs = () => import('@/pages/Clubs')
 
 // Settings
 const AccountSettings = () => import('@/pages/settings/AccountSettings')
@@ -42,6 +43,12 @@ export default new Router({
       path: '/training/scoreboard',
       name: 'TrainingScoreboard',
       component: Scoreboard
+    },
+    // Clubs
+    {
+      path: '/clubs',
+      name: 'Clubs',
+      component: Clubs
     },
     // Matches
     {

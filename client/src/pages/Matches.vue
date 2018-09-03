@@ -2,7 +2,7 @@
   <v-container grid-list-lg fluid>
     <v-layout row>
       <v-flex>
-        <div class="title">Recent matches</div>
+        <div class="title">Matches</div>
       </v-flex>
     </v-layout>
     <MatchesCardList v-if="listType === 'cards'" :matches="matches"></MatchesCardList>

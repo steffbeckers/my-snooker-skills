@@ -46,6 +46,10 @@
       "emailVerificationRequired": true
     }
   },
+  "ApplicationCredential": {
+    "dataSource": "mongodb",
+    "public": false
+  },
   "userCredential": {
     "dataSource": "mongodb",
     "public": false

@@ -336,7 +336,10 @@ export default {
         },
         {
           icon: 'place',
-          title: 'Clubs'
+          title: 'Clubs',
+          page: {
+            name: 'Clubs'
+          }
         }
       ],
       buildDateTime: process.env.BUILD_DATETIME,
