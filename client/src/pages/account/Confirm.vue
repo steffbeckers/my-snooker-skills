@@ -1,14 +1,10 @@
 <template>
-  <v-dialog persistent fullscreen>
-    <v-container fill-height>
-      <v-layout row justify-center align-center>
-        <v-progress-circular indeterminate :size="150" :width="10" color="primary"></v-progress-circular>
-      </v-layout>
-    </v-container>
-  </v-dialog>
+  <Loader></Loader>
 </template>
 
 <script>
+import Loader from '../../components/Loader.vue'
+
 export default {
   created() {
     // Confirm the newly created account from link in email
@@ -48,6 +44,9 @@ export default {
         localStorage.setItem('register:verification-failed', true)
         this.$router.push('/register')
       })
+  },
+  components: {
+    Loader
   },
   name: 'AccountConfirmation'
 }

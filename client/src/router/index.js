@@ -17,11 +17,13 @@ const AccountConfirmation = () => import('@/pages/account/Confirm')
 const ResetPassword = () => import('@/pages/account/ResetPassword')
 const Register = () => import('@/pages/account/Register')
 const Login = () => import('@/pages/account/Login')
+const Logout = () => import('@/pages/account/Logout')
 
 // Training
 const Scoreboard = () => import('@/pages/training/Scoreboard')
 
 // Components (for testing)
+const Loader = () => import('@/components/Loader')
 const Camera = () => import('@/components/Camera')
 
 // Errors
@@ -33,6 +35,11 @@ export default new Router({
   // mode: 'history',
   routes: [
     // Tools
+    {
+      path: '/components/loader',
+      name: 'LoaderComponent',
+      component: Loader
+    },
     {
       path: '/components/camera',
       name: 'CameraComponent',
@@ -100,6 +107,11 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/logout',
+      name: 'Logout',
+      component: Logout
     },
     // Root
     {

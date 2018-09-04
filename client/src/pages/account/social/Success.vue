@@ -1,7 +1,10 @@
 <template>
+  <Loader></Loader>
 </template>
 
 <script>
+import Loader from '../../../components/Loader.vue'
+
 export default {
   async created() {
     // Check if the user authenticated from social logins
@@ -42,6 +45,9 @@ export default {
     }
 
     this.$router.push('/account')
+  },
+  components: {
+    Loader
   },
   name: 'AccountSocialSuccess'
 }
