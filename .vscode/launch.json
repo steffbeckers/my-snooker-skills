@@ -10,9 +10,8 @@
       "name": "Debug live",
       "address": "127.0.0.1",
       "localRoot": "${workspaceRoot}/",
-      "remoteRoot": "/app/",
-      "port": 9229,
-      "protocol": "inspector"
+      "remoteRoot": "/app",
+      "port": 9229
     },
     {
         "type": "node",
