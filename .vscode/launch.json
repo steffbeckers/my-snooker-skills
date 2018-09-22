@@ -8,7 +8,7 @@
       "type": "node",
       "request": "attach",
       "name": "Debug live",
-      "address": "127.0.0.1",
+      "address": "dev.steffbeckers.eu",
       "localRoot": "${workspaceRoot}/",
       "remoteRoot": "/app",
       "port": 9229
