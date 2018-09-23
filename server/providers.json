@@ -10,7 +10,7 @@
   "facebook-login": {
     "provider": "facebook",
     "module": "passport-facebook",
-    "profileFields": ["link", "locale", "name", "timezone", "verified", "email", "updated_time", "displayName", "username"],
+    "profileFields": ["link", "locale", "name", "timezone", "verified", "email", "updated_time", "displayName"],
     "clientID": "1888929744484257",
     "clientSecret": "579712137a66c1b9a51822829f32814e",
     "callbackURL": "https://app.mysnookerskills.com/auth/facebook/callback",
