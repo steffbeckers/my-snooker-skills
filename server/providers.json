@@ -30,6 +30,10 @@
       {
         "userField": "email",
         "providerField": "emails[0].value"
+      },
+      {
+        "userField": "profilePicture",
+        "providerField": "photos[0].value"
       }
     ],
     "authOptions": {
