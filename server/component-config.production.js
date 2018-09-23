@@ -1,9 +1,9 @@
 'use strict';
 
 module.exports = {
-  'loopback-component-explorer': {
-    'uiDirs': ['client/dist/static/explorer'],
-  },
+  // 'loopback-component-explorer': {
+  //   'uiDirs': ['client/www/explorer'],
+  // },
   // // For main component-config.json
   // "@mean-expert/loopback-component-realtime": {
   //   "debug": true,
