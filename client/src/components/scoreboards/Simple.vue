@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     scoreOfPlayer: function(playerId) {
-      if (this.$store.state.ssb.scores['5b846ea93fc3df3dac82eb0b'].length === 0) { return 0 }
+      if (!this.$store.state.ssb.scores || !this.$store.state.ssb.scores['5b846ea93fc3df3dac82eb0b'] || this.$store.state.ssb.scores['5b846ea93fc3df3dac82eb0b'].length === 0) { return 0 }
       return this.$store.state.ssb.scores['5b846ea93fc3df3dac82eb0b'].reduce((total, score) => {
         return total + score.value
       }, 0)
