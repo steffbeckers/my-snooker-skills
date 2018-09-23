@@ -26,7 +26,7 @@
     <v-btn @click="$store.commit('ssb/inputScore', '7')" color="secondary" class="elevation-0" large>7</v-btn>
     <v-btn @click="$store.commit('ssb/inputScore', '8')" color="secondary" class="elevation-0" large>8</v-btn>
     <v-btn @click="$store.commit('ssb/inputScore', '9')" color="secondary" class="elevation-0" large>9</v-btn>
-    <v-btn @click="$store.commit('ssb/inputScore', '0')" color="secondary" class="elevation-0" large>0</v-btn>
+    <v-btn @click="$store.commit('ssb/inputScore', '0')" color="secondary" class="elevation-0" :disabled="$store.state.ssb.currentScore === ''" large>0</v-btn>
     <v-btn @click="$store.commit('ssb/resetScore')" color="secondary" class="elevation-0" :disabled="$store.state.ssb.currentScore === ''" large>C</v-btn>
     <v-btn @click="$store.commit('ssb/addScore')" class="elevation-0" :disabled="$store.state.ssb.currentScore === ''" color="primary" block large>Add score</v-btn>
     <v-btn @click="$store.commit('ssb/undo')" class="elevation-0" color="primary" block large>Undo</v-btn>
