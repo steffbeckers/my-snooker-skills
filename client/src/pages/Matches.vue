@@ -32,7 +32,8 @@ export default {
               fields: {
                 id: true,
                 firstName: true,
-                lastName: true
+                lastName: true,
+                profilePicture: true
               }
             }
           },
