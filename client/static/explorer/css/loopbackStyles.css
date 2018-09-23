@@ -14,6 +14,10 @@
   font-family: 'Helvetica Neue', Helvetica, arial, sans-serif !important;
 }
 
+.swagger-section .swagger-ui-wrap ul#resources li.resource div.heading h2 {
+  text-transform: capitalize;
+}
+
 /* layout spacing and global colors */
 body {
   padding-top: 60px;
