@@ -38,6 +38,10 @@
       {
         "userField": "profilePicture",
         "providerField": "photos[0].value"
+      },
+      {
+        "userField": "emailVerified",
+        "providerField": "true"
       }
     ],
     "authOptions": {
@@ -75,6 +79,10 @@
       {
         "userField": "profilePicture",
         "providerField": "photos[0].value"
+      },
+      {
+        "userField": "emailVerified",
+        "providerField": "true"
       }
     ]
   },
@@ -120,6 +128,10 @@
       {
         "userField": "profilePicture",
         "providerField": "photos[0].value"
+      },
+      {
+        "userField": "emailVerified",
+        "providerField": "true"
       }
     ],
     "link": true
@@ -155,6 +167,10 @@
       {
         "userField": "profilePicture",
         "providerField": "photos[0].value"
+      },
+      {
+        "userField": "emailVerified",
+        "providerField": "true"
       }
     ],
     "link": true
