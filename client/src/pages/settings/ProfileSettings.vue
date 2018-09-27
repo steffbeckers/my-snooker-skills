@@ -49,7 +49,7 @@
                 type="warning"
                 transition="scale-transition"
               >
-                You changed your email address.<br />Please check your mailbox and verify your new email address by clicking the verification link.
+                Please check your mailbox and verify your email address by clicking the verification link.
               </v-alert>
               <v-btn
                 v-if="!$store.state.user.emailVerified && !resentVerificationEmail"
