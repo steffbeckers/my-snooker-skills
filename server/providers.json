@@ -28,6 +28,10 @@
         "providerField": "name.familyName"
       },
       {
+        "userField": "username",
+        "providerField": "id"
+      },
+      {
         "userField": "email",
         "providerField": "emails[0].value"
       },
@@ -88,6 +92,7 @@
   "facebook-link": {
     "provider": "facebook",
     "module": "passport-facebook",
+    "profileFields": ["link", "locale", "name", "timezone", "verified", "email", "updated_time", "photos"],
     "clientID": "1888929744484257",
     "clientSecret": "579712137a66c1b9a51822829f32814e",
     "callbackURL": "https://app.mysnookerskills.com/link/facebook/callback",
@@ -105,8 +110,16 @@
         "providerField": "name.familyName"
       },
       {
+        "userField": "username",
+        "providerField": "id"
+      },
+      {
         "userField": "email",
         "providerField": "emails[0].value"
+      },
+      {
+        "userField": "profilePicture",
+        "providerField": "photos[0].value"
       }
     ],
     "link": true
