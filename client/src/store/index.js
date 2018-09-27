@@ -177,10 +177,10 @@ export default new Vuex.Store({
       localStorage.setItem('login:usernameOrEmail', state.user.username)
     },
     changeProfile(state, user) {
-      state.user.firstName = user.firstName
-      state.user.lastName = user.lastName
-      state.user.email = user.email
-      state.user.emailVerified = user.emailVerified
+      if (user.firstName) state.user.firstName = user.firstName
+      if (user.lastName) state.user.lastName = user.lastName
+      if (user.email) state.user.email = user.email
+      if (user.emailVerified) state.user.emailVerified = user.emailVerified
 
       // Save user
       localStorage.setItem('user', JSON.stringify(state.user))

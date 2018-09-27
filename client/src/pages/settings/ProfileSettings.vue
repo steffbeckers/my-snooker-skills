@@ -213,6 +213,12 @@ export default {
           // Message
           this.resentVerificationEmail = response.data.code === 'RESENT_VERIFICATION_EMAIL'
         })
+        .catch(error => {
+          // Already verified
+          if (error.code === 'EMAIL_ALREADY_VERIFIED') {
+            this.$store.commit('changeProfile', { emailVerified: true })
+          }
+        })
     }
   },
   name: 'ProfileSettings'
