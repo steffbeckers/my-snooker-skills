@@ -166,7 +166,7 @@ module.exports = function(user) {
           return cb(null, {code: 'RESENT_VERIFICATION_EMAIL'});
         });
       } else {
-        cb(null, {code: 'EMAIL_ALREADY_VERIFIED'});
+        cb(null, {code: 'EMAIL_ALREADY_VERIFIED', user: userInstance});
       }
     });
   };
