@@ -212,10 +212,8 @@ export default {
         .then(response => {
           // Message
           this.resentVerificationEmail = response.data.code === 'RESENT_VERIFICATION_EMAIL'
-        })
-        .catch(error => {
           // Already verified
-          if (error.code === 'EMAIL_ALREADY_VERIFIED') {
+          if (response.data.code === 'EMAIL_ALREADY_VERIFIED') {
             this.$store.commit('changeProfile', { emailVerified: true })
           }
         })
