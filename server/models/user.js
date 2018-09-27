@@ -166,18 +166,17 @@ module.exports = function(user) {
           return cb(null, {code: 'RESENT_VERIFICATION_EMAIL'});
         });
       } else {
-        cb(null, {code: 'EMAIL_ALREADY_VERIFIED', user: userInstance});
+        cb(null, {code: 'EMAIL_ALREADY_VERIFIED'});
       }
     });
   };
   user.remoteMethod(
     'resendVerificationEmail',
     {
-      http: {path: '/resendVerificationEmailTo/:usernameOrEmail', verb: 'post'},
+      http: {path: '/resendVerificationEmailTo', verb: 'post'},
       accepts: {
         arg: 'usernameOrEmail',
         type: 'string',
-        http: {source: 'query'},
       },
       returns: {type: 'object', root: true},
     }

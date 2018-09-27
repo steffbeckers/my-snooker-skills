@@ -236,7 +236,7 @@ export default {
       if (this.usernameOrEmail === '') { return }
 
       this.$axios
-        .post(process.env.API + `/Users/resendVerificationEmailTo/${this.usernameOrEmail}`)
+        .post(process.env.API + '/Users/resendVerificationEmailTo', { usernameOrEmail: this.usernameOrEmail })
         .then(response => {
           // Message
           this.failedNotVerifiedYet = false

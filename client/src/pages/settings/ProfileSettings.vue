@@ -208,7 +208,7 @@ export default {
       if (this.email === '') { return }
 
       this.$axios
-        .post(process.env.API + `/Users/resendVerificationEmailTo/${this.email}`)
+        .post(process.env.API + '/Users/resendVerificationEmailTo', { usernameOrEmail: this.email })
         .then(response => {
           // Message
           this.resentVerificationEmail = response.data.code === 'RESENT_VERIFICATION_EMAIL'
