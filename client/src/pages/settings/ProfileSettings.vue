@@ -9,7 +9,7 @@
         Profile
       </v-breadcrumbs-item>
     </v-breadcrumbs>
-    <v-layout :class="$vuetify.breakpoint.smAndUp ? 'pt-3 bb-1px-s-eee pb-3' : 'bb-1px-s-eee pb-3'" row wrap>
+    <v-layout :class="$vuetify.breakpoint.smAndUp ? 'pt-3 pb-3' : 'pb-3'" row wrap>
       <v-flex xs12 sm3>
         <p class="title">Avatar</p>
         <p :class="$vuetify.breakpoint.xs ? 'sub-title mb-0' : 'sub-title'">You can upload an avatar here or change it at <a href="https://www.gravatar.com/" target="_blank">gravatar.com</a></p>

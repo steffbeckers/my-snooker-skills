@@ -195,7 +195,7 @@
       </v-toolbar>
       <v-list class="pt-0">
         <v-divider></v-divider>
-        <v-list-tile>
+        <v-list-tile :to="{ name: 'ProfileFriends', params: { username: $store.state.user.username }}" exact>
           <v-list-tile-action>
             <v-icon light>people</v-icon>
           </v-list-tile-action>

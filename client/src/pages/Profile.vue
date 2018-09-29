@@ -118,8 +118,52 @@ export default {
     }
   },
   watch: {
+    $route(value) {
+      switch (value.name) {
+        case 'ProfileMatches':
+          this.selectedTab = 'matches'
+          break
+        case 'ProfileTournaments':
+          this.selectedTab = 'tournaments'
+          break
+        case 'ProfileStatistics':
+          this.selectedTab = 'statistics'
+          break
+        case 'ProfileFriends':
+          this.selectedTab = 'friends'
+          break
+        case 'ProfileFavorites':
+          this.selectedTab = 'favorites'
+          break
+      }
+    },
     selectedTab(id) {
+      // Save to local storage
       localStorage.setItem('profile:selectedTab', id)
+
+      // Goto route
+      let routeName
+      switch (id) {
+        case 'matches':
+          routeName = 'ProfileMatches'
+          break
+        case 'tournaments':
+          routeName = 'ProfileTournaments'
+          break
+        case 'statistics':
+          routeName = 'ProfileStatistics'
+          break
+        case 'friends':
+          routeName = 'ProfileFriends'
+          break
+        case 'favorites':
+          routeName = 'ProfileFavorites'
+          break
+        default:
+          routeName = 'Profile'
+          break
+      }
+      this.$router.push({name: routeName, params: {username: this.$route.params.username}})
     }
   },
   name: 'Profile'

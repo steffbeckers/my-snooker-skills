@@ -77,6 +77,31 @@ export default new Router({
       meta: { requiresAuth: true }
     },
     {
+      path: '/@:username/matches',
+      name: 'ProfileMatches',
+      component: Profile
+    },
+    {
+      path: '/@:username/tournaments',
+      name: 'ProfileTournaments',
+      component: Profile
+    },
+    {
+      path: '/@:username/statistics',
+      name: 'ProfileStatistics',
+      component: Profile
+    },
+    {
+      path: '/@:username/friends',
+      name: 'ProfileFriends',
+      component: Profile
+    },
+    {
+      path: '/@:username/favorites',
+      name: 'ProfileFavorites',
+      component: Profile
+    },
+    {
       path: '/@:username',
       name: 'Profile',
       component: Profile
