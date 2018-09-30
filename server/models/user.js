@@ -377,25 +377,26 @@ module.exports = function(user) {
     var filter = {
       include: ['roles', 'subscriptions', 'identities', 'club', 'address'],
     };
-    user.findById(options.accessToken.userId, filter, function(err, userInstance) {
-      var userJSON = userInstance.toJSON();
+    user.findById(options.accessToken.userId, filter,
+      function(err, userInstance) {
+        var userJSON = userInstance.toJSON();
 
-      // Simplify roles in string array
-      var simpleRoleArray = [];
-      userJSON.roles.forEach(role => {
-        simpleRoleArray.push(role.name);
+        // Simplify roles in string array
+        var simpleRoleArray = [];
+        userJSON.roles.forEach(role => {
+          simpleRoleArray.push(role.name);
+        });
+        userJSON.roles = simpleRoleArray;
+
+        // Simplify subscriptions in string array
+        var simpleSubscriptionArray = [];
+        userJSON.subscriptions.forEach(subscription => {
+          simpleSubscriptionArray.push(subscription.name);
+        });
+        userJSON.subscriptions = simpleSubscriptionArray;
+
+        cb(null, userJSON);
       });
-      userJSON.roles = simpleRoleArray;
-
-      // Simplify subscriptions in string array
-      var simpleSubscriptionArray = [];
-      userJSON.subscriptions.forEach(subscription => {
-        simpleSubscriptionArray.push(subscription.name);
-      });
-      userJSON.subscriptions = simpleSubscriptionArray;
-
-      cb(null, userJSON);
-    });
   };
   user.remoteMethod('me', {
     http: {
@@ -423,10 +424,33 @@ module.exports = function(user) {
       },
       fields: {
         settings: false,
+        telephone: false,
         email: false,
         emailVerified: false,
         updatedOn: false,
       },
+      include: [
+        {
+          relation: 'friends',
+          scope: {
+            fields: {
+              firstName: true,
+              lastName: true,
+              username: true,
+              profilePicture: true,
+            },
+          },
+        },
+        {
+          relation: 'club',
+          scope: {
+            fields: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      ],
     };
     user.findOne(filter, function(err, userInstance) {
       // On error

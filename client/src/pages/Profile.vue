@@ -18,6 +18,9 @@
       <v-layout class="mt-2" align-center justify-space-around wrap>
         @{{ user.username }} &nbsp;&centerdot;&nbsp; Member since {{ user.createdOn | formatDateLongerEN }}
       </v-layout>
+      <v-layout v-if="user.bio" class="mt-2" align-center justify-space-around wrap>
+        {{ user.bio }}
+      </v-layout>
     </v-container>
     <v-tabs
       centered
@@ -66,7 +69,19 @@
       </v-tab-item>
       <v-tab-item id="friends">
         <v-card flat>
-          <v-card-text>Friends of this player</v-card-text>
+          <v-layout v-if="user.friends.length > 0" wrap>
+            <v-flex v-for="friend in user.friends" :key="friend.id" xs12 sm6 md4 lg3 class="ma-3 friend">
+              <v-avatar size="60px" :color="!user.profilePicture ? 'red' : 'transparent'">
+                <img v-if="user.profilePicture" :src="profilePicture(user.profilePicture, 60)">
+                <v-icon style="font-size: 30px;" dark v-else>person</v-icon>
+              </v-avatar>
+              <div>
+                {{ friend.firstName }} {{ friend.lastName }}<br />
+                @{{ friend.username }}
+              </div>
+            </v-flex>
+          </v-layout>
+          <v-card-text v-else>This player has not added friends yet.</v-card-text>
         </v-card>
       </v-tab-item>
       <v-tab-item id="favorites">
@@ -90,13 +105,13 @@ export default {
       selectedTab: localStorage.getItem('profile:selectedTab') || 'statistics'
     }
   },
-  created() {
+  mounted() {
     this.getProfileByUsername()
   },
   methods: {
     getProfileByUsername() {
       this.$axios
-        .get(process.env.API + '/Users/' + this.username + '/profile')
+        .get(process.env.API + '/Users/' + this.$route.params.username + '/profile')
         .then(response => {
           this.user = response.data
           // Save to local storage
@@ -135,6 +150,12 @@ export default {
         case 'ProfileFavorites':
           this.selectedTab = 'favorites'
           break
+      }
+
+      // Reload profile when username changes in URL
+      if (this.username && this.username !== value.params.username) {
+        this.username = value.params.username
+        this.getProfileByUsername()
       }
     },
     selectedTab(id) {

@@ -96,8 +96,6 @@
                 clearable
               ></v-text-field>
             </v-flex>
-          </v-layout>
-          <v-layout row wrap>
             <v-flex xs12>
               <v-text-field
                 prepend-icon="email"
@@ -111,6 +109,19 @@
                 clearable
               ></v-text-field>
             </v-flex>
+            <v-flex>
+              <v-textarea
+                prepend-icon="subject"
+                name="bio"
+                label="Bio"
+                v-model="bio"
+                :rules="bioRules"
+                @input="profileChanged = false"
+                :disabled="!$store.state.user.emailVerified"
+                counter
+                clearable
+              ></v-textarea>
+            </v-flex>
           </v-layout>
           <v-btn
             color="primary"
@@ -119,7 +130,8 @@
               $store.state.loading ||
               $store.state.user.firstName === this.firstName &&
               $store.state.user.lastName === this.lastName &&
-              $store.state.user.email === this.email
+              $store.state.user.email === this.email &&
+              $store.state.user.bio === this.bio
             "
             type="submit"
             :block="$vuetify.breakpoint.xs"
@@ -156,6 +168,10 @@ export default {
           'Email has to be valid'
       ],
       emailErrors: [],
+      bio: this.$store.state.user.bio,
+      bioRules: [
+        v => (v && v.length <= 255) || 'Bio must be less than 255 characters'
+      ],
       profileChanged: false,
       resentVerificationEmail: false
     }
@@ -179,7 +195,8 @@ export default {
         .patch(process.env.API + '/Users/' + this.$store.state.user.id, {
           firstName: this.firstName,
           lastName: this.lastName,
-          email: this.email
+          email: this.email,
+          bio: this.bio
         }).then(response => {
           // Update user in store
           this.$store.commit('changeProfile', response.data)
@@ -188,6 +205,7 @@ export default {
           this.firstName = this.$store.state.user.firstName
           this.lastName = this.$store.state.user.lastName
           this.email = this.$store.state.user.email
+          this.bio = this.$store.state.user.bio
         }).catch(error => {
           if (error.statusCode === 422 && error.details && error.details.codes) { // Validation error
             // Uniqueness

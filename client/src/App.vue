@@ -195,6 +195,30 @@
       </v-toolbar>
       <v-list class="pt-0">
         <v-divider></v-divider>
+        <v-list-tile :to="{ name: 'ProfileMatches', params: { username: $store.state.user.username }}" exact>
+          <v-list-tile-action>
+            <v-icon light>list</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title>Matches</v-list-tile-title>
+        </v-list-tile>
+        <v-list-tile :to="{ name: 'ProfileTournaments', params: { username: $store.state.user.username }}" exact>
+          <v-list-tile-action>
+            <v-icon light>line_style</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title>Tournaments</v-list-tile-title>
+        </v-list-tile>
+        <v-list-tile :to="{ name: 'ProfileStatistics', params: { username: $store.state.user.username }}" exact>
+          <v-list-tile-action>
+            <v-icon light>bar_chart</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title>Statistics</v-list-tile-title>
+        </v-list-tile>
+        <v-list-tile :to="{ name: 'ProfileFavorites', params: { username: $store.state.user.username }}" exact>
+          <v-list-tile-action>
+            <v-icon light>favorite</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title>Favorites</v-list-tile-title>
+        </v-list-tile>
         <v-list-tile :to="{ name: 'ProfileFriends', params: { username: $store.state.user.username }}" exact>
           <v-list-tile-action>
             <v-icon light>people</v-icon>
@@ -203,7 +227,6 @@
         </v-list-tile>
         <v-list-group
           prepend-icon="assignment"
-          value="true"
         >
           <v-list-tile slot="activator">
             <v-list-tile-title>Training</v-list-tile-title>

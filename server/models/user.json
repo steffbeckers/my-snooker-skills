@@ -76,9 +76,11 @@
       "model": "Subscription"
     },
     "friends": {
-      "type": "hasAndBelongsToMany",
+      "type": "hasMany",
       "model": "user",
-      "foreignKey": "userId"
+      "foreignKey": "userId",
+      "through": "Friendship",
+      "keyThrough": "friendId"
     },
     "address": {
       "type": "hasOne",

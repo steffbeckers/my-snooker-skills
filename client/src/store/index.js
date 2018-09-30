@@ -181,6 +181,7 @@ export default new Vuex.Store({
       if (user.lastName) state.user.lastName = user.lastName
       if (user.email) state.user.email = user.email
       if (user.emailVerified) state.user.emailVerified = user.emailVerified
+      if (user.bio) state.user.bio = user.bio
 
       // Save user
       localStorage.setItem('user', JSON.stringify(state.user))
