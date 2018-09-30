@@ -69,7 +69,7 @@
       </v-tab-item>
       <v-tab-item id="friends">
         <v-card flat>
-          <v-layout v-if="user.friends.length > 0" wrap>
+          <v-layout v-if="user.friends && user.friends.length > 0" wrap>
             <v-flex v-for="friend in user.friends" :key="friend.id" xs12 sm6 md4 lg3 class="ma-3 friend">
               <v-avatar size="60px" :color="!user.profilePicture ? 'red' : 'transparent'">
                 <img v-if="user.profilePicture" :src="profilePicture(user.profilePicture, 60)">

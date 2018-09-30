@@ -213,18 +213,19 @@
           </v-list-tile-action>
           <v-list-tile-title>Statistics</v-list-tile-title>
         </v-list-tile>
-        <v-list-tile :to="{ name: 'ProfileFavorites', params: { username: $store.state.user.username }}" exact>
-          <v-list-tile-action>
-            <v-icon light>favorite</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title>Favorites</v-list-tile-title>
-        </v-list-tile>
         <v-list-tile :to="{ name: 'ProfileFriends', params: { username: $store.state.user.username }}" exact>
           <v-list-tile-action>
             <v-icon light>people</v-icon>
           </v-list-tile-action>
           <v-list-tile-title>Friends</v-list-tile-title>
         </v-list-tile>
+        <v-list-tile :to="{ name: 'ProfileFavorites', params: { username: $store.state.user.username }}" exact>
+          <v-list-tile-action>
+            <v-icon light>favorite</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title>Favorites</v-list-tile-title>
+        </v-list-tile>
+
         <v-list-group
           prepend-icon="assignment"
         >
