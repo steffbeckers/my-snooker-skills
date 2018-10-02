@@ -302,8 +302,7 @@ module.exports = function(user) {
     },
   });
 
-  // List players, with filter
-  user.listPlayers = function(orderBy, orderDirection, skip, take, cb) {
+  user.list = function(orderBy, orderDirection, skip, take, cb) {
     // Check on input
     if (orderBy !== 'firstName' && orderBy !== 'lastName') {
       orderBy = 'firstName';
@@ -329,9 +328,9 @@ module.exports = function(user) {
       cb(null, users);
     });
   };
-  user.remoteMethod('listPlayers', {
+  user.remoteMethod('list', {
     http: {
-      path: '/listPlayers',
+      path: '/list',
       verb: 'get',
     },
     accepts: [

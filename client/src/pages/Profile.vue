@@ -12,7 +12,7 @@
           </v-btn>
         </div>
       </v-layout>
-      <v-layout class="headline mt-3" align-center justify-space-around wrap>
+      <v-layout class="display-1 font-weight-light mt-3" align-center justify-space-around wrap>
         {{ user.firstName }} {{ user.lastName }}
       </v-layout>
       <v-layout class="mt-2" align-center justify-space-around wrap>
@@ -45,6 +45,10 @@
       <v-tab href="#friends">
         Friends
         <v-icon>people</v-icon>
+        <!-- <v-badge color="red">
+          <span slot="badge">420</span>
+          <v-icon>people</v-icon>
+        </v-badge> -->
       </v-tab>
       <v-tab href="#favorites">
         Favorites
@@ -68,20 +72,46 @@
         </v-card>
       </v-tab-item>
       <v-tab-item id="friends">
-        <v-card flat>
-          <v-layout v-if="user.friends && user.friends.length > 0" wrap>
-            <v-flex v-for="friend in user.friends" :key="friend.id" xs12 sm6 md4 lg3 class="ma-3 friend">
-              <v-avatar size="60px" :color="!user.profilePicture ? 'red' : 'transparent'">
-                <img v-if="user.profilePicture" :src="profilePicture(user.profilePicture, 60)">
-                <v-icon style="font-size: 30px;" dark v-else>person</v-icon>
-              </v-avatar>
-              <div>
-                {{ friend.firstName }} {{ friend.lastName }}<br />
-                @{{ friend.username }}
-              </div>
-            </v-flex>
-          </v-layout>
-          <v-card-text v-else>This player has not added friends yet.</v-card-text>
+        <v-card>
+          <v-toolbar color="white" class="elevation-0">
+            <v-toolbar-title color="grey">
+              <v-icon class="mr-2">people</v-icon>Friends
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn icon>
+              <v-icon>search</v-icon>
+            </v-btn>
+            <v-btn icon>
+              <v-icon>favorite</v-icon>
+            </v-btn>
+            <v-btn icon>
+              <v-icon>more_vert</v-icon>
+            </v-btn>
+          </v-toolbar>
+          <v-container grid-list-lg fluid class="pt-0">
+            <v-layout v-if="user.friends && user.friends.length > 0" wrap>
+              <v-flex v-for="friend in user.friends" :key="friend.id" xs12 sm6 md3 class="ma-3 friend">
+                <v-avatar class="friend__avatar" size="60px" :color="!user.profilePicture ? 'red' : 'transparent'">
+                  <img v-if="user.profilePicture" :src="profilePicture(user.profilePicture, 60)">
+                  <v-icon style="font-size: 30px;" dark v-else>person</v-icon>
+                </v-avatar>
+                <div class="friend__details ml-3 mr-3 pa-2">
+                  <div class="friend__name subheading">
+                    {{ friend.firstName }} {{ friend.lastName }}
+                  </div>
+                  <div class="friend__username">
+                    @{{ friend.username }}
+                  </div>
+                </div>
+                <div class="friend__actions pa-2">
+                  <v-btn icon>
+                    <v-icon>add</v-icon>
+                  </v-btn>
+                </div>
+              </v-flex>
+            </v-layout>
+            <v-card-text v-else>This player has not added friends yet.</v-card-text>
+          </v-container>
         </v-card>
       </v-tab-item>
       <v-tab-item id="favorites">
@@ -93,6 +123,29 @@
   </div>
 </template>
 
+<style scoped>
+.friend {
+}
+
+.friend .friend__details {
+  float: left;
+}
+
+.friend .friend__avatar {
+  float: left;
+}
+
+.friend .friend__actions {
+  float: right;
+}
+
+.friend .friend__name {
+}
+
+.friend .friend__username {
+}
+</style>
+
 <script>
 export default {
   data() {
@@ -103,6 +156,28 @@ export default {
           localStorage.getItem('profile:' + this.$route.params.username)
         ) || {},
       selectedTab: localStorage.getItem('profile:selectedTab') || 'statistics'
+    }
+  },
+  created() {
+    switch (this.$route.name) {
+      case 'ProfileMatches':
+        this.selectedTab = 'matches'
+        break
+      case 'ProfileTournaments':
+        this.selectedTab = 'tournaments'
+        break
+      case 'ProfileStatistics':
+        this.selectedTab = 'statistics'
+        break
+      case 'ProfileFriends':
+        this.selectedTab = 'friends'
+        break
+      case 'ProfileFavorites':
+        this.selectedTab = 'favorites'
+        break
+      default:
+        this.selectedTab = localStorage.getItem('profile:selectedTab') || 'statistics'
+        break
     }
   },
   mounted() {
