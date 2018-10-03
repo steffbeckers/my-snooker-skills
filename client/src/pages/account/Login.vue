@@ -217,7 +217,7 @@ export default {
       }
 
       this.$axios
-        .post(process.env.API + '/Users/login', credentials)
+        .post(process.env.VUE_APP_API + '/Users/login', credentials)
         .then(response => {
           // Authenticate with store
           this.$store.commit('authenticate', response.data)
@@ -236,7 +236,7 @@ export default {
       if (this.usernameOrEmail === '') { return }
 
       this.$axios
-        .post(process.env.API + '/Users/resendVerificationEmailTo', { usernameOrEmail: this.usernameOrEmail })
+        .post(process.env.VUE_APP_API + '/Users/resendVerificationEmailTo', { usernameOrEmail: this.usernameOrEmail })
         .then(response => {
           // Message
           this.failedNotVerifiedYet = false

@@ -162,10 +162,10 @@ export default {
       if (!this.$refs.passwordResetRequestForm.validate()) { return }
 
       this.$axios
-        .post(process.env.API + '/Users/reset', {
+        .post(process.env.VUE_APP_API + '/Users/reset', {
           email: this.email
         })
-        .then(response => {
+        .then(() => {
           this.passwordResetRequestEmailSent = true
         })
     },
@@ -179,10 +179,10 @@ export default {
       if (!this.$refs.passwordResetForm.validate()) { return }
 
       this.$axios
-        .post(process.env.API + '/Users/reset-password?access_token=' + this.$route.query.access_token, {
+        .post(process.env.VUE_APP_API + '/Users/reset-password?access_token=' + this.$route.query.access_token, {
           newPassword: this.password
         })
-        .then(response => {
+        .then(() => {
           // Verified, redirect
           localStorage.setItem('login:password-reset', true)
           this.$router.push('/login')

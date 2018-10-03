@@ -174,7 +174,7 @@
 export default {
   data() {
     return {
-      version: process.env.VERSION,
+      version: process.env.VUE_APP_VERSION,
       privacyPolicy: false,
       registerFormValid: false,
       firstName: '',
@@ -269,7 +269,7 @@ export default {
       if (!this.$refs.registerForm.validate()) { return }
 
       this.$axios
-        .post(process.env.API + '/Users', {
+        .post(process.env.VUE_APP_API + '/Users', {
           firstName: this.firstName,
           lastName: this.lastName,
           email: this.email,

@@ -236,7 +236,7 @@ export default {
       if (!this.$refs.changeUsernameForm.validate()) { return }
 
       this.$axios
-        .patch(process.env.API + '/Users/' + this.$store.state.user.id, {
+        .patch(process.env.VUE_APP_API + '/Users/' + this.$store.state.user.id, {
           username: this.username
         }).then(response => {
           // Update user in store
@@ -266,10 +266,10 @@ export default {
       if (!this.$refs.changePasswordForm.validate()) { return }
 
       this.$axios
-        .post(process.env.API + '/Users/change-password', {
+        .post(process.env.VUE_APP_API + '/Users/change-password', {
           oldPassword: this.currentPassword,
           newPassword: this.password
-        }).then(response => {
+        }).then(() => {
           // Reset the form
           this.$refs.changePasswordForm.reset()
           // Message

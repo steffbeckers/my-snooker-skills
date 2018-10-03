@@ -9,8 +9,8 @@ export default {
   created() {
     // Logout functionality
     this.$axios
-      .post(process.env.API + '/Users/logout')
-      .then(response => {
+      .post(process.env.VUE_APP_API + '/Users/logout')
+      .then(() => {
         this.$store.commit('signOut')
         this.$router.push({ name: 'Root' })
       })

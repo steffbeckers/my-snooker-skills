@@ -192,7 +192,7 @@ export default {
       if (!this.$refs.changeProfileForm.validate()) { return }
 
       this.$axios
-        .patch(process.env.API + '/Users/' + this.$store.state.user.id, {
+        .patch(process.env.VUE_APP_API + '/Users/' + this.$store.state.user.id, {
           firstName: this.firstName,
           lastName: this.lastName,
           email: this.email,
@@ -226,7 +226,7 @@ export default {
       if (this.email === '') { return }
 
       this.$axios
-        .post(process.env.API + '/Users/resendVerificationEmailTo', { usernameOrEmail: this.email })
+        .post(process.env.VUE_APP_API + '/Users/resendVerificationEmailTo', { usernameOrEmail: this.email })
         .then(response => {
           // Message
           this.resentVerificationEmail = response.data.code === 'RESENT_VERIFICATION_EMAIL'

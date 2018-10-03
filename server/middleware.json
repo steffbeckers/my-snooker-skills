@@ -1,7 +1,7 @@
 {
   "initial:before": {
     "loopback#favicon": {
-      "params": "$!../client/www/img/icons/SnookerBall.png"
+      "params": "$!../client/public/img/icons/SnookerBall.png"
     }
   },
   "initial": {
@@ -43,9 +43,7 @@
     }
   },
   "files": {
-    "loopback#static": {
-      "params": "$!../client/www"
-    }
+    "loopback#static": {}
   },
   "final": {
     "loopback#urlNotFound": {}

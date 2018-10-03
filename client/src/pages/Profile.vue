@@ -124,9 +124,6 @@
 </template>
 
 <style scoped>
-.friend {
-}
-
 .friend .friend__details {
   float: left;
 }
@@ -137,12 +134,6 @@
 
 .friend .friend__actions {
   float: right;
-}
-
-.friend .friend__name {
-}
-
-.friend .friend__username {
 }
 </style>
 
@@ -186,7 +177,7 @@ export default {
   methods: {
     getProfileByUsername() {
       this.$axios
-        .get(process.env.API + '/Users/' + this.$route.params.username + '/profile')
+        .get(process.env.VUE_APP_API + '/Users/' + this.$route.params.username + '/profile')
         .then(response => {
           this.user = response.data
           // Save to local storage

@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     listNearbyClubs() {
-      this.$axios.get(process.env.API + '/Clubs/nearby').then(response => {
+      this.$axios.get(process.env.VUE_APP_API + '/Clubs/nearby').then(response => {
         this.clubs = response.data
       })
     }

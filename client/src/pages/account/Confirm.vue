@@ -28,7 +28,7 @@ export default {
     let params = `?uid=${userId}&token=${token}`
 
     this.$axios
-      .get(process.env.API + '/Users/confirm' + params).then(response => {
+      .get(process.env.VUE_APP_API + '/Users/confirm' + params).then(() => {
         // Verified, redirect
         localStorage.setItem('login:verified', true)
         this.$router.push('/login')

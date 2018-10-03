@@ -327,11 +327,9 @@ main.content {
 </style>
 
 <script>
-import Vue from 'vue'
 export default {
   data() {
     return {
-      cordova: Vue.cordova,
       clipped: false,
       fixed: true,
       settingsDropdown: localStorage.getItem('app:settingsDropdown') || true,
@@ -366,18 +364,13 @@ export default {
           }
         }
       ],
-      buildDateTime: process.env.BUILD_DATETIME,
-      version: process.env.VERSION,
+      buildDateTime: process.env.VUE_APP_BUILD_DATETIME,
+      version: process.env.VUE_APP_VERSION,
       nodeEnv: process.env.NODE_ENV,
       title: 'My Snooker Skills'
     }
   },
   async created() {
-    var self = this
-    this.cordova.on('deviceready', () => {
-      self.onDeviceReady()
-    })
-
     // Authentication - Reload the user
     if (this.$store.state.authenticated) {
       let user = await this.$authentication.me()
@@ -385,37 +378,10 @@ export default {
     }
   },
   methods: {
-    onDeviceReady() {
-      // Handle the device ready event.
-      this.cordova.on('pause', this.onPause, false)
-      this.cordova.on('resume', this.onResume, false)
-      if (this.cordova.device.platform === 'Android') {
-        document.addEventListener('backbutton', this.onBackKeyDown, false)
-      }
-    },
-    reload() {
-      console.log('reload')
-      location.reload(false)
-    },
-    onPause() {
-      // Handle the pause lifecycle event.
-      console.log('pause')
-    },
-    onResume() {
-      // Handle the resume lifecycle event.
-      // SetTimeout required for iOS.
-      setTimeout(function() {
-        console.log('resume')
-      }, 0)
-    },
-    onBackKeyDown() {
-      // Handle the back-button event on Android. By default it will exit the app.
-      navigator.app.exitApp()
-    },
     logout() {
       this.$axios
-        .post(process.env.API + '/Users/logout')
-        .then(response => {
+        .post(process.env.VUE_APP_API + '/Users/logout')
+        .then(() => {
           this.$store.commit('signOut')
 
           // Redirect to Root when you need to be logged in to visit the current page
