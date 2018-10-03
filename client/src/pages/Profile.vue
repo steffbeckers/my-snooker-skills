@@ -123,29 +123,6 @@
   </div>
 </template>
 
-<style scoped>
-.friend {
-}
-
-.friend .friend__details {
-  float: left;
-}
-
-.friend .friend__avatar {
-  float: left;
-}
-
-.friend .friend__actions {
-  float: right;
-}
-
-.friend .friend__name {
-}
-
-.friend .friend__username {
-}
-</style>
-
 <script>
 export default {
   data() {
