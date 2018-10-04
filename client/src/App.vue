@@ -17,7 +17,7 @@
           <img
             v-if="!$store.state.loading"
             style="position: relative; top: 3px;"
-            :src="($store.state.env === 'development' ? 'static/' : '') + 'img/icons/SnookerBall-48px.png'"
+            :src="baseUrl + 'img/icons/SnookerBall-48px.png'"
             alt="Logo"
             width="25"
             height="25"
@@ -56,7 +56,7 @@
         <img
           v-if="!$store.state.loading"
           style="position: relative; top: 3px;"
-          :src="($store.state.env === 'development' ? 'static/' : '') + 'img/icons/SnookerBall-48px.png'"
+          :src="baseUrl + 'img/icons/SnookerBall-48px.png'"
           alt="Logo"
           width="25"
           height="25"
@@ -367,6 +367,7 @@ export default {
       buildDateTime: process.env.VUE_APP_BUILD_DATETIME,
       version: process.env.VUE_APP_VERSION,
       nodeEnv: process.env.NODE_ENV,
+      baseUrl: process.env.BASE_URL,
       title: 'My Snooker Skills'
     }
   },

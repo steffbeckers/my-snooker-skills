@@ -1,5 +1,7 @@
+/*eslint no-console: ["error", { allow: ["log", "info", "error", "count", "groupEnd", "profileEnd", "time", "timeEnd"] }] */
+
 export default class Logger {
-  debug = process.env.NODE_ENV === 'development' || window.location.hostname === 'steff.mysnookerskills.com'
+  debug = process.env.NODE_ENV === 'local' || process.env.NODE_ENV === 'development' || window.location.hostname === 'steff.mysnookerskills.com'
 
   log(...args) {
     if (this.debug) console.log.apply(console, JSON.parse(JSON.stringify(args)))
