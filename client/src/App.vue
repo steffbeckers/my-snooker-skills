@@ -295,7 +295,7 @@
       app
       style="padding-right: 0px;"
     >
-      <div id="buildInfo" class="ml-2">Last update: {{ buildDateTime }} - Version: {{ version }}</div>
+      <div id="buildInfo" class="ml-2">Last update: {{ buildDateTime }} - v{{ version }} {{nodeEnv}}</div>
       <div id="copyright" class="mr-2">&copy; <a href="https://steffbeckers.eu/">Steff</a></div>
     </v-footer>
   </v-app>
