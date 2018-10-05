@@ -1,0 +1,180 @@
+{
+  "name": "user",
+  "base": "User",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "mongodb": {
+    "collection": "User"
+  },
+  "mixins": {
+    "TimeStamp": {
+      "createdAt": "createdOn",
+      "updatedAt": "updatedOn",
+      "validateUpsert": true,
+      "required": false
+    }
+  },
+  "properties": {
+    "firstName": {
+      "type": "string",
+      "required": true
+    },
+    "lastName": {
+      "type": "string",
+      "required": true
+    },
+    "telephone": {
+      "type": "string"
+    },
+    "website": {
+      "type": "string"
+    },
+    "bio": {
+      "type": "string"
+    },
+    "settings": {
+      "type": "object",
+      "default": {
+        "lang": "en",
+        "itemsPerPage": 10
+      }
+    },
+    "profilePicture": {
+      "type": "string"
+    },
+    "profileBanner": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "accessTokens": {
+      "type": "hasMany",
+      "model": "accessToken",
+      "foreignKey": "userId"
+    },
+    "identities": {
+      "type": "hasMany",
+      "model": "userIdentity",
+      "foreignKey": "userId"
+    },
+    "credentials": {
+      "type": "hasMany",
+      "model": "userCredential",
+      "foreignKey": "userId"
+    },
+    "roles": {
+      "type": "hasMany",
+      "model": "Role",
+      "foreignKey": "principalId",
+      "through": "RoleMapping"
+    },
+    "subscriptions": {
+      "type": "hasAndBelongsToMany",
+      "model": "Subscription"
+    },
+    "friends": {
+      "type": "hasMany",
+      "model": "user",
+      "foreignKey": "userId",
+      "through": "Friendship",
+      "keyThrough": "friendId"
+    },
+    "address": {
+      "type": "hasOne",
+      "model": "Address"
+    },
+    "club": {
+      "type": "belongsTo",
+      "model": "Club"
+    },
+    "team": {
+      "type": "hasAndBelongsToMany",
+      "model": "Team"
+    },
+    "tournaments": {
+      "type": "hasAndBelongsToMany",
+      "model": "Tournament"
+    },
+    "matches": {
+      "type": "hasAndBelongsToMany",
+      "model": "Match",
+      "foreignKey": "userModelId"
+    },
+    "frames": {
+      "type": "hasAndBelongsToMany",
+      "model": "Frame",
+      "foreignKey": "userModelId"
+    },
+    "breaks": {
+      "type": "hasMany",
+      "model": "Break"
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "Administrator",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "searchByFullnameOrUsername"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "profileByUsername"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "me"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "calculateStatistics"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "statistics"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "list"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "resendVerificationEmail"
+    }
+  ],
+  "methods": {}
+}

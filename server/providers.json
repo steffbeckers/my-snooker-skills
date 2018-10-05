@@ -4,20 +4,42 @@
     "module": "passport-local",
     "usernameField": "username",
     "passwordField": "password",
-    "authPath": "/auth/local",
-    "successRedirect": "https://app.mysnookerskills.com/account"
+    "authPath": "/api/auth/local",
+    "successRedirect": "https://app.mysnookerskills.com/account/social/success"
   },
   "facebook-login": {
     "provider": "facebook",
     "module": "passport-facebook",
-    "profileFields": ["link", "locale", "name", "timezone", "verified", "email", "updated_time"],
+    "profileFields": ["link", "locale", "name", "timezone", "verified", "email", "updated_time", "photos"],
     "clientID": "1888929744484257",
     "clientSecret": "579712137a66c1b9a51822829f32814e",
-    "callbackURL": "https://app.mysnookerskills.com/auth/facebook/callback",
-    "authPath": "/auth/facebook",
-    "callbackPath": "/auth/facebook/callback",
-    "successRedirect": "https://app.mysnookerskills.com/account",
+    "callbackURL": "https://app.mysnookerskills.com/api/auth/facebook/callback",
+    "authPath": "/api/auth/facebook",
+    "callbackPath": "/api/auth/facebook/callback",
+    "successRedirect": "https://app.mysnookerskills.com/account/social/success",
     "scope": ["email"],
+    "profileMapping": [
+      {
+        "userField": "firstName",
+        "providerField": "name.givenName"
+      },
+      {
+        "userField": "lastName",
+        "providerField": "name.familyName"
+      },
+      {
+        "userField": "username",
+        "providerField": "id"
+      },
+      {
+        "userField": "email",
+        "providerField": "emails[0].value"
+      },
+      {
+        "userField": "profilePicture",
+        "providerField": "photos[0].value"
+      }
+    ],
     "authOptions": {
       "display": "popup"
     }
@@ -28,33 +50,78 @@
     "strategy": "OAuth2Strategy",
     "clientID": "952649996308-pj8fa8uq6o3bgl86ikg8aap9oddoheeu.apps.googleusercontent.com",
     "clientSecret": "v_pjzJYfSKOTgroewTaSSzpE",
-    "callbackURL": "https://app.mysnookerskills.com/auth/google/callback",
-    "authPath": "/auth/google",
-    "callbackPath": "/auth/google/callback",
-    "successRedirect": "https://app.mysnookerskills.com/account",
-    "scope": ["email", "profile"]
+    "callbackURL": "https://app.mysnookerskills.com/api/auth/google/callback",
+    "authPath": "/api/auth/google",
+    "callbackPath": "/api/auth/google/callback",
+    "successRedirect": "https://app.mysnookerskills.com/account/social/success",
+    "scope": ["email", "profile"],
+    "profileMapping": [
+      {
+        "userField": "firstName",
+        "providerField": "name.givenName"
+      },
+      {
+        "userField": "lastName",
+        "providerField": "name.familyName"
+      },
+      {
+        "userField": "username",
+        "providerField": "displayName"
+      },
+      {
+        "userField": "email",
+        "providerField": "emails[0].value"
+      },
+      {
+        "userField": "profilePicture",
+        "providerField": "photos[0].value"
+      }
+    ]
   },
   "twitter-login": {
     "provider": "twitter",
     "authScheme": "oauth",
     "module": "passport-twitter",
-    "callbackURL": "https://app.mysnookerskills.com/auth/twitter/callback",
-    "authPath": "/auth/twitter",
-    "callbackPath": "/auth/twitter/callback",
-    "successRedirect": "https://app.mysnookerskills.com/account",
+    "callbackURL": "https://app.mysnookerskills.com/api/auth/twitter/callback",
+    "authPath": "/api/auth/twitter",
+    "callbackPath": "/api/auth/twitter/callback",
+    "successRedirect": "https://app.mysnookerskills.com/account/social/success",
     "consumerKey": "LUUO4Js2bfidabZkiD0e9QSBe",
     "consumerSecret": "c3SfkLmR78TtoPIb9UgeLWlZjwEllLerLOIc296ilZMX8ZQGQ2"
   },
   "facebook-link": {
     "provider": "facebook",
     "module": "passport-facebook",
+    "profileFields": ["link", "locale", "name", "timezone", "verified", "email", "updated_time", "photos"],
     "clientID": "1888929744484257",
     "clientSecret": "579712137a66c1b9a51822829f32814e",
-    "callbackURL": "https://app.mysnookerskills.com/link/facebook/callback",
-    "authPath": "/link/facebook",
-    "callbackPath": "/link/facebook/callback",
-    "successRedirect": "https://app.mysnookerskills.com/account",
-    "scope": ["email", "user_likes"],
+    "callbackURL": "https://app.mysnookerskills.com/api/link/facebook/callback",
+    "authPath": "/api/link/facebook",
+    "callbackPath": "/api/link/facebook/callback",
+    "successRedirect": "https://app.mysnookerskills.com/account/social/success",
+    "scope": ["email"],
+    "profileMapping": [
+      {
+        "userField": "firstName",
+        "providerField": "name.givenName"
+      },
+      {
+        "userField": "lastName",
+        "providerField": "name.familyName"
+      },
+      {
+        "userField": "username",
+        "providerField": "id"
+      },
+      {
+        "userField": "email",
+        "providerField": "emails[0].value"
+      },
+      {
+        "userField": "profilePicture",
+        "providerField": "photos[0].value"
+      }
+    ],
     "link": true
   },
   "google-link": {
@@ -63,11 +130,33 @@
     "strategy": "OAuth2Strategy",
     "clientID": "952649996308-pj8fa8uq6o3bgl86ikg8aap9oddoheeu.apps.googleusercontent.com",
     "clientSecret": "v_pjzJYfSKOTgroewTaSSzpE",
-    "callbackURL": "https://app.mysnookerskills.com/link/google/callback",
-    "authPath": "/link/google",
-    "callbackPath": "/link/google/callback",
-    "successRedirect": "https://app.mysnookerskills.com/account",
+    "callbackURL": "https://app.mysnookerskills.com/api/link/google/callback",
+    "authPath": "/api/link/google",
+    "callbackPath": "/api/link/google/callback",
+    "successRedirect": "https://app.mysnookerskills.com/account/social/success",
     "scope": ["email", "profile"],
+    "profileMapping": [
+      {
+        "userField": "firstName",
+        "providerField": "name.givenName"
+      },
+      {
+        "userField": "lastName",
+        "providerField": "name.familyName"
+      },
+      {
+        "userField": "username",
+        "providerField": "displayName"
+      },
+      {
+        "userField": "email",
+        "providerField": "emails[0].value"
+      },
+      {
+        "userField": "profilePicture",
+        "providerField": "photos[0].value"
+      }
+    ],
     "link": true
   }
 }

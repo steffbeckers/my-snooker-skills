@@ -20,7 +20,7 @@ module.exports = {
         secure: true,
         port: 465,
         tls: {
-          'rejectUnauthorized': true,
+          'rejectUnauthorized': false,
         },
         auth: {
           user: 'steff@mysnookerskills.com',
@@ -39,7 +39,7 @@ module.exports = {
         secure: true,
         port: 465,
         tls: {
-          'rejectUnauthorized': true,
+          'rejectUnauthorized': false,
         },
         auth: {
           user: 'info@mysnookerskills.com',
@@ -58,7 +58,7 @@ module.exports = {
         secure: true,
         port: 465,
         tls: {
-          'rejectUnauthorized': true,
+          'rejectUnauthorized': false,
         },
         auth: {
           user: 'privacy@mysnookerskills.com',
@@ -77,7 +77,7 @@ module.exports = {
         secure: true,
         port: 465,
         tls: {
-          'rejectUnauthorized': true,
+          'rejectUnauthorized': false,
         },
         auth: {
           user: 'admin@mysnookerskills.com',
@@ -96,7 +96,7 @@ module.exports = {
         secure: true,
         port: 465,
         tls: {
-          'rejectUnauthorized': true,
+          'rejectUnauthorized': false,
         },
         auth: {
           user: 'support@mysnookerskills.com',
@@ -115,7 +115,7 @@ module.exports = {
         secure: true,
         port: 465,
         tls: {
-          'rejectUnauthorized': true,
+          'rejectUnauthorized': false,
         },
         auth: {
           user: 'registration@mysnookerskills.com',
@@ -134,7 +134,7 @@ module.exports = {
         secure: true,
         port: 465,
         tls: {
-          'rejectUnauthorized': true,
+          'rejectUnauthorized': false,
         },
         auth: {
           user: 'account@mysnookerskills.com',

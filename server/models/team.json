@@ -29,11 +29,11 @@
     },
     "players": {
       "type": "hasAndBelongsToMany",
-      "model": "UserModel"
+      "model": "user"
     },
     "reserves": {
       "type": "hasAndBelongsToMany",
-      "model": "UserModel"
+      "model": "user"
     },
     "tournaments": {
       "type": "hasAndBelongsToMany",

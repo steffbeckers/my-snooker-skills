@@ -42,7 +42,7 @@ boot(app, __dirname, function(err) {
 // Build the providers/passport config
 var config = {};
 try {
-  config = require('./providers.json');
+  config = require('./providers' + (process.env.NODE_ENV === 'local' ? '.local' : '') + '.json');
 } catch (err) {
   console.trace(err);
   process.exit(1); // fatal
@@ -53,7 +53,7 @@ passportConfigurator.init();
 
 // Set up related models
 passportConfigurator.setupModels({
-  userModel: app.models.UserModel,
+  userModel: app.models.user,
   userIdentityModel: app.models.userIdentity,
   userCredentialModel: app.models.userCredential,
 });

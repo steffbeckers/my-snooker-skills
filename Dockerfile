@@ -15,5 +15,6 @@ RUN npm install && npm run build
 WORKDIR /app
 
 CMD NODE_ENV=production node server/server.js
+# CMD NODE_ENV=production node --inspect=0.0.0.0 server/server.js
 
 EXPOSE 3000

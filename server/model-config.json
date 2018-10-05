@@ -5,6 +5,7 @@
       "loopback/server/models",
       "../common/models",
       "./models",
+      "./emailAddresses",
       "../node_modules/loopback-component-passport/lib/models"
     ],
     "mixins": [
@@ -17,21 +18,47 @@
       "../node_modules/loopback-softdelete-mixin3"
     ]
   },
-  "Email": {
-    "dataSource": "email"
+  "EmailFromSteff": {
+    "dataSource": "emailFromSteff"
   },
-  "User": {
-    "dataSource": "mongodb",
-    "public": false
+  "EmailFromInfo": {
+    "dataSource": "emailFromInfo"
   },
-  "UserModel": {
+  "EmailFromPrivacy": {
+    "dataSource": "emailFromPrivacy"
+  },
+  "EmailFromAdmin": {
+    "dataSource": "emailFromAdmin"
+  },
+  "EmailFromSupport": {
+    "dataSource": "emailFromSupport"
+  },
+  "EmailFromRegistration": {
+    "dataSource": "emailFromRegistration"
+  },
+  "EmailFromAccount": {
+    "dataSource": "emailFromAccount"
+  },
+  "user": {
     "dataSource": "mongodb",
     "public": true,
     "options": {
       "emailVerificationRequired": true
     }
   },
-  "AccessToken": {
+  "ApplicationCredential": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "userCredential": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "userIdentity": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "accessToken": {
     "dataSource": "mongodb",
     "public": false
   },
@@ -50,15 +77,11 @@
     "dataSource": "mongodb",
     "public": false
   },
-  "ApplicationCredential": {
+  "Friendship": {
     "dataSource": "mongodb",
     "public": true
   },
-  "UserCredential": {
-    "dataSource": "mongodb",
-    "public": true
-  },
-  "UserIdentity": {
+  "Subscription": {
     "dataSource": "mongodb",
     "public": true
   },
@@ -94,8 +117,8 @@
     "dataSource": "mongodb",
     "public": true
   },
-  "Subscription": {
+  "Setting": {
     "dataSource": "mongodb",
-    "public": true
+    "public": false
   }
 }

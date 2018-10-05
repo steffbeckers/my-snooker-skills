@@ -1,17 +1,11 @@
 {
   "loopback-component-explorer": {
-    "mountPath": "/explorer"
-  },
-  "@mean-expert/loopback-component-realtime": {
-    "debug": true,
-    "auth": false,
-    "driver": {
-      "name": "socket.io",
-      "options": {}
-    },
-    "modules": [
-      "IO"
-    ],
-    "secure": false
+    "mountPath": "/api/explorer",
+    "uiDirs": ["client/public/explorer"],
+    "apiInfo": {
+      "title": "My Snooker Skills API ",
+      "description": "Powered by Steff!",
+      "contact": "steff@steffbeckers.eu"
+    }
   }
 }

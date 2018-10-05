@@ -1,15 +1,8 @@
 <template>
   <v-container grid-list-lg fluid>
-    <v-layout v-if="errors.length > 0" row>
-      <v-flex>
-        <v-alert :value="true" v-for="(error, index) in errors" :key="index" type="error">
-          {{ error.message }}
-        </v-alert>
-      </v-flex>
-    </v-layout>
     <v-layout row>
       <v-flex>
-        <div class="title">Recent matches</div>
+        <div class="title">Matches</div>
       </v-flex>
     </v-layout>
     <MatchesCardList v-if="listType === 'cards'" :matches="matches"></MatchesCardList>
@@ -20,7 +13,6 @@
 export default {
   data() {
     return {
-      errors: [],
       matches: [],
       listType: 'cards'
     }
@@ -40,7 +32,8 @@ export default {
               fields: {
                 id: true,
                 firstName: true,
-                lastName: true
+                lastName: true,
+                profilePicture: true
               }
             }
           },
@@ -54,12 +47,9 @@ export default {
       }
 
       this.$axios
-        .get(process.env.API + '/Matches?filter=' + JSON.stringify(filter))
+        .get(process.env.VUE_APP_API + '/Matches?filter=' + encodeURI(JSON.stringify(filter)))
         .then(response => {
           this.matches = response.data
-        })
-        .catch(error => {
-          this.errors.unshift(error)
         })
     }
   },
