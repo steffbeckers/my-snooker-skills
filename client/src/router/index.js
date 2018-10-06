@@ -5,6 +5,8 @@ import Router from 'vue-router'
 const Dashboard = () => import('@/pages/Dashboard')
 const Profile = () => import('@/pages/Profile')
 const Matches = () => import('@/pages/Matches')
+const Tournaments = () => import('@/pages/Tournaments')
+const Players = () => import('@/pages/Players')
 const Clubs = () => import('@/pages/Clubs')
 
 // Settings
@@ -22,9 +24,8 @@ const Logout = () => import('@/pages/account/Logout')
 // Training
 const Scoreboard = () => import('@/pages/training/Scoreboard')
 
-// Components (for testing)
+// Generic components
 const Loader = () => import('@/components/Loader')
-const Camera = () => import('@/components/Camera')
 
 // Errors
 const PageNotFound = () => import('@/errors/PageNotFound')
@@ -40,11 +41,6 @@ export default new Router({
       name: 'LoaderComponent',
       component: Loader
     },
-    {
-      path: '/components/camera',
-      name: 'CameraComponent',
-      component: Camera
-    },
     // Training
     {
       path: '/training/scoreboard',
@@ -56,6 +52,18 @@ export default new Router({
       path: '/clubs',
       name: 'Clubs',
       component: Clubs
+    },
+    // Players
+    {
+      path: '/players',
+      name: 'Players',
+      component: Players
+    },
+    // Tournaments
+    {
+      path: '/tournaments',
+      name: 'Tournaments',
+      component: Tournaments
     },
     // Matches
     {

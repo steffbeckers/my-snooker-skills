@@ -75,22 +75,25 @@
         <v-card>
           <v-toolbar color="white" class="elevation-0">
             <v-toolbar-title color="grey">
-              <v-icon class="mr-2">people</v-icon>Friends
+              <v-icon class="mr-2">people</v-icon>
+              <span v-if="Object.keys($store.state.user.friends).length === 0">Add friends</span>
+              <span v-if="Object.keys($store.state.user.friends).length === 1">1 friend</span>
+              <span v-if="Object.keys($store.state.user.friends).length > 1">{{ Object.keys($store.state.user.friends).length }} friends</span>
             </v-toolbar-title>
+            <v-btn :to="{name: 'Players'}" icon>
+              <v-icon color="rgba(0,0,0,.54)">add</v-icon>
+            </v-btn>
             <v-spacer></v-spacer>
             <v-btn icon>
-              <v-icon>search</v-icon>
+              <v-icon color="rgba(0,0,0,.54)">search</v-icon>
             </v-btn>
             <v-btn icon>
-              <v-icon>favorite</v-icon>
-            </v-btn>
-            <v-btn icon>
-              <v-icon>more_vert</v-icon>
+              <v-icon color="rgba(0,0,0,.54)">more_vert</v-icon>
             </v-btn>
           </v-toolbar>
           <v-container grid-list-lg fluid class="pt-0">
             <v-layout v-if="user.friends && user.friends.length > 0" wrap>
-              <v-flex v-for="friend in user.friends" :key="friend.id" xs12 sm6 md3 class="ma-3 friend">
+              <v-flex v-for="friend in user.friends" :key="friend.id" xs12 sm6 md4 class="ma-3 friend">
                 <v-avatar class="friend__avatar" size="60px" :color="!user.profilePicture ? 'red' : 'transparent'">
                   <img v-if="user.profilePicture" :src="profilePicture(user.profilePicture, 60)">
                   <v-icon style="font-size: 30px;" dark v-else>person</v-icon>

@@ -203,6 +203,44 @@ export default new Vuex.Store({
 
       // Save user
       localStorage.setItem('user', JSON.stringify(state.user))
+    },
+    addFriend(state, user) {
+      // User should be authenticated
+      if (!state.authenticated) return
+
+      // When friends could be undefined
+      if (state.user.friends === undefined) {
+        state.user.friends = {}
+      }
+      // Check if the friend isn't added already
+      else if (!state.user.friends.hasOwnProperty(user.id)) {
+        // Add the user to friends
+        state.user.friends[user.id] = {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          username: user.username
+        }
+        // Trigger update
+        state.user.friends = Object.assign({}, state.user.friends)
+      };
+
+      // Save user
+      localStorage.setItem('user', JSON.stringify(state.user))
+    },
+    removeFriend(state, user) {
+      // User should be authenticated
+      if (!state.authenticated) return
+
+      // Check if the friend is added
+      else if (state.user.friends.hasOwnProperty(user.id)) {
+        // Add the user to friends
+        delete state.user.friends[user.id]
+        // Trigger update
+        state.user.friends = Object.assign({}, state.user.friends)
+      };
+
+      // Save user
+      localStorage.setItem('user', JSON.stringify(state.user))
     }
   },
   modules: {

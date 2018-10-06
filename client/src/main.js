@@ -15,8 +15,11 @@ import './plugins/filters'
 // Components
 import App from './App.vue'
 import MatchesCardList from './components/matches/CardList.vue'
-
+import TournamentsCardList from './components/tournaments/CardList.vue'
+import PlayersCardList from './components/players/CardList.vue'
 Vue.component('MatchesCardList', MatchesCardList)
+Vue.component('TournamentsCardList', TournamentsCardList)
+Vue.component('PlayersCardList', PlayersCardList)
 
 // Google
 if (process.env.NODE_ENV === 'production') {

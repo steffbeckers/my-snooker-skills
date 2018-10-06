@@ -70,8 +70,8 @@
       </v-toolbar-title>
       <v-toolbar-items v-if="$vuetify.breakpoint.mdAndUp">
         <v-btn class="white--text" :to="{ name: 'Matches' }" exact flat>Matches</v-btn>
-        <v-btn class="white--text" exact flat>Tournaments</v-btn>
-        <v-btn class="white--text" exact flat>Players</v-btn>
+        <v-btn class="white--text" :to="{ name: 'Tournaments' }" exact flat>Tournaments</v-btn>
+        <v-btn class="white--text" :to="{ name: 'Players' }" exact flat>Players</v-btn>
       </v-toolbar-items>
       <v-spacer></v-spacer>
       <!-- <v-text-field
@@ -350,11 +350,17 @@ export default {
         },
         {
           icon: 'line_style',
-          title: 'Tournaments'
+          title: 'Tournaments',
+          page: {
+            name: 'Tournaments'
+          }
         },
         {
           icon: 'people',
-          title: 'Players'
+          title: 'Players',
+          page: {
+            name: 'Players'
+          }
         },
         {
           icon: 'place',
