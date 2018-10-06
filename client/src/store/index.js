@@ -222,7 +222,7 @@ export default new Vuex.Store({
         }
         // Trigger update
         state.user.friends = Object.assign({}, state.user.friends)
-      };
+      }
 
       // Save user
       localStorage.setItem('user', JSON.stringify(state.user))
@@ -237,7 +237,7 @@ export default new Vuex.Store({
         delete state.user.friends[user.id]
         // Trigger update
         state.user.friends = Object.assign({}, state.user.friends)
-      };
+      }
 
       // Save user
       localStorage.setItem('user', JSON.stringify(state.user))

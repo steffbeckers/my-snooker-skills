@@ -44,10 +44,9 @@ export default {
     addPlayerAsFriend(player) {
       this.$axios
         .put(process.env.VUE_APP_API + '/Users/' + this.$store.state.user.id + '/friends/rel/' + player.id)
-        .then(response => {
+        .then(() => {
           // Add player to friends in state
           this.$store.commit('addFriend', player)
-          playerIsAFriend(player)
         })
         .catch(error => {
           this.$logger.error(error)
@@ -56,10 +55,9 @@ export default {
     removePlayerAsFriend(player) {
       this.$axios
         .delete(process.env.VUE_APP_API + '/Users/' + this.$store.state.user.id + '/friends/rel/' + player.id)
-        .then(response => {
+        .then(() => {
           // Remove player from friends in state
           this.$store.commit('removeFriend', player)
-          playerIsAFriend(player)
         })
         .catch(error => {
           this.$logger.error(error)
