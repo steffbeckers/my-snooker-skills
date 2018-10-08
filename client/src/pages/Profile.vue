@@ -76,9 +76,9 @@
           <v-toolbar color="white" class="elevation-0">
             <v-toolbar-title color="grey">
               <v-icon class="mr-2">people</v-icon>
-              <span v-if="Object.keys($store.state.user.friends).length === 0">Add friends</span>
-              <span v-if="Object.keys($store.state.user.friends).length === 1">1 friend</span>
-              <span v-if="Object.keys($store.state.user.friends).length > 1">{{ Object.keys($store.state.user.friends).length }} friends</span>
+              <span v-if="$store.state.authenticated && $store.state.user.id === user.id && user.friends.length === 0">Add friends</span>
+              <span v-if="user.friends.length === 1">1 friend</span>
+              <span v-if="user.friends.length > 1">{{ user.friends.length }} friends</span>
             </v-toolbar-title>
             <v-btn :to="{name: 'Players'}" icon>
               <v-icon color="rgba(0,0,0,.54)">add</v-icon>
@@ -94,11 +94,11 @@
           <v-container grid-list-lg fluid class="pt-0">
             <v-layout v-if="user.friends && user.friends.length > 0" wrap>
               <v-flex v-for="friend in user.friends" :key="friend.id" xs12 sm6 md4 class="ma-3 friend">
-                <v-avatar class="friend__avatar" size="60px" :color="!user.profilePicture ? 'red' : 'transparent'">
-                  <img v-if="user.profilePicture" :src="profilePicture(user.profilePicture, 60)">
+                <v-avatar @click="$router.push({name: 'Profile', params: {username: friend.username}})" class="friend__avatar" size="60px" :color="!friend.profilePicture ? 'red' : 'transparent'">
+                  <img v-if="friend.profilePicture" :src="profilePicture(friend.profilePicture, 60)">
                   <v-icon style="font-size: 30px;" dark v-else>person</v-icon>
                 </v-avatar>
-                <div class="friend__details ml-3 mr-3 pa-2">
+                <div @click="$router.push({name: 'Profile', params: {username: friend.username}})" class="friend__details ml-3 mr-3 pa-2">
                   <div class="friend__name subheading">
                     {{ friend.firstName }} {{ friend.lastName }}
                   </div>
@@ -106,14 +106,27 @@
                     @{{ friend.username }}
                   </div>
                 </div>
-                <div class="friend__actions pa-2">
-                  <v-btn icon>
-                    <v-icon>add</v-icon>
-                  </v-btn>
+                <div v-if="$store.state.authenticated && $store.state.user.id === user.id" class="friend__actions pa-2">
+                  <v-menu bottom left>
+                    <v-btn
+                      slot="activator"
+                      icon
+                    >
+                      <v-icon>more_vert</v-icon>
+                    </v-btn>
+                    <v-list>
+                      <v-list-tile>
+                        <v-list-tile-title :prepend-icon="favorite">Add to favorites</v-list-tile-title>
+                      </v-list-tile>
+                      <v-list-tile>
+                        <v-list-tile-title :prepend-icon="remove">Remove as friend</v-list-tile-title>
+                      </v-list-tile>
+                    </v-list>
+                  </v-menu>
                 </div>
               </v-flex>
             </v-layout>
-            <v-card-text v-else>This player has not added friends yet.</v-card-text>
+            <v-card-text class="pa-0" v-else>This player has not added friends yet.</v-card-text>
           </v-container>
         </v-card>
       </v-tab-item>
