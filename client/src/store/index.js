@@ -243,6 +243,30 @@ export default new Vuex.Store({
       localStorage.setItem('user', JSON.stringify(state.user))
     }
   },
+  actions: {
+    addPlayerAsFriend({ commit, state }, player) {
+      Vue.prototype.$axios
+        .put(process.env.VUE_APP_API + '/Users/' + state.user.id + '/friends/rel/' + player.id)
+        .then(() => {
+          // Add player to friends in state
+          commit('addFriend', player)
+        })
+        .catch(error => {
+          Vue.prototype.$logger.error(error)
+        })
+    },
+    removePlayerAsFriend({ commit, state }, player) {
+      Vue.prototype.$axios
+        .delete(process.env.VUE_APP_API + '/Users/' + state.user.id + '/friends/rel/' + player.id)
+        .then(() => {
+          // Remove player from friends in state
+          commit('removeFriend', player)
+        })
+        .catch(error => {
+          Vue.prototype.$logger.error(error)
+        })
+    }
+  },
   modules: {
     ssb: simpleScoreboard
   }

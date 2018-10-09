@@ -121,7 +121,7 @@
                         <v-list-tile>
                           <v-list-tile-title>Add to favorites</v-list-tile-title>
                         </v-list-tile>
-                        <v-list-tile>
+                        <v-list-tile @click="removePlayerAsFriend(friend)">
                           <v-list-tile-title>Remove as friend</v-list-tile-title>
                         </v-list-tile>
                       </v-list>
@@ -211,6 +211,10 @@ export default {
         url = url.replace('sz=50', 'sz=' + size)
       }
       return url
+    },
+    async removePlayerAsFriend(friend) {
+      await this.$store.dispatch('removePlayerAsFriend', friend)
+      this.getProfileByUsername()
     }
   },
   watch: {

@@ -72,6 +72,7 @@
         <v-btn class="white--text" :to="{ name: 'Matches' }" exact flat>Matches</v-btn>
         <v-btn class="white--text" :to="{ name: 'Tournaments' }" exact flat>Tournaments</v-btn>
         <v-btn class="white--text" :to="{ name: 'Players' }" exact flat>Players</v-btn>
+        <v-btn class="white--text" exact flat>Clubs</v-btn>
       </v-toolbar-items>
       <v-spacer></v-spacer>
       <!-- <v-text-field
