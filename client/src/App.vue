@@ -82,16 +82,16 @@
         class="hidden-sm-and-down"
       ></v-text-field>
       <v-spacer></v-spacer> -->
-      <v-btn class="white--text" v-if="!$store.state.authenticated" icon>
+      <v-btn class="white--text mr-2" v-if="!$store.state.authenticated" icon>
         <v-icon>g_translate</v-icon>
       </v-btn>
       <v-toolbar-items
         v-if="!$store.state.authenticated && $vuetify.breakpoint.smAndUp"
       >
-        <v-btn class="white--text" :to="{ name: 'Register' }" exact flat><v-icon class="mr-2">person_add</v-icon>Register</v-btn>
+        <v-btn v-if="$vuetify.breakpoint.mdAndUp" class="white--text" :to="{ name: 'Register' }" exact flat><v-icon class="mr-2">person_add</v-icon>Register</v-btn>
         <v-btn class="white--text" :to="{ name: 'Login' }" exact flat><v-icon class="mr-2">exit_to_app</v-icon>Login</v-btn>
       </v-toolbar-items>
-      <v-btn
+      <!-- <v-btn
         v-if="!$store.state.authenticated && $vuetify.breakpoint.xs"
         class="white--text"
         :to="{ name: 'Register' }"
@@ -99,7 +99,7 @@
         icon
       >
         <v-icon>person_add</v-icon>
-      </v-btn>
+      </v-btn> -->
       <v-btn
         v-if="!$store.state.authenticated && $vuetify.breakpoint.xs"
         class="white--text"

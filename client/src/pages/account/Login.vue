@@ -8,6 +8,16 @@
           </v-toolbar>
           <v-card-text align-center>
             <v-layout column>
+              <v-flex xs12>
+                <v-alert
+                  v-if="version"
+                  :value="true"
+                  type="warning"
+                  transition="scale-transition"
+                >
+                  This application is still in development. Version: {{ version }}
+                </v-alert>
+              </v-flex>
               <v-flex class="text-xs-center" xs12>
                 <p>Sign-in with your favorite social account.</p>
                 <v-btn fab dark class="google-fab" :href="'/api/auth/google'">
@@ -138,8 +148,8 @@
             </v-layout>
           </v-card-text>
         </v-card>
-        <v-btn class="mt-3 grey--text" block :to="{ name: 'ResetPassword' }" flat>Forgot your password?</v-btn>
-        <v-btn class="grey--text" block :to="{ name: 'Register' }" flat>Register a new account</v-btn>
+        <v-btn class="mt-3 grey--text" block :to="{ name: 'Register' }" flat>Register a new account</v-btn>
+        <v-btn class="grey--text" block :to="{ name: 'ResetPassword' }" flat>Forgot your password?</v-btn>
       </v-flex>
     </v-layout>
   </v-container>
@@ -149,6 +159,7 @@
 export default {
   data() {
     return {
+      version: process.env.VUE_APP_VERSION,
       loginFormValid: false,
       usernameOrEmail: localStorage.getItem('login:usernameOrEmail') || '',
       usernameOrEmailRules: [
