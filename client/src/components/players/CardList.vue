@@ -26,11 +26,28 @@
         </v-layout>
         <v-card-actions v-if="$store.state.authenticated">
           <v-btn v-if="!playerIsAFriend(player)" @click="$store.dispatch('addPlayerAsFriend', player)" flat>
-            <v-icon color="rgba(0,0,0,.54)" class="mr-1">add</v-icon> as friend
+            Add as friend
           </v-btn>
-          <v-btn v-else @click="$store.dispatch('removePlayerAsFriend', player)" flat>
-            <v-icon color="rgba(0,0,0,.54)" class="mr-1">remove</v-icon> as friend
+          <v-btn v-if="playerIsAFriend(player)" flat>
+            Play match
           </v-btn>
+          <v-spacer></v-spacer>
+          <v-menu bottom left>
+            <v-btn
+              slot="activator"
+              icon
+            >
+              <v-icon>more_vert</v-icon>
+            </v-btn>
+            <v-list>
+              <v-list-tile>
+                <v-list-tile-title>Add to favorites</v-list-tile-title>
+              </v-list-tile>
+              <v-list-tile v-if="playerIsAFriend(player)" @click="$store.dispatch('removePlayerAsFriend', player)">
+                <v-list-tile-title>Remove as friend</v-list-tile-title>
+              </v-list-tile>
+            </v-list>
+          </v-menu>
         </v-card-actions>
       </v-card>
     </v-flex>

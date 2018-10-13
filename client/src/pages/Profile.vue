@@ -212,9 +212,13 @@ export default {
       }
       return url
     },
-    async removePlayerAsFriend(friend) {
-      await this.$store.dispatch('removePlayerAsFriend', friend)
-      this.getProfileByUsername()
+    removePlayerAsFriend(friend) {
+      this.$store.dispatch('removePlayerAsFriend', friend).then(
+        () => {
+          this.getProfileByUsername()
+        },
+        this.$logger.error
+      )
     }
   },
   watch: {

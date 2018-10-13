@@ -29,7 +29,7 @@ Vue.prototype.$axios.interceptors.response.use(
 
     // Logging
     if (process.env.NODE_ENV === 'development') {
-      Vue.prototype.$logger.log(response.request.responseURL)
+      Vue.prototype.$logger.log(response.config.method.toUpperCase(), response.request.responseURL)
       Vue.prototype.$logger.log(response.status, response.data)
     }
 
