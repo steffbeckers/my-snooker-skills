@@ -154,6 +154,19 @@ export default {
       this.currentBreak = ''
       this.score -= this.breaks.pop().value
     },
+    reset() {
+      this.resetTimers()
+
+      if (confirm('Are you sure you want to reset the scoreboard?')) {
+        this.dateTime = new Date().toISOString()
+        this.lastInputAutoOK = null
+        this.lastInputAutoOKCounter = 0
+        this.lastInputAutoOKInterval = null
+        this.score = 0
+        this.currentBreak = ''
+        this.breaks = []
+      }
+    },
     resetTimers() {
       if (this.lastInputAutoOKInterval) {
         clearInterval(this.lastInputAutoOKInterval)
@@ -165,17 +178,6 @@ export default {
         this.lastInputAutoOK = null
       }
     },
-    reset() {
-      if (confirm('Are you sure you want to reset the scoreboard?')) {
-        this.dateTime = new Date().toISOString()
-        this.lastInputAutoOK = null
-        this.lastInputAutoOKCounter = 0
-        this.lastInputAutoOKInterval = null
-        this.score = 0
-        this.currentBreak = ''
-        this.breaks = []
-      }
-    }
   },
   watch: {
     dateTime(value) {
