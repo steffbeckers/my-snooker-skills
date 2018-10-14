@@ -4,9 +4,7 @@
       <v-toolbar-side-icon class="white--text" @click.stop="$store.commit('drawer', !$store.state.drawer)"></v-toolbar-side-icon>
       <v-toolbar-title class="white--text">Scoreboard</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon>
-        <v-icon>apps</v-icon>
-      </v-btn>
+      <v-btn @click="undo()" v-if="breaks.length > 0" flat dark><v-icon class="mr-2">undo</v-icon>Undo</v-btn>
       <v-btn :to="{ name: 'TrainingOverview' }" exact icon>
         <v-icon>close</v-icon>
       </v-btn>
@@ -51,10 +49,9 @@
             <v-btn @click="inputNumber(0)" :disabled="currentBreak === '' || currentBreak === '-'" color="secondary" class="number-button elevation-0" large>0</v-btn>
             <v-btn @click="currentBreak = ''; resetTimers()" :disabled="currentBreak === ''" color="secondary" class="number-button elevation-0" large>C</v-btn>
             <div style="grid-area: ok; width: 100%;">
-              <v-progress-linear class="auto-ok-progress mb-0 mt-1" v-model="lastInputAutoOKCounter" height="5"></v-progress-linear>
+              <v-progress-linear class="auto-ok-progress mb-0 mt-4" v-model="lastInputAutoOKCounter" height="5"></v-progress-linear>
               <v-btn @click="ok()" :disabled="currentBreak === '' || currentBreak === '-'" class="elevation-0 mt-0 ok-button" color="primary" block large>OK</v-btn>
             </div>
-            <v-btn style="grid-area: undo" @click="undo()" v-if="breaks.length > 0" class="elevation-0 mt-3" color="primary" block large>Undo</v-btn>
           </div>
         </v-flex>
       </v-layout>
@@ -69,7 +66,7 @@
   width: fit-content;
   display: grid;
   grid-template-columns: 80px 80px 80px;
-  grid-template-rows: 50px 50px 50px 50px 50px;
+  grid-template-rows: 75px 75px 75px 75px 100px 50px;
   grid-template-areas: "num num num"
                        "num num num"
                        "num num num"
@@ -81,7 +78,7 @@
   justify-items: center;
 }
 .number-button {
-  height: 50px;
+  height: 75px;
   border-radius: 0;
   font-size: 2em;
   margin: 0px;
@@ -92,7 +89,7 @@
   border-top-right-radius: 2px;
 }
 .ok-button {
-  height: 60px;
+  height: 75px;
   padding-bottom: 5px;
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
