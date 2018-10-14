@@ -30,7 +30,7 @@
           <v-btn @click="inputNumber(9)" color="secondary" class="number-button elevation-0" large>9</v-btn>
           <v-btn @click="inputNumber('-')" :disabled="currentBreak !== ''" color="secondary" class="number-button elevation-0" large>-</v-btn>
           <v-btn @click="inputNumber(0)" :disabled="currentBreak === ''" color="secondary" class="number-button elevation-0" large>0</v-btn>
-          <v-btn @click="currentBreak = ''" :disabled="currentBreak === ''" color="secondary" class="number-button elevation-0" large>C</v-btn>
+          <v-btn @click="currentBreak = ''; resetTimers()" :disabled="currentBreak === ''" color="secondary" class="number-button elevation-0" large>C</v-btn>
           <v-progress-linear v-model="lastInputAutoOKCounter"></v-progress-linear>
           <v-btn @click="ok()" :disabled="currentBreak === ''" class="elevation-0" color="primary" block large>OK</v-btn>
           <v-btn @click="undo()" :disabled="breaks.length === 0" class="elevation-0" color="primary" block large>Undo</v-btn>
