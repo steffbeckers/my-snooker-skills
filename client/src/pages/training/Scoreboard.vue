@@ -113,14 +113,14 @@ export default {
   },
   methods: {
     inputNumber(value) {
-      this.resetTimers()
-
       // If minus, then the length can be 4, else 3 characters
       if (this.currentBreak.indexOf('-') !== -1) {
         if (this.currentBreak.length === 4) return
       } else {
         if (this.currentBreak.length === 3) return
       }
+
+      this.resetTimers()
 
       this.currentBreak += value
 
