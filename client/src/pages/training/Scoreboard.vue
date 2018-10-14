@@ -34,6 +34,9 @@
           <div v-else class="display-4 font-weight-light text-xs-center">
             {{ currentBreak || 0 }}
           </div>
+          <div class="text-xs-center">
+            <span v-for="(b, index) in breaks" :key="b.dateTime">{{ b.value}}<span v-if="index !== breaks.length - 1">, </span></span>
+          </div>
           <div class="numpad">
             <v-btn @click="inputNumber(1)" color="secondary" class="number-button elevation-0" large>1</v-btn>
             <v-btn @click="inputNumber(2)" color="secondary" class="number-button elevation-0" large>2</v-btn>
@@ -142,7 +145,7 @@ export default {
       this.resetTimers()
 
       this.score += parseInt(this.currentBreak)
-      this.breaks.push({
+      this.breaks.unshift({
         dateTime: new Date().toISOString(),
         value: parseInt(this.currentBreak)
       })
@@ -152,7 +155,7 @@ export default {
       this.resetTimers()
 
       this.currentBreak = ''
-      this.score -= this.breaks.pop().value
+      this.score -= this.breaks.shift().value
     },
     resetTimers() {
       if (this.lastInputAutoOKInterval) {
