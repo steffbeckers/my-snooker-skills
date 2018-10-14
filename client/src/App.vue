@@ -408,7 +408,7 @@ export default {
     }
   },
   watch: {
-    $route: function() {
+    $route: function () {
       // Check if given route is true, if it is then hide Nav.
       if (this.$route.name === 'TrainingScoreboard') {
         this.$store.commit('showTopNav', false)
