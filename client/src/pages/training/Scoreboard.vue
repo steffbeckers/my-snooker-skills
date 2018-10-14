@@ -31,6 +31,7 @@
           <v-btn @click="inputNumber('-')" :disabled="currentBreak !== ''" color="secondary" class="number-button elevation-0" large>-</v-btn>
           <v-btn @click="inputNumber(0)" :disabled="currentBreak === ''" color="secondary" class="number-button elevation-0" large>0</v-btn>
           <v-btn @click="currentBreak = ''" :disabled="currentBreak === ''" color="secondary" class="number-button elevation-0" large>C</v-btn>
+          <v-progress-linear v-model="lastInputAutoOKCounter"></v-progress-linear>
           <v-btn @click="ok()" :disabled="currentBreak === ''" class="elevation-0" color="primary" block large>OK</v-btn>
           <v-btn @click="undo()" :disabled="breaks.length === 0" class="elevation-0" color="primary" block large>Undo</v-btn>
         </div>
@@ -53,13 +54,15 @@
 </style>
 
 <script>
-import { setTimeout, clearTimeout } from 'timers'
+import { setTimeout, clearTimeout, setInterval, clearInterval } from 'timers'
 
 export default {
   data() {
     return {
       dateTime: new Date().toISOString(),
       lastInputAutoOK: null,
+      lastInputAutoOKCounter: 0,
+      lastInputAutoOKInterval: null,
       score: 0,
       currentBreak: '',
       breaks: []
@@ -70,6 +73,15 @@ export default {
       this.resetTimers()
 
       this.currentBreak += value
+
+      // Counter
+      this.lastInputAutoOKInterval = setInterval(() => {
+        if (this.lastInputAutoOKCounter <= 100) {
+          this.lastInputAutoOKCounter += 10
+        } else {
+          this.resetTimers()
+        }
+      }, 270)
 
       // Automatically trigger OK 3 seconds after last input
       this.lastInputAutoOK = setTimeout(() => {
@@ -89,9 +101,15 @@ export default {
     undo() {
       this.resetTimers()
 
+      this.currentBreak = ''
       this.score -= this.breaks.pop().value
     },
     resetTimers() {
+      if (this.lastInputAutoOKInterval) {
+        clearInterval(this.lastInputAutoOKInterval)
+        this.lastInputAutoOKInterval = null
+        this.lastInputAutoOKCounter = 0
+      }
       if (this.lastInputAutoOK) {
         clearTimeout(this.lastInputAutoOK)
         this.lastInputAutoOK = null

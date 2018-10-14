@@ -72,9 +72,9 @@ export default new Vuex.Store({
     // Loading
     loading: false,
     loadingCounter: 0,
-    // Navigation
+    // Layout
     showTopNav: true,
-    // Drawers
+    showFooter: true,
     drawer: false,
     rightDrawer: false,
     // Auth
@@ -124,6 +124,9 @@ export default new Vuex.Store({
     },
     showTopNav(state, bool) {
       state.showTopNav = bool
+    },
+    showFooter(state, bool) {
+      state.showFooter = bool
     },
     drawer(state, bool) {
       state.drawer = bool

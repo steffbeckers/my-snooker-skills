@@ -292,6 +292,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-footer
+      v-if="$store.state.showFooter"
       :fixed="fixed"
       app
       style="padding-right: 0px;"
@@ -405,8 +406,10 @@ export default {
       // Check if given route is true, if it is then hide Nav.
       if (this.$route.name === 'TrainingScoreboard') {
         this.$store.commit('showTopNav', false)
+        this.$store.commit('showFooter', false)
       } else {
         this.$store.commit('showTopNav', true)
+        this.$store.commit('showFooter', true)
       }
 
       this.$logger.log('showTopNav', this.$store.state.showTopNav)
