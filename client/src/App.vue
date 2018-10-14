@@ -233,6 +233,12 @@
           <v-list-tile slot="activator">
             <v-list-tile-title>Training</v-list-tile-title>
           </v-list-tile>
+          <v-list-tile :to="{ name: 'TrainingOverview' }" exact>
+            <v-list-tile-action>
+              <v-icon light>apps</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-title>Overview</v-list-tile-title>
+          </v-list-tile>
           <v-list-tile :to="{ name: 'TrainingScoreboard' }" exact>
             <v-list-tile-action>
               <v-icon light>drag_indicator</v-icon>

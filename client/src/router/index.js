@@ -22,7 +22,8 @@ const Login = () => import('@/pages/account/Login')
 const Logout = () => import('@/pages/account/Logout')
 
 // Training
-const Scoreboard = () => import('@/pages/training/Scoreboard')
+const TrainingOverview = () => import('@/pages/training/Overview')
+const TrainingScoreboard = () => import('@/pages/training/Scoreboard')
 
 // Generic components
 const Loader = () => import('@/components/Loader')
@@ -45,7 +46,12 @@ export default new Router({
     {
       path: '/training/scoreboard',
       name: 'TrainingScoreboard',
-      component: Scoreboard
+      component: TrainingScoreboard
+    },
+    {
+      path: '/training',
+      name: 'TrainingOverview',
+      component: TrainingOverview
     },
     // Clubs
     {
