@@ -29,11 +29,13 @@
           <v-btn @click="inputNumber(8)" color="secondary" class="number-button elevation-0" large>8</v-btn>
           <v-btn @click="inputNumber(9)" color="secondary" class="number-button elevation-0" large>9</v-btn>
           <v-btn @click="inputNumber('-')" :disabled="currentBreak !== ''" color="secondary" class="number-button elevation-0" large>-</v-btn>
-          <v-btn @click="inputNumber(0)" :disabled="currentBreak === ''" color="secondary" class="number-button elevation-0" large>0</v-btn>
+          <v-btn @click="inputNumber(0)" :disabled="currentBreak === '' || currentBreak === '-'" color="secondary" class="number-button elevation-0" large>0</v-btn>
           <v-btn @click="currentBreak = ''; resetTimers()" :disabled="currentBreak === ''" color="secondary" class="number-button elevation-0" large>C</v-btn>
-          <v-progress-linear v-model="lastInputAutoOKCounter"></v-progress-linear>
-          <v-btn @click="ok()" :disabled="currentBreak === ''" class="elevation-0" color="primary" block large>OK</v-btn>
-          <v-btn @click="undo()" :disabled="breaks.length === 0" class="elevation-0" color="primary" block large>Undo</v-btn>
+          <div style="grid-area: ok; width: 100%;">
+            <v-progress-linear class="auto-ok-progress mb-0 mt-1" v-model="lastInputAutoOKCounter" height="5"></v-progress-linear>
+            <v-btn @click="ok()" :disabled="currentBreak === '' || currentBreak === '-'" class="elevation-0 mt-0 ok-button" color="primary" block large>OK</v-btn>
+          </div>
+          <v-btn style="grid-area: undo" @click="undo()" v-if="breaks.length > 0" class="elevation-0 mt-3" color="primary" block large>Undo</v-btn>
         </div>
       </v-flex>
     </v-layout>
@@ -42,14 +44,38 @@
 
 <style lang="scss" scoped>
 .numpad {
-  max-width: 400px;
   margin: 0 auto;
+  margin-top: 20px;
+  width: fit-content;
+  display: grid;
+  grid-template-columns: 80px 80px 80px;
+  grid-template-rows: 50px 50px 50px 50px 50px;
+  grid-template-areas: "num num num"
+                       "num num num"
+                       "num num num"
+                       "num num num"
+                       "ok ok ok"
+                       "undo undo undo";
+  grid-column-gap: 18px;
+  grid-row-gap: 10px;
+  justify-items: center;
 }
-.numpad .number-button {
-  width: 100px;
-  height: 100px;
+.number-button {
+  height: 50px;
   border-radius: 0;
-  font-size: 3em;
+  font-size: 2em;
+  margin: 0px;
+  overflow: hidden;
+}
+.auto-ok-progress {
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+.ok-button {
+  height: 60px;
+  padding-bottom: 5px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
 }
 </style>
 
@@ -71,6 +97,13 @@ export default {
   methods: {
     inputNumber(value) {
       this.resetTimers()
+
+      // If minus, then the length can be 4, else 3 characters
+      if (this.currentBreak.indexOf('-') !== -1) {
+        if (this.currentBreak.length === 4) return
+      } else {
+        if (this.currentBreak.length === 3) return
+      }
 
       this.currentBreak += value
 

@@ -411,8 +411,6 @@ export default {
         this.$store.commit('showTopNav', true)
         this.$store.commit('showFooter', true)
       }
-
-      this.$logger.log('showTopNav', this.$store.state.showTopNav)
     },
     settingsDropdown(bool) {
       localStorage.setItem('login:settingsDropdown', bool)
