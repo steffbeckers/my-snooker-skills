@@ -9,31 +9,94 @@
         Scoreboard
       </v-breadcrumbs-item>
     </v-breadcrumbs>
-    <v-layout :class="$vuetify.breakpoint.smAndUp ? 'pt-3 bb-1px-s-eee pb-3' : 'bb-1px-s-eee pb-3'" row wrap>
-      <v-flex>
-        <div class="title">Scoreboard</div>
-      </v-flex>
-    </v-layout>
-    <v-layout row justify-center>
-      <v-flex xs12 md8 lg6>
-        <SimpleScoreboard v-if="type === 'simple'" :players="players"></SimpleScoreboard>
+    <v-layout row>
+      <v-flex xs12>
+        <div>{{ dateTime | formatDateTime }}</div>
+        <div v-if="currentBreak === ''" class="display-4 font-weight-light text-xs-center">
+          {{ score }}
+        </div>
+        <div v-else class="display-4 font-weight-light text-xs-center">
+          {{ currentBreak || 0 }}
+        </div>
+        <div class="numpad">
+          <v-btn @click="inputNumber(1)" color="secondary" class="number-button elevation-0" large>1</v-btn>
+          <v-btn @click="inputNumber(2)" color="secondary" class="number-button elevation-0" large>2</v-btn>
+          <v-btn @click="inputNumber(3)" color="secondary" class="number-button elevation-0" large>3</v-btn>
+          <v-btn @click="inputNumber(4)" color="secondary" class="number-button elevation-0" large>4</v-btn>
+          <v-btn @click="inputNumber(5)" color="secondary" class="number-button elevation-0" large>5</v-btn>
+          <v-btn @click="inputNumber(6)" color="secondary" class="number-button elevation-0" large>6</v-btn>
+          <v-btn @click="inputNumber(7)" color="secondary" class="number-button elevation-0" large>7</v-btn>
+          <v-btn @click="inputNumber(8)" color="secondary" class="number-button elevation-0" large>8</v-btn>
+          <v-btn @click="inputNumber(9)" color="secondary" class="number-button elevation-0" large>9</v-btn>
+          <v-btn @click="inputNumber('-')" :disabled="currentBreak !== ''" color="secondary" class="number-button elevation-0" large>-</v-btn>
+          <v-btn @click="inputNumber(0)" :disabled="currentBreak === ''" color="secondary" class="number-button elevation-0" large>0</v-btn>
+          <v-btn @click="currentBreak = ''" :disabled="currentBreak === ''" color="secondary" class="number-button elevation-0" large>C</v-btn>
+          <v-btn @click="ok()" :disabled="currentBreak === ''" class="elevation-0" color="primary" block large>OK</v-btn>
+          <v-btn @click="undo()" :disabled="breaks.length === 0" class="elevation-0" color="primary" block large>Undo</v-btn>
+        </div>
       </v-flex>
     </v-layout>
   </v-container>
 </template>
 
+<style lang="scss" scoped>
+.numpad {
+  max-width: 400px;
+  margin: 0 auto;
+}
+.numpad .number-button {
+  width: 100px;
+  height: 100px;
+  border-radius: 0;
+  font-size: 3em;
+}
+</style>
+
 <script>
-import SimpleScoreboard from '../../components/scoreboards/Simple.vue'
+import { setTimeout, clearTimeout } from 'timers'
 
 export default {
   data() {
     return {
-      type: 'simple',
-      players: [this.$store.state.user]
+      dateTime: new Date().toISOString(),
+      lastInputAutoOK: null,
+      score: 0,
+      currentBreak: '',
+      breaks: []
     }
   },
-  components: {
-    SimpleScoreboard
+  methods: {
+    inputNumber(value) {
+      this.resetTimers()
+
+      this.currentBreak += value
+
+      // Automatically trigger OK 3 seconds after last input
+      this.lastInputAutoOK = setTimeout(() => {
+        this.ok()
+      }, 3000)
+    },
+    ok() {
+      this.resetTimers()
+
+      this.score += parseInt(this.currentBreak)
+      this.breaks.push({
+        dateTime: new Date().toISOString(),
+        value: parseInt(this.currentBreak)
+      })
+      this.currentBreak = ''
+    },
+    undo() {
+      this.resetTimers()
+
+      this.score -= this.breaks.pop().value
+    },
+    resetTimers() {
+      if (this.lastInputAutoOK) {
+        clearTimeout(this.lastInputAutoOK)
+        this.lastInputAutoOK = null
+      }
+    }
   },
   name: 'TrainingScoreboard'
 }

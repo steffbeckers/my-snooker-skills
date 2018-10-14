@@ -72,6 +72,8 @@ export default new Vuex.Store({
     // Loading
     loading: false,
     loadingCounter: 0,
+    // Navigation
+    showTopNav: true,
     // Drawers
     drawer: false,
     rightDrawer: false,
@@ -119,6 +121,9 @@ export default new Vuex.Store({
       state.loadingCounter > 0
         ? (state.loading = true)
         : (state.loading = false)
+    },
+    showTopNav(state, bool) {
+      state.showTopNav = bool
     },
     drawer(state, bool) {
       state.drawer = bool

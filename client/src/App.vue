@@ -43,7 +43,7 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar fixed app :clipped-left="clipped" color="primary" class="white--text">
+    <v-toolbar v-if="$store.state.showTopNav" fixed app :clipped-left="clipped" color="primary" class="white--text">
       <v-toolbar-side-icon class="white--text" @click.stop="$store.commit('drawer', !$store.state.drawer)"></v-toolbar-side-icon>
       <v-progress-circular
         class="ml-2"
@@ -401,9 +401,19 @@ export default {
     }
   },
   watch: {
+    $route: function() {
+      // Check if given route is true, if it is then hide Nav.
+      if (this.$route.name === 'TrainingScoreboard') {
+        this.$store.commit('showTopNav', false)
+      } else {
+        this.$store.commit('showTopNav', true)
+      }
+
+      this.$logger.log('showTopNav', this.$store.state.showTopNav)
+    },
     settingsDropdown(bool) {
       localStorage.setItem('login:settingsDropdown', bool)
-    }
+    },
   },
   name: 'App'
 }
