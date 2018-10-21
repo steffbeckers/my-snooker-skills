@@ -334,6 +334,7 @@ module.exports = function(user) {
         firstName: true,
         lastName: true,
         username: true,
+        profilePicture: true,
         createdOn: true,
       },
       include: 'club',
