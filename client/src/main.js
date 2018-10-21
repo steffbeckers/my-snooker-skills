@@ -11,6 +11,7 @@ import './plugins/logger'
 import './plugins/cookies'
 import './plugins/axios'
 import './plugins/filters'
+import './plugins/upload'
 
 // Components
 import App from './App.vue'

@@ -64,6 +64,7 @@ export default new Vuex.Store({
   state: {
     // Env
     env: process.env.NODE_ENV,
+    debug: process.env.NODE_ENV === 'development',
     // Messages
     infos: [],
     successes: [],
@@ -183,6 +184,12 @@ export default new Vuex.Store({
 
       // Update login username
       localStorage.setItem('login:usernameOrEmail', state.user.username)
+    },
+    changeAvatar(state, image) {
+      state.user.profilePicture = image
+
+      // Save user
+      localStorage.setItem('user', JSON.stringify(state.user))
     },
     changeProfile(state, user) {
       if (user.firstName) state.user.firstName = user.firstName

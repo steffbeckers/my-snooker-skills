@@ -26,12 +26,19 @@
         </v-flex>
         <v-flex xs12 sm6>
           <p class="body-2 mb-2">Upload new avatar</p>
-          <!-- <upload-btn
+          <v-alert
+            :value="newAvatarTooLarge"
+            type="error"
+            transition="scale-transition"
+          >
+            This image is too big. Try uploading a smaller image.
+          </v-alert>
+          <upload-btn
             accept="image/*"
             title="Choose new avatar"
             :fileChangedCallback="uploadNewAvatar"
-          >
-          </upload-btn> -->
+            class="pl-0"
+          ></upload-btn>
           <p class="mt-2">The maximum image size allowed is 500KB.</p>
         </v-flex>
       </v-layout>
@@ -150,9 +157,12 @@
 </template>
 
 <script>
+import UploadButton from 'vuetify-upload-button'
+
 export default {
   data() {
     return {
+      newAvatarTooLarge: false,
       changeProfileFormValid: false,
       firstName: this.$store.state.user.firstName,
       firstNameRules: [
@@ -186,6 +196,35 @@ export default {
     if (user) this.$store.commit('updateMe', user)
   },
   methods: {
+    async uploadNewAvatar(file) {
+      /*eslint no-console: ["error", { allow: ["log"] }] */
+      if (this.$store.state.debug) console.log(file)
+
+      // Do nothing when file is undefined
+      if (!file) { return }
+
+      // Check image size
+      this.newAvatarTooLarge = file.size > 512000
+      if (this.newAvatarTooLarge) return
+
+      if (this.$store.state.debug) console.log(await this.getBase64(file))
+
+      this.$axios
+        .patch(process.env.VUE_APP_API + '/Users/' + this.$store.state.user.id, {
+          profilePicture: await this.getBase64(file),
+        }).then(response => {
+          // Update user in store
+          this.$store.commit('changeAvatar', response.data.profilePicture)
+        })
+    },
+    getBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    },
     changeProfile(e) {
       e.preventDefault() // Submit
 
@@ -241,6 +280,9 @@ export default {
           }
         })
     }
+  },
+  components: {
+    'upload-btn': UploadButton
   },
   name: 'ProfileSettings'
 }
