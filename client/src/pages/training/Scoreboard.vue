@@ -1,36 +1,21 @@
 <template>
   <div>
-    <v-toolbar dark color="primary">
-      <v-toolbar-side-icon class="white--text" @click.stop="$store.commit('drawer', !$store.state.drawer)"></v-toolbar-side-icon>
-      <v-toolbar-title class="white--text">Scoreboard - {{ dateTime | formatDateTime }}</v-toolbar-title>
+    <v-toolbar color="transparent" class="elevation-0">
+      <v-toolbar-title><v-icon class="mr-2">drag_indicator</v-icon> Scoreboard</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn @click="undo()" v-if="breaks.length > 0" icon><v-icon>undo</v-icon></v-btn>
-      <v-btn @click="reset()" icon><v-icon>refresh</v-icon></v-btn>
+      <v-btn @click="undo()" v-if="breaks.length > 0" icon><v-icon color="rgba(0,0,0,.54)">undo</v-icon></v-btn>
+      <v-btn @click="reset()" icon><v-icon color="rgba(0,0,0,.54)">refresh</v-icon></v-btn>
       <v-btn :to="{ name: 'TrainingOverview' }" exact icon>
-        <v-icon>close</v-icon>
+        <v-icon color="rgba(0,0,0,.54)">close</v-icon>
       </v-btn>
-      <v-toolbar-side-icon
-        v-if="$store.state.authenticated"
-        class="white--text"
-        @click.stop="$store.commit('rightDrawer', !$store.state.rightDrawer)"
-      ></v-toolbar-side-icon>
     </v-toolbar>
-    <v-container grid-list-lg fluid>
-      <v-breadcrumbs v-if="$vuetify.breakpoint.smAndUp">
-        <v-icon slot="divider">fiber_manual_record</v-icon>
-        <v-breadcrumbs-item :to="{ name: 'TrainingOverview' }" exact>
-          Training
-        </v-breadcrumbs-item>
-        <v-breadcrumbs-item>
-          Scoreboard
-        </v-breadcrumbs-item>
-      </v-breadcrumbs>
+    <v-container class="pt-0" grid-list-lg fluid>
       <v-layout row>
         <v-flex xs12>
-          <div v-if="currentBreak === ''" class="display-4 font-weight-light text-xs-center mt-2 pr-1">
+          <div v-if="currentBreak === ''" class="display-4 font-weight-light text-xs-center pr-1">
             {{ score }}
           </div>
-          <div v-else class="display-4 text-xs-center mt-2 pr-1" :class="lastInputAutoOKCounter % 15 === 0 ? 'font-weight-medium' : 'font-weight-light'">
+          <div v-else class="display-4 text-xs-center pr-1" :class="lastInputAutoOKCounter % 15 === 0 ? 'font-weight-medium' : 'font-weight-light'">
             {{ currentBreak || 0 }}
           </div>
           <div class="text-xs-center">

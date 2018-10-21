@@ -1,12 +1,22 @@
 <template>
-  <v-container grid-list-lg fluid>
-    <v-layout row>
-      <v-flex>
-        <div class="title">Matches</div>
-      </v-flex>
-    </v-layout>
-    <MatchesCardList v-if="listType === 'cards'" :matches="matches"></MatchesCardList>
-  </v-container>
+  <div>
+    <v-toolbar color="transparent" class="elevation-0">
+      <v-toolbar-title color="grey">
+        <v-icon class="mr-2">list</v-icon> Matches
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon>
+        <v-icon color="rgba(0,0,0,.54)">search</v-icon>
+      </v-btn>
+      <v-btn icon>
+        <v-icon color="rgba(0,0,0,.54)">more_vert</v-icon>
+      </v-btn>
+    </v-toolbar>
+    <v-container class="pt-2" grid-list-lg fluid>
+      <MatchesCardList v-if="listType === 'cards'" :matches="matches"></MatchesCardList>
+    </v-container>
+  </div>
+
 </template>
 
 <script>

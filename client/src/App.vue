@@ -72,7 +72,7 @@
         <v-btn class="white--text" :to="{ name: 'Matches' }" exact flat>Matches</v-btn>
         <v-btn class="white--text" :to="{ name: 'Tournaments' }" exact flat>Tournaments</v-btn>
         <v-btn class="white--text" :to="{ name: 'Players' }" exact flat>Players</v-btn>
-        <v-btn class="white--text" exact flat>Clubs</v-btn>
+        <!-- <v-btn class="white--text" exact flat>Clubs</v-btn> -->
       </v-toolbar-items>
       <v-spacer></v-spacer>
       <!-- <v-text-field
@@ -301,10 +301,16 @@
       v-if="$store.state.showFooter"
       :fixed="fixed"
       app
-      style="padding-right: 0px;"
     >
-      <div id="buildInfo" class="ml-2">Last update: {{ buildDateTime }} - v{{ version }} <span v-if="nodeEnv !== 'production'">Env: {{ nodeEnv }}</span></div>
-      <div id="copyright" class="mr-2">&copy; <a href="https://steffbeckers.eu/">Steff</a></div>
+      <div id="build-info">
+        <v-icon class="mr-1">code</v-icon><span>Last updated on {{ buildDateTime | formatDateTime }} to v{{ version }}</span>
+      </div>
+      <div id="report-bug">
+        <span>Report a</span><v-icon class="ml-1">bug_report</v-icon>
+      </div>
+      <div id="copyright">
+        <v-icon class="mr-1">copyright</v-icon><a href="https://steffbeckers.eu/">Steff</a>
+      </div>
     </v-footer>
   </v-app>
 </template>
@@ -314,23 +320,29 @@ main.content {
   margin-bottom: 60px;
 }
 
-#buildInfo {
-  color: #ffffff;
-  font-size: 11px;
-  line-height: 11px;
-}
-
-#copyright {
+.v-footer {
   color: #868e96;
-  margin-left: auto;
+  font-size: 12px;
+  line-height: 32px;
+
+  display: flex;
+  justify-content: space-between;
+
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
-#copyright a {
+.v-footer a {
   text-decoration: none;
 }
 
-#copyright a:hover {
+.v-footer a:hover {
   text-decoration: underline;
+}
+
+.v-footer .v-icon {
+  position: relative;
+  top: 5px;
 }
 </style>
 
@@ -410,13 +422,13 @@ export default {
   watch: {
     $route: function () {
       // Check if given route is true, if it is then hide Nav.
-      if (this.$route.name === 'TrainingScoreboard') {
-        this.$store.commit('showTopNav', false)
-        this.$store.commit('showFooter', false)
-      } else {
-        this.$store.commit('showTopNav', true)
-        this.$store.commit('showFooter', true)
-      }
+      // if (this.$route.name === 'TrainingScoreboard') {
+      //   this.$store.commit('showTopNav', false)
+      //   this.$store.commit('showFooter', false)
+      // } else {
+      //   this.$store.commit('showTopNav', true)
+      //   this.$store.commit('showFooter', true)
+      // }
     },
     settingsDropdown(bool) {
       localStorage.setItem('login:settingsDropdown', bool)

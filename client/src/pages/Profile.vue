@@ -76,8 +76,8 @@
         <v-tab-item id="friends">
           <v-card>
             <v-toolbar color="white" class="elevation-0">
-              <v-toolbar-title color="grey">
-                <v-icon class="mr-2">people</v-icon>
+              <v-toolbar-title color="rgba(0,0,0,.54)">
+                <v-icon color="rgba(0,0,0,.54)" class="mr-2">people</v-icon>
                 <span v-if="$store.state.authenticated && $store.state.user.id === user.id && user.friends.length === 0">Add friends</span>
                 <span v-else-if="user.friends.length === 0">Friends</span>
                 <span v-if="user.friends.length === 1">1 friend</span>

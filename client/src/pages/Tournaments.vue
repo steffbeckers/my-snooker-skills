@@ -1,12 +1,21 @@
 <template>
-  <v-container grid-list-lg fluid>
-    <v-layout row>
-      <v-flex>
-        <div class="title">Tournaments</div>
-      </v-flex>
-    </v-layout>
-    <TournamentsCardList v-if="listType === 'cards'" :tournaments="tournaments"></TournamentsCardList>
-  </v-container>
+  <div>
+    <v-toolbar color="transparent" class="elevation-0">
+      <v-toolbar-title color="grey">
+        <v-icon class="mr-2">line_style</v-icon> Tournaments
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon>
+        <v-icon color="rgba(0,0,0,.54)">search</v-icon>
+      </v-btn>
+      <v-btn icon>
+        <v-icon color="rgba(0,0,0,.54)">more_vert</v-icon>
+      </v-btn>
+    </v-toolbar>
+    <v-container class="pt-2" grid-list-lg fluid>
+      <TournamentsCardList v-if="listType === 'cards'" :tournaments="tournaments"></TournamentsCardList>
+    </v-container>
+  </div>
 </template>
 
 <script>
