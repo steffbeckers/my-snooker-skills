@@ -70,7 +70,15 @@ export default {
     playerIsAFriend(player) {
       if (!this.$store.state.authenticated || !this.$store.state.user.friends) return
       return this.$store.state.user.friends.hasOwnProperty(player.id);
-    }
+    },
+    // TODO Refactor method in profile component
+    profilePicture(url, size) {
+      // Google standard
+      if (url.includes('google') && url.includes('?sz=50')) {
+        url = url.replace('sz=50', 'sz=' + size)
+      }
+      return url
+    },
   },
   name: 'PlayersCardList'
 }
