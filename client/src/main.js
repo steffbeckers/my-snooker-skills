@@ -12,6 +12,7 @@ import './plugins/cookies'
 import './plugins/axios'
 import './plugins/filters'
 import './plugins/upload'
+import './plugins/database'
 
 // Components
 import App from './App.vue'

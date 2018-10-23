@@ -28,7 +28,7 @@
           <v-btn v-if="!playerIsAFriend(player)" @click="$store.dispatch('addPlayerAsFriend', player)" flat>
             Add as friend
           </v-btn>
-          <v-btn v-if="playerIsAFriend(player)" flat>
+          <v-btn :to="{ name: 'MatchesPlayAgainst', params: { username: player.username } }" v-if="playerIsAFriend(player)" flat>
             Play match
           </v-btn>
           <v-spacer></v-spacer>
