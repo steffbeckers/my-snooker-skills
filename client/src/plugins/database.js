@@ -1,4 +1,8 @@
 import Vue from 'vue'
+import Dexie from 'dexie'
 
-import Database from '../services/database'
-Vue.prototype.$db = new Database()
+Vue.prototype.$db = new Dexie('MySnookerSkills')
+
+Vue.prototype.$db.version(1).stores({
+  matches: '++id,players,teams,referee,winner,startDateTime,endDateTime,bestOf,reds,scores,handicaps,scoreboardType,statistics,createdOn,updatedOn'
+})

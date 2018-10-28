@@ -60,10 +60,6 @@
       "model": "User",
       "foreignKey": "updatedBy"
     },
-    "tournament": {
-      "type": "belongsTo",
-      "model": "Tournament"
-    },
     "frames": {
       "type": "hasMany",
       "model": "Frame"

@@ -242,7 +242,7 @@ export default {
       }
 
       // Reload profile when username changes in URL
-      if (this.username && this.username !== value.params.username) {
+      if (this.username !== value.params.username) {
         this.username = value.params.username
         this.getProfileByUsername()
       }

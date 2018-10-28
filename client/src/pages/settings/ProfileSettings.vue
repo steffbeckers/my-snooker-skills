@@ -39,7 +39,6 @@
             :fileChangedCallback="uploadNewAvatar"
             class="pl-0"
           ></upload-btn>
-          <p class="mt-2">The maximum image size allowed is 500KB.</p>
         </v-flex>
       </v-layout>
       <v-layout class="pt-3 pb-3" row wrap>
@@ -158,11 +157,13 @@
 
 <script>
 import UploadButton from 'vuetify-upload-button'
+import ImageUploader from 'vue-image-upload-resize'
 
 export default {
   data() {
     return {
       newAvatarTooLarge: false,
+      hasImage: false,
       changeProfileFormValid: false,
       firstName: this.$store.state.user.firstName,
       firstNameRules: [
@@ -282,7 +283,8 @@ export default {
     }
   },
   components: {
-    'upload-btn': UploadButton
+    'upload-btn': UploadButton,
+    'image-uploader': ImageUploader,
   },
   name: 'ProfileSettings'
 }

@@ -7,6 +7,7 @@ const Profile = () => import('@/pages/Profile')
 const Matches = () => import('@/pages/Matches')
 const MatchesPlay = () => import('@/pages/matches/Play')
 const Tournaments = () => import('@/pages/Tournaments')
+const FrameDetail = () => import('@/pages/frame/Detail')
 const Players = () => import('@/pages/Players')
 const Clubs = () => import('@/pages/Clubs')
 
@@ -87,6 +88,12 @@ export default new Router({
       path: '/matches',
       name: 'Matches',
       component: Matches
+    },
+    // Frame
+    {
+      path: '/frame/:id',
+      name: 'Frame',
+      component: FrameDetail
     },
     // Social auth
     {
