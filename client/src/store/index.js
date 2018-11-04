@@ -64,7 +64,7 @@ export default new Vuex.Store({
   state: {
     // Env
     env: process.env.NODE_ENV,
-    debug: process.env.NODE_ENV === 'development',
+    debug: localStorage.getItem('debug') || process.env.NODE_ENV === 'development',
     // Messages
     infos: [],
     successes: [],
@@ -225,18 +225,24 @@ export default new Vuex.Store({
 
       // When friends could be undefined
       if (state.user.friends === undefined) {
-        state.user.friends = {}
+        state.user.friends = []
       }
+
       // Check if the friend isn't added already
-      else if (!state.user.friends.hasOwnProperty(user.id)) {
+      let found = state.user.friends.some((friend) => {
+        return friend.id === user.id
+      })
+      if (!found) {
         // Add the user to friends
-        state.user.friends[user.id] = {
+        state.user.friends.push({
+          id: user.id,
           firstName: user.firstName,
           lastName: user.lastName,
-          username: user.username
-        }
+          username: user.username,
+          profilePicture: user.profilePicture
+        })
         // Trigger update
-        state.user.friends = Object.assign({}, state.user.friends)
+        state.user.friends = [...state.user.friends]
       }
 
       // Save user
@@ -247,11 +253,15 @@ export default new Vuex.Store({
       if (!state.authenticated) return
 
       // Check if the friend is added
-      else if (state.user.friends.hasOwnProperty(user.id)) {
-        // Add the user to friends
-        delete state.user.friends[user.id]
+      let found = state.user.friends.some((friend) => {
+        return friend.id === user.id
+      })
+      if (found) {
+        // Remove the user from friends
+        let index = state.user.friends.map(f => f.id).indexOf(user.id);
+        if (index >= 0) state.user.friends.splice(index, 1)
         // Trigger update
-        state.user.friends = Object.assign({}, state.user.friends)
+        state.user.friends = [...state.user.friends]
       }
 
       // Save user

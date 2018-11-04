@@ -12,7 +12,65 @@
     </v-toolbar>
     <v-container class='pt-2' grid-list-lg fluid>
       <v-layout>
-
+        <v-form
+          ref="newMatchForm"
+          v-model="newMatchFormValid"
+          @submit="start"
+        >
+          <v-flex>
+            <v-autocomplete
+              v-model="match.players"
+              :items="[{
+                id: $store.state.user.id,
+                firstName: $store.state.user.firstName,
+                lastName: $store.state.user.lastName,
+                username: $store.state.user.username,
+                profilePicture: $store.state.user.profilePicture
+              },...$store.state.user.friends]"
+              chips
+              label="Players"
+              :item-text="['firstName', 'lastName', 'username']"
+              item-value="item"
+              multiple
+            >
+              <template
+                slot="selection"
+                slot-scope="data"
+              >
+                <v-chip
+                  :selected="data.selected"
+                  close
+                  class="chip--select-multi"
+                  @input="removePlayer(data.item)"
+                >
+                  <v-avatar :color="!data.item.profilePicture ? 'red' : 'transparent'">
+                    <img v-if="data.item.profilePicture" :src="data.item.profilePicture">
+                    <v-icon color="white" v-else>person</v-icon>
+                  </v-avatar>
+                  {{ data.item.firstName }} {{ data.item.lastName }}
+                </v-chip>
+              </template>
+              <template
+                slot="item"
+                slot-scope="data"
+              >
+                <template v-if="typeof data.item !== 'object'">
+                  <v-list-tile-content v-text="data.item"></v-list-tile-content>
+                </template>
+                <template v-else>
+                  <v-list-tile-avatar :color="!data.item.profilePicture ? 'red' : 'transparent'">
+                    <img v-if="data.item.profilePicture" :src="data.item.profilePicture">
+                    <v-icon dark v-else>person</v-icon>
+                  </v-list-tile-avatar>
+                  <v-list-tile-content>
+                    <v-list-tile-title>{{ data.item.firstName }} {{ data.item.lastName }}</v-list-tile-title>
+                    <v-list-tile-sub-title v-html="data.item.username"></v-list-tile-sub-title>
+                  </v-list-tile-content>
+                </template>
+              </template>
+            </v-autocomplete>
+          </v-flex>
+        </v-form>
       </v-layout>
     </v-container>
   </div>
@@ -42,12 +100,18 @@ export default {
         wonToss: {},
         breakOff: {}
       },
-      newMatch: {}
+      newMatch: {},
+      newMatchFormValid: false
     }
   },
   created() {
     // New match copy
-    this.newMatch = Object.assign({}, this.match)
+    this.newMatch = {...this.match}
+
+    // Retrieve match with state 'new' from local db
+    this.$db.matches.where('state').equals('new').first(function(match) {
+      if (match) this.match = match
+    })
 
     // Play match against friend
     if (this.$route.params.username) {
@@ -80,11 +144,24 @@ export default {
   //   // this.$logger.log(matches)
   // },
   methods: {
-    start() {
-
+    start(e) {
+      e.preventDefault() // Submit
+    },
+    removePlayer(player) {
+      const index = this.match.players.map(p => p.id).indexOf(player.id)
+      if (index >= 0) this.match.players.splice(index, 1)
     },
     reset() {
-      this.match = Object.assign({}, this.newMatch)
+      this.match = {...this.newMatch}
+    }
+  },
+  watch: {
+    match: {
+      handler: function(value) {
+        // Update to local db
+        this.$db.matches.put(value)
+      },
+      deep: true
     }
   },
   name: 'MatchesPlay'

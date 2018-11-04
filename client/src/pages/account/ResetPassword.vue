@@ -190,7 +190,7 @@ export default {
         .catch(error => {
           if (error && error.code === 'AUTHORIZATION_REQUIRED') {
             // Remove token from query params
-            let query = Object.assign({}, this.$route.query)
+            let query = {...this.$route.query}
             delete query.access_token
             this.$router.replace({ query })
 

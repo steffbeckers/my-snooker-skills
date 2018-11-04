@@ -69,7 +69,10 @@ export default {
   methods: {
     playerIsAFriend(player) {
       if (!this.$store.state.authenticated || !this.$store.state.user.friends) return
-      return this.$store.state.user.friends.hasOwnProperty(player.id);
+      let isFriend = this.$store.state.user.friends.some((friend) => {
+        return friend.id === player.id
+      })
+      return isFriend;
     },
     // TODO Refactor method in profile component
     profilePicture(url, size) {

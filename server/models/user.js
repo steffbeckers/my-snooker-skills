@@ -170,17 +170,14 @@ module.exports = function(user) {
       }
     });
   };
-  user.remoteMethod(
-    'resendVerificationEmail',
-    {
-      http: {path: '/resendVerificationEmailTo', verb: 'post'},
-      accepts: {
-        arg: 'usernameOrEmail',
-        type: 'string',
-      },
-      returns: {type: 'object', root: true},
-    }
-  );
+  user.remoteMethod('resendVerificationEmail', {
+    http: {path: '/resendVerificationEmailTo', verb: 'post'},
+    accepts: {
+      arg: 'usernameOrEmail',
+      type: 'string',
+    },
+    returns: {type: 'object', root: true},
+  });
 
   // Send password reset email
   user.on('resetPasswordRequest', function(info) {
@@ -231,16 +228,18 @@ module.exports = function(user) {
       });
       userJSON.roles = simpleRoleArray;
 
-      // Simplify friends in object
-      var simpleFriendsObject = {};
+      // Simplify friends in array
+      var simpleFriendsArray = [];
       userJSON.friends.forEach(friend => {
-        simpleFriendsObject[friend.id] = {
+        simpleFriendsArray.push({
+          id: friend.id,
           firstName: friend.firstName,
-          lastName: friend.firstName,
+          lastName: friend.lastName,
           username: friend.username,
-        };
+          profilePicture: friend.profilePicture,
+        });
       });
-      userJSON.friends = simpleFriendsObject;
+      userJSON.friends = simpleFriendsArray;
 
       // Simplify subscriptions in string array
       var simpleSubscriptionArray = [];
@@ -267,6 +266,7 @@ module.exports = function(user) {
           firstName: true,
           lastName: true,
           username: true,
+          profilePicture: true,
         },
         order: 'firstName ASC',
         limit: 10,
@@ -285,6 +285,7 @@ module.exports = function(user) {
           firstName: true,
           lastName: true,
           username: true,
+          profilePicture: true,
         },
         order: 'firstName ASC',
         limit: 10,
@@ -412,16 +413,18 @@ module.exports = function(user) {
         });
         userJSON.roles = simpleRoleArray;
 
-        // Simplify friends in object
-        var simpleFriendsObject = {};
+        // Simplify friends in array
+        var simpleFriendsArray = [];
         userJSON.friends.forEach(friend => {
-          simpleFriendsObject[friend.id] = {
+          simpleFriendsArray.push({
+            id: friend.id,
             firstName: friend.firstName,
-            lastName: friend.firstName,
+            lastName: friend.lastName,
             username: friend.username,
-          };
+            profilePicture: friend.profilePicture,
+          });
         });
-        userJSON.friends = simpleFriendsObject;
+        userJSON.friends = simpleFriendsArray;
 
         // Simplify subscriptions in string array
         var simpleSubscriptionArray = [];
@@ -469,6 +472,7 @@ module.exports = function(user) {
           relation: 'friends',
           scope: {
             fields: {
+              id: true,
               firstName: true,
               lastName: true,
               username: true,
