@@ -309,7 +309,7 @@
         <span>Report a</span><v-icon class="ml-1">bug_report</v-icon>
       </div>
       <div id="copyright">
-        <v-icon class="mr-1">copyright</v-icon><a href="https://steffbeckers.eu/">Steff</a>
+        <v-icon class="mr-1">copyright</v-icon><a href="https://steffbeckers.eu/" target="_blank">Steff</a>
       </div>
     </v-footer>
   </v-app>

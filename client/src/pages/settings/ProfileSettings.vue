@@ -38,6 +38,7 @@
             title="Choose new avatar"
             :fileChangedCallback="uploadNewAvatar"
             class="pl-0"
+            :block="$vuetify.breakpoint.xs"
           ></upload-btn>
         </v-flex>
       </v-layout>
