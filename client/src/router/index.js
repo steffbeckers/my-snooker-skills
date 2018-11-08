@@ -77,12 +77,14 @@ export default new Router({
     {
       path: '/matches/play/against/:username',
       name: 'MatchesPlayAgainst',
-      component: MatchesPlay
+      component: MatchesPlay,
+      meta: { requiresAuth: true }
     },
     {
       path: '/matches/play',
       name: 'MatchesPlay',
-      component: MatchesPlay
+      component: MatchesPlay,
+      meta: { requiresAuth: true }
     },
     {
       path: '/matches',

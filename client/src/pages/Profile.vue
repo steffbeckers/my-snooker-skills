@@ -58,22 +58,36 @@
         </v-tab>
       </v-tabs>
       <v-tabs-items v-model="selectedTab">
-        <v-tab-item id="matches">
-          <v-card flat>
-            <v-card-text>Recent matches</v-card-text>
+        <v-tab-item value="matches">
+          <v-card>
+            <v-toolbar color="white" class="elevation-0">
+              <v-toolbar-title color="rgba(0,0,0,.54)">
+                <v-icon color="rgba(0,0,0,.54)" class="mr-2">list</v-icon> Recent matches
+              </v-toolbar-title>
+              <v-spacer></v-spacer>
+              <v-btn :to="{ name: 'MatchesPlayAgainst', params: { username: user.username } }" v-if="$store.state.authenticated && $store.state.user.id !== user.id && user && playerIsAFriend()" flat>
+                Play match
+              </v-btn>
+              <v-btn icon>
+                <v-icon color="rgba(0,0,0,.54)">search</v-icon>
+              </v-btn>
+              <v-btn icon>
+                <v-icon color="rgba(0,0,0,.54)">more_vert</v-icon>
+              </v-btn>
+            </v-toolbar>
           </v-card>
         </v-tab-item>
-        <v-tab-item id="tournaments">
-          <v-card flat>
+        <v-tab-item value="tournaments">
+          <v-card>
             <v-card-text>Recent tournaments</v-card-text>
           </v-card>
         </v-tab-item>
-        <v-tab-item id="statistics">
-          <v-card flat>
+        <v-tab-item value="statistics">
+          <v-card>
             <v-card-text>All statistics of this player</v-card-text>
           </v-card>
         </v-tab-item>
-        <v-tab-item id="friends">
+        <v-tab-item value="friends">
           <v-card>
             <v-toolbar color="white" class="elevation-0">
               <v-toolbar-title color="rgba(0,0,0,.54)">
@@ -87,6 +101,12 @@
                 <v-icon color="rgba(0,0,0,.54)">add</v-icon>
               </v-btn>
               <v-spacer></v-spacer>
+              <v-btn v-if="$store.state.authenticated&& $store.state.user.id !== user.id && user && !playerIsAFriend()" @click="addPlayerAsFriend(user)" flat>
+                <v-icon color="rgba(0,0,0,.54)" class="mr-2">add</v-icon> Add as friend
+              </v-btn>
+              <v-btn v-else @click="removePlayerAsFriend(user)" flat>
+                <v-icon color="rgba(0,0,0,.54)" class="mr-2">remove</v-icon> Remove as friend
+              </v-btn>
               <v-btn icon>
                 <v-icon color="rgba(0,0,0,.54)">search</v-icon>
               </v-btn>
@@ -134,8 +154,8 @@
             </v-container>
           </v-card>
         </v-tab-item>
-        <v-tab-item id="favorites">
-          <v-card flat>
+        <v-tab-item value="favorites">
+          <v-card>
             <v-card-text>Favorites of this player</v-card-text>
           </v-card>
         </v-tab-item>
@@ -211,6 +231,26 @@ export default {
         url = url.replace('sz=50', 'sz=' + size)
       }
       return url
+    },
+    playerIsAFriend() {
+      // User needs to be loaded
+      if (!this.user) return
+
+      // We need to be authenticated and have friends
+      if (!this.$store.state.authenticated || !this.$store.state.user.friends) return
+
+      // Check for friends
+      return this.$store.state.user.friends.some((friend) => {
+        return friend.id === this.user.id
+      })
+    },
+    addPlayerAsFriend(friend) {
+      this.$store.dispatch('addPlayerAsFriend', friend).then(
+        () => {
+          this.getProfileByUsername()
+        },
+        this.$logger.error
+      )
     },
     removePlayerAsFriend(friend) {
       this.$store.dispatch('removePlayerAsFriend', friend).then(

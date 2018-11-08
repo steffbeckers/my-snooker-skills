@@ -5,7 +5,7 @@
         <v-icon class="mr-2">list</v-icon> Matches
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn :to="{ name: 'MatchesPlay' }" exact color="primary">
+      <v-btn v-if="$store.state.authenticated" :to="{ name: 'MatchesPlay' }" exact color="primary">
         Play
       </v-btn>
       <v-btn icon>

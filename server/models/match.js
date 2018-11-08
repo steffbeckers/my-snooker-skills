@@ -11,6 +11,8 @@ module.exports = function(Match) {
       if (context.isNewInstance) {
         context.instance.createdBy = context.options.accessToken.userId;
         context.instance.ownerId = context.options.accessToken.userId;
+        // Update state to started
+        context.instance.state = 'started';
       }
       context.instance.updatedBy = context.options.accessToken.userId;
     }
@@ -40,6 +42,15 @@ module.exports = function(Match) {
     //     Match.app.mx.IO.emit('new-match', { userId: ctx.options.accessToken.userId, match: match });
     //   });
     // }
+    next();
+  });
+
+  Match.afterRemote('create', function(ctx, matchInstance, next) {
+    // Link players to match
+    ctx.req.body.players.forEach(function(player) {
+      matchInstance.players.add(player.id);
+    });
+
     next();
   });
 

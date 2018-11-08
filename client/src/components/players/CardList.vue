@@ -8,22 +8,16 @@
       v-for="player in players" :key="player.id"
     >
       <v-card>
-        <v-layout @click="$router.push({name: 'Profile', params: {username: player.username}})">
-          <v-flex class="pt-0" sm3 xs12>
-            <v-avatar class="ml-4 mt-4" size="60px" :color="!player.profilePicture ? 'red' : 'transparent'">
-              <img v-if="player.profilePicture" :src="profilePicture(player.profilePicture, 60)">
-              <v-icon style="font-size: 42px;" dark v-else>person</v-icon>
-            </v-avatar>
-          </v-flex>
-          <v-flex class="pt-0" sm9 xs12>
-            <v-card-title primary-title>
-              <div>
-                <div class="headline">{{ player.firstName }} {{ player.lastName }}</div>
-                <div>@{{ player.username }}</div>
-              </div>
-            </v-card-title>
-          </v-flex>
-        </v-layout>
+        <v-card-title @click="$router.push({name: 'Profile', params: {username: player.username}})" primary-title>
+          <v-avatar class="ml-1 mr-4" size="60px" :color="!player.profilePicture ? 'red' : 'transparent'">
+            <img v-if="player.profilePicture" :src="profilePicture(player.profilePicture, 60)">
+            <v-icon style="font-size: 42px;" dark v-else>person</v-icon>
+          </v-avatar>
+          <div>
+            <div class="headline">{{ player.firstName }} {{ player.lastName }}</div>
+            <div>@{{ player.username }}</div>
+          </div>
+        </v-card-title>
         <v-card-actions v-if="$store.state.authenticated">
           <v-btn v-if="!playerIsAFriend(player)" @click="$store.dispatch('addPlayerAsFriend', player)" flat>
             Add as friend

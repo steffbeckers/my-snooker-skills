@@ -66,7 +66,8 @@
     },
     "players": {
       "type": "hasAndBelongsToMany",
-      "model": "user"
+      "model": "user",
+      "throughTable": "MatchPlayer"
     },
     "teams": {
       "type": "hasAndBelongsToMany",

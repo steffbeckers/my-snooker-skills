@@ -9,7 +9,7 @@
     >
       <v-card>
         <v-card-title primary-title>
-          <h3 class="headline">{{ match.startDateTime | formatDateTime }}<span v-if="match.endDateTime"> - {{ match.endDateTime | formatDateTime }}</span></h3>
+          <h3 class="headline">{{ match.players[0].firstName }} {{ match.players[0].lastName }} - {{ match.players[1].firstName }} {{ match.players[1].lastName }}</h3>
         </v-card-title>
       </v-card>
     </v-flex>

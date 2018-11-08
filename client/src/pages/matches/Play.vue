@@ -19,13 +19,71 @@
         <v-layout class="pb-3" row wrap>
           <v-flex xs12 sm4>
             <p class="title">Players</p>
-            <p :class="$vuetify.breakpoint.xs ? 'mb-0' : ''">Add your friends or search for players by name or username.</p>
-            <!-- Friends selector -->
+            <p :class="$vuetify.breakpoint.xs ? 'mb-0' : ''">Add your friends or search for players by name or username. At least 2 players need to be added.</p>
+            <v-btn v-if="!currentUserAddedToMatch" @click="match.players.push(meAsPlayer)" color="primary" block flat>Add yourself</v-btn>
+            <v-autocomplete
+              :items="friendsThatCanBeAddedToMatch"
+              v-model="friendSelector"
+              label="Add friend"
+              :filter="userFilter"
+              @change="() => { match.players.unshift(friendSelector); friendSelector = {} }"
+            >
+              <template slot="selection" slot-scope="data">
+                {{ data.item.firstName }} {{ data.item.lastName }}
+              </template>
+              <template
+                slot="item"
+                slot-scope="data"
+              >
+                <template>
+                  <v-list-tile-avatar :color="!data.item.profilePicture ? 'red' : 'transparent'">
+                    <img v-if="data.item.profilePicture" :src="data.item.profilePicture">
+                    <v-icon dark v-else>person</v-icon>
+                  </v-list-tile-avatar>
+                  <v-list-tile-content>
+                    <v-list-tile-title>{{ data.item.firstName }} {{ data.item.lastName }}</v-list-tile-title>
+                    <v-list-tile-sub-title v-html="data.item.username"></v-list-tile-sub-title>
+                  </v-list-tile-content>
+                </template>
+              </template>
+            </v-autocomplete>
             <!-- Player selector -->
           </v-flex>
           <v-flex xs12 sm8>
-            <!-- Display players in cards -->
-            <!-- Add player with plus-sign card -->
+            <v-layout row wrap>
+              <v-flex
+                v-for="player in match.players"
+                :key="player.id"
+                xs12
+              >
+                <v-card>
+                  <v-card-title @click="$router.push({name: 'Profile', params: {username: player.username}})" primary-title>
+                    <v-avatar class="ml-1 mr-4" size="60px" :color="!player.profilePicture ? 'red' : 'transparent'">
+                      <img v-if="player.profilePicture" :src="player.profilePicture">
+                      <v-icon style="font-size: 42px;" dark v-else>person</v-icon>
+                    </v-avatar>
+                    <div>
+                      <div class="headline">{{ player.firstName }} {{ player.lastName }}</div>
+                      <div>@{{ player.username }}</div>
+                    </div>
+                  </v-card-title>
+                  <v-card-actions v-if="$store.state.authenticated">
+                    <v-btn @click="removePlayer(player)" flat>
+                      Remove&nbsp;<span v-if="player.id === $store.state.user.id">yourself</span><span v-else>player</span>
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-flex>
+              <!-- <v-flex
+                v-for="player in match.players"
+                :key="player.id"
+                xs12
+              >
+                <v-card class="text-xs-center">
+                  <v-icon>add</v-icon>
+                </v-card>
+              </v-flex> -->
+            </v-layout>
           </v-flex>
         </v-layout>
         <v-layout class="pt-3 pb-3" row wrap>
@@ -35,14 +93,14 @@
           </v-flex>
           <v-flex xs12 sm8>
             <v-layout row wrap>
-              <v-flex xs12 sm4>
+              <v-flex xs6 sm4>
                 <v-select
                   :items="bestOf"
                   :value="match.bestOf"
                   label="Best Of (frames)"
                 ></v-select>
               </v-flex>
-              <v-flex xs12 sm4>
+              <v-flex xs6 sm4>
                 <v-select
                   :items="[6, 10, 15]"
                   :value="match.reds"
@@ -74,10 +132,7 @@
                     slot="item"
                     slot-scope="data"
                   >
-                    <template v-if="typeof data.item !== 'object'">
-                      <v-list-tile-content v-text="data.item"></v-list-tile-content>
-                    </template>
-                    <template v-else>
+                    <template>
                       <v-list-tile-avatar :color="!data.item.profilePicture ? 'red' : 'transparent'">
                         <img v-if="data.item.profilePicture" :src="data.item.profilePicture">
                         <v-icon dark v-else>person</v-icon>
@@ -157,6 +212,7 @@
           color="primary"
           type="submit"
           block
+          :disabled="match.players.length < 2 || $store.state.loading"
         >
           Start match
         </v-btn>
@@ -173,15 +229,7 @@ export default {
         state: "new",
         bestOf: 3, // TODO: Application setting
         reds: 15, // TODO: Application setting (15, 10, 6)
-        players: [
-          {
-            id: this.$store.state.user.id,
-            firstName: this.$store.state.user.firstName,
-            lastName: this.$store.state.user.lastName,
-            username: this.$store.state.user.username,
-            profilePicture: this.$store.state.user.profilePicture
-          }
-        ],
+        players: [],
         scores: [],
         handicap: false,
         handicaps: [],
@@ -191,21 +239,32 @@ export default {
         wonToss: {},
         breakOff: {}
       },
+      meAsPlayer: {
+        id: this.$store.state.user.id,
+        firstName: this.$store.state.user.firstName,
+        lastName: this.$store.state.user.lastName,
+        username: this.$store.state.user.username,
+        profilePicture: this.$store.state.user.profilePicture
+      },
       newMatch: {},
-      newMatchFormValid: false
+      newMatchFormValid: false,
+      friendSelector: {}
     };
   },
   created() {
+    // Add me to match
+    this.match.players.push(this.meAsPlayer)
+
     // New match copy
-    this.newMatch = { ...this.match };
+    this.newMatch = { ...this.match }
 
     // Retrieve match with state 'new' from local db
-    this.$db.matches
-      .where("state")
-      .equals("new")
-      .first(function(match) {
-        if (match) this.match = match;
-      });
+    // this.$db.matches
+    //   .where("state")
+    //   .equals("new")
+    //   .first(function(match) {
+    //     if (match) this.match = match
+    //   });
 
     // Play match against friend
     if (this.$route.params.username) {
@@ -217,11 +276,11 @@ export default {
             "/profile"
         )
         .then(response => {
-          this.match.players.push(response.data);
-          delete this.$route.params.username;
+          this.match.players.unshift(response.data)
+          delete this.$route.params.username
         })
         .catch(error => {
-          this.$logger.error(error);
+          this.$logger.error(error)
         });
     }
   },
@@ -244,37 +303,62 @@ export default {
   // },
   computed: {
     bestOf() {
-      let max = 35; // TODO: Application setting
-      let arrayOfNumbers = [];
+      let max = 35 // TODO: Application setting
+      let arrayOfNumbers = []
       for (let i = 0; i <= max / 2; i++) {
         arrayOfNumbers[i] = 2 * i + 1;
       }
-      return arrayOfNumbers;
+      return arrayOfNumbers
+    },
+    friendsThatCanBeAddedToMatch() {
+      return this.$store.state.user.friends.filter(f => !this.match.players.includes(f))
+    },
+    currentUserAddedToMatch() {
+      return this.match.players.find((p) => {
+        return p.id === this.$store.state.user.id;
+      });
     }
   },
   methods: {
     start(e) {
-      e.preventDefault(); // Submit
+      e.preventDefault() // Submit
 
       this.$logger.log(this.match)
+
+      this.$axios
+        .post(process.env.VUE_APP_API + '/Matches', this.match)
+        .then(response => {
+          this.$logger.log(response)
+        })
+    },
+    userFilter (item, queryText) {
+      const firstName = item.firstName.toLowerCase()
+      const lastName = item.lastName.toLowerCase()
+      const username = item.username.toLowerCase()
+      const searchText = queryText.toLowerCase()
+
+      return firstName.indexOf(searchText) > -1 ||
+        lastName.indexOf(searchText) > -1 ||
+        username.indexOf(searchText) > -1
     },
     removePlayer(player) {
-      const index = this.match.players.map(p => p.id).indexOf(player.id);
-      if (index >= 0) this.match.players.splice(index, 1);
+      const index = this.match.players.map(p => p.id).indexOf(player.id)
+      if (index >= 0) this.match.players.splice(index, 1)
     },
     reset() {
-      this.match = { ...this.newMatch };
+      this.match = { ...this.newMatch }
     }
   },
-  watch: {
-    match: {
-      handler: function(value) {
-        // Update to local db
-        this.$db.matches.put(value);
-      },
-      deep: true
-    }
-  },
+  // watch: {
+  //   match: {
+  //     handler: function(value) {
+  //       this.$logger.log('WATCH: match', value)
+  //       // Update to local db
+  //       // this.$db.matches.put(value)
+  //     },
+  //     deep: true
+  //   }
+  // },
   name: "MatchesPlay"
 };
 </script>
