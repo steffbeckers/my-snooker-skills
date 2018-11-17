@@ -42,7 +42,7 @@
                   </v-list-tile-avatar>
                   <v-list-tile-content>
                     <v-list-tile-title>{{ data.item.firstName }} {{ data.item.lastName }}</v-list-tile-title>
-                    <v-list-tile-sub-title v-html="data.item.username"></v-list-tile-sub-title>
+                    <v-list-tile-sub-title>@{{ data.item.username }}</v-list-tile-sub-title>
                   </v-list-tile-content>
                 </template>
               </template>
@@ -57,17 +57,26 @@
                 xs12
               >
                 <v-card>
-                  <v-card-title @click="$router.push({name: 'Profile', params: {username: player.username}})" primary-title>
-                    <v-avatar class="ml-1 mr-4" size="60px" :color="!player.profilePicture ? 'red' : 'transparent'">
+                  <v-card-title primary-title>
+                    <v-avatar @click="$router.push({name: 'Profile', params: {username: player.username}})" class="ml-1 mr-4" size="60px" :color="!player.profilePicture ? 'red' : 'transparent'">
                       <img v-if="player.profilePicture" :src="player.profilePicture">
                       <v-icon style="font-size: 42px;" dark v-else>person</v-icon>
                     </v-avatar>
-                    <div>
+                    <div @click="$router.push({name: 'Profile', params: {username: player.username}})">
                       <div class="headline">{{ player.firstName }} {{ player.lastName }}</div>
                       <div>@{{ player.username }}</div>
                     </div>
+                    <v-spacer v-if="match.handicap"></v-spacer>
+                    <div class="handicap-selector" v-if="match.handicap">
+                      <v-text-field
+                        v-model.number="match.handicaps[player.id]"
+                        label="Handicap"
+                        type="number"
+                        clearable
+                      ></v-text-field>
+                    </div>
                   </v-card-title>
-                  <v-card-actions v-if="$store.state.authenticated">
+                  <v-card-actions>
                     <v-btn @click="removePlayer(player)" flat>
                       Remove&nbsp;<span v-if="player.id === $store.state.user.id">yourself</span><span v-else>player</span>
                     </v-btn>
@@ -90,6 +99,11 @@
           <v-flex xs12 sm4>
             <p class="title">Settings</p>
             <p :class="$vuetify.breakpoint.xs ? 'mb-0' : ''">Configure some match settings.</p>
+            <v-switch
+              label="Handicap?"
+              v-model="match.handicap"
+              color="primary"
+            ></v-switch>
           </v-flex>
           <v-flex xs12 sm8>
             <v-layout row wrap>
@@ -177,7 +191,7 @@
               </v-flex>
               <v-flex xs12 sm4>
                 <v-select
-                  :items="match.players"
+                  :items="friendsThatCanBeAddedToMatchAsReferee"
                   :value="match.referee"
                   label="Referee"
                   clearable
@@ -221,6 +235,12 @@
   </div>
 </template>
 
+<style scoped>
+.handicap-selector {
+  max-width: 125px;
+}
+</style>
+
 <script>
 export default {
   data() {
@@ -230,9 +250,9 @@ export default {
         bestOf: 3, // TODO: Application setting
         reds: 15, // TODO: Application setting (15, 10, 6)
         players: [],
-        scores: [],
+        scores: {},
         handicap: false,
-        handicaps: [],
+        handicaps: {},
         scoreboardType: "simple", // // TODO: Application setting (simple, advanced, full)
         referee: {},
         // First frame
@@ -283,6 +303,9 @@ export default {
           this.$logger.error(error)
         });
     }
+
+    // Retrieve match from local storage
+    this.match = JSON.parse(localStorage.getItem('match:play'))
   },
   // async mounted() {
   //   // // Dexie test
@@ -311,12 +334,19 @@ export default {
       return arrayOfNumbers
     },
     friendsThatCanBeAddedToMatch() {
-      return this.$store.state.user.friends.filter(f => !this.match.players.includes(f))
+      let idsOfPlayersAddedToMatch = this.match.players.map(p => p.id)
+      return this.$store.state.user.friends.filter(f => !idsOfPlayersAddedToMatch.includes(f.id))
+    },
+    friendsThatCanBeAddedToMatchAsReferee() {
+      if (!this.currentUserAddedToMatch) {
+        return [this.meAsPlayer, ...this.friendsThatCanBeAddedToMatch]
+      }
+      return this.friendsThatCanBeAddedToMatch
     },
     currentUserAddedToMatch() {
       return this.match.players.find((p) => {
-        return p.id === this.$store.state.user.id;
-      });
+        return p.id === this.$store.state.user.id
+      })
     }
   },
   methods: {
@@ -335,11 +365,11 @@ export default {
       const firstName = item.firstName.toLowerCase()
       const lastName = item.lastName.toLowerCase()
       const username = item.username.toLowerCase()
-      const searchText = queryText.toLowerCase()
+      const searchText = queryText.replace('@', '').toLowerCase()
 
-      return firstName.indexOf(searchText) > -1 ||
-        lastName.indexOf(searchText) > -1 ||
-        username.indexOf(searchText) > -1
+      return username.indexOf(searchText) > -1 ||
+        firstName.indexOf(searchText) > -1 ||
+        lastName.indexOf(searchText) > -1
     },
     removePlayer(player) {
       const index = this.match.players.map(p => p.id).indexOf(player.id)
@@ -349,16 +379,15 @@ export default {
       this.match = { ...this.newMatch }
     }
   },
-  // watch: {
-  //   match: {
-  //     handler: function(value) {
-  //       this.$logger.log('WATCH: match', value)
-  //       // Update to local db
-  //       // this.$db.matches.put(value)
-  //     },
-  //     deep: true
-  //   }
-  // },
+  watch: {
+    match: {
+      handler: function(value) {
+        // Update to local storage
+        localStorage.setItem('match:play', JSON.stringify(value))
+      },
+      deep: true
+    }
+  },
   name: "MatchesPlay"
 };
 </script>
