@@ -305,7 +305,7 @@ export default {
     }
 
     // Retrieve match from local storage
-    this.match = JSON.parse(localStorage.getItem('match:play'))
+    this.match = JSON.parse(localStorage.getItem('match:play')) || this.newMatch
   },
   // async mounted() {
   //   // // Dexie test
