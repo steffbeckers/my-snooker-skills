@@ -278,6 +278,30 @@ export default {
     // New match copy
     this.newMatch = { ...this.match }
 
+    // Retrieve match from local storage
+    this.match = JSON.parse(localStorage.getItem('match:play')) || this.newMatch
+
+    // Play match against friend
+    if (this.$route.params.username) {
+      let usernamesOfPlayersAddedToMatch = this.match.players.map(p => p.username)
+      if (!usernamesOfPlayersAddedToMatch.includes(this.$route.params.username)) {
+        this.$axios
+          .get(
+            process.env.VUE_APP_API +
+              "/Users/" +
+              this.$route.params.username +
+              "/profile"
+          )
+          .then(response => {
+            this.match.players.unshift(response.data)
+            this.$router.push({ name: 'MatchesPlay' })
+          })
+          .catch(error => {
+            this.$logger.error(error)
+          });
+      }
+    }
+
     // Retrieve match with state 'new' from local db
     // this.$db.matches
     //   .where("state")
@@ -285,27 +309,6 @@ export default {
     //   .first(function(match) {
     //     if (match) this.match = match
     //   });
-
-    // Play match against friend
-    if (this.$route.params.username) {
-      this.$axios
-        .get(
-          process.env.VUE_APP_API +
-            "/Users/" +
-            this.$route.params.username +
-            "/profile"
-        )
-        .then(response => {
-          this.match.players.unshift(response.data)
-          delete this.$route.params.username
-        })
-        .catch(error => {
-          this.$logger.error(error)
-        });
-    }
-
-    // Retrieve match from local storage
-    this.match = JSON.parse(localStorage.getItem('match:play')) || this.newMatch
   },
   // async mounted() {
   //   // // Dexie test
