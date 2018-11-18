@@ -233,8 +233,12 @@ export default {
           // Authenticate with store
           this.$store.commit('authenticate', response.data)
 
-          // Redirect to Account
-          this.$router.push(this.$route.query.redirect || localStorage.getItem('previous-page') || '/account')
+          // Redirect from login page
+          let redirectTo = this.$route.query.redirect || localStorage.getItem('previous-page') || '/account'
+          if (redirectTo === '/login') {
+            redirectTo = '/'
+          }
+          this.$router.push(redirectTo)
         }).catch(error => {
           this.failed = error.code === 'LOGIN_FAILED' && error.statusCode === 401
           this.failedNotVerifiedYet = error.code === 'LOGIN_FAILED_EMAIL_NOT_VERIFIED'

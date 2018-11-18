@@ -13,6 +13,10 @@ module.exports = function(Match) {
         context.instance.ownerId = context.options.accessToken.userId;
         // Update state to started
         context.instance.state = 'started';
+        // Start date time
+        if (!context.instance.startDateTime) {
+          context.instance.startDateTime = new Date().toISOString();
+        }
       }
       context.instance.updatedBy = context.options.accessToken.userId;
     }
@@ -47,9 +51,13 @@ module.exports = function(Match) {
 
   Match.afterRemote('create', function(ctx, matchInstance, next) {
     // Link players to match
-    ctx.req.body.players.forEach(function(player) {
-      matchInstance.players.add(player.id);
-    });
+    if (ctx && ctx.req && ctx.req.body && ctx.req.body.players) {
+      ctx.req.body.players.forEach(function(player) {
+        matchInstance.players.add(player.id);
+      });
+    }
+
+    // TODO: Create first frame
 
     next();
   });

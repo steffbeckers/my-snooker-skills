@@ -55,6 +55,15 @@ export default {
             scope: {
               order: 'startDateTime DESC'
             }
+          },
+          {
+            relation: 'referee',
+            scope: {
+              fields: {
+                firstName: true,
+                lastName: true
+              }
+            }
           }
         ]
       }

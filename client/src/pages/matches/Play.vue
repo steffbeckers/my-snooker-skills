@@ -110,14 +110,14 @@
               <v-flex xs6 sm4>
                 <v-select
                   :items="bestOf"
-                  :value="match.bestOf"
+                  v-model="match.bestOf"
                   label="Best Of (frames)"
                 ></v-select>
               </v-flex>
               <v-flex xs6 sm4>
                 <v-select
                   :items="[6, 10, 15]"
-                  :value="match.reds"
+                  v-model="match.reds"
                   label="Reds"
                 ></v-select>
               </v-flex>
@@ -126,7 +126,7 @@
                   :items="[{name: 'Simple', value: 'simple'}, {name: 'Advanced', value: 'advanced'}, {name: 'Full', value: 'full'}]"
                   item-text="name"
                   item-value="value"
-                  :value="match.scoreboardType"
+                  v-model="match.scoreboardType"
                   label="Scoreboard Type"
                 ></v-select>
               </v-flex>
@@ -135,7 +135,7 @@
               <v-flex xs12 sm4>
                 <v-select
                   :items="match.players"
-                  :value="match.wonToss"
+                  v-model="match.wonToss"
                   label="Won Toss"
                   clearable
                 >
@@ -162,7 +162,7 @@
               <v-flex xs12 sm4>
                 <v-select
                   :items="match.players"
-                  :value="match.wonToss"
+                  v-model="match.breakOff"
                   label="Break Off"
                   clearable
                 >
@@ -192,7 +192,7 @@
               <v-flex xs12 sm4>
                 <v-select
                   :items="friendsThatCanBeAddedToMatchAsReferee"
-                  :value="match.referee"
+                  v-model="match.referee"
                   label="Referee"
                   clearable
                 >
@@ -246,14 +246,14 @@ export default {
   data() {
     return {
       match: {
-        state: "new",
+        state: 'new',
         bestOf: 3, // TODO: Application setting
         reds: 15, // TODO: Application setting (15, 10, 6)
         players: [],
         scores: {},
         handicap: false,
         handicaps: {},
-        scoreboardType: "simple", // // TODO: Application setting (simple, advanced, full)
+        scoreboardType: 'simple', // // TODO: Application setting (simple, advanced, full)
         referee: {},
         // First frame
         wonToss: {},
@@ -288,9 +288,9 @@ export default {
         this.$axios
           .get(
             process.env.VUE_APP_API +
-              "/Users/" +
+              '/Users/' +
               this.$route.params.username +
-              "/profile"
+              '/profile'
           )
           .then(response => {
             this.match.players.unshift(response.data)
@@ -304,8 +304,8 @@ export default {
 
     // Retrieve match with state 'new' from local db
     // this.$db.matches
-    //   .where("state")
-    //   .equals("new")
+    //   .where('state')
+    //   .equals('new')
     //   .first(function(match) {
     //     if (match) this.match = match
     //   });
@@ -354,14 +354,44 @@ export default {
   },
   methods: {
     start(e) {
+      // TODO: Local creation of match
+
       e.preventDefault() // Submit
 
+      // Body to create match
       this.$logger.log(this.match)
+      let matchToCreate = { ...this.match }
+      // Referee
+      if (this.match.referee) {
+        matchToCreate.refereeId = this.match.referee.id
+        delete matchToCreate.referee
+      }
+      // First frame
+      matchToCreate.firstFrame = {}
+      if (this.match.wonToss) {
+        matchToCreate.firstFrame.tossWonById = this.match.wonToss.id
+        delete matchToCreate.wonToss
+      }
+      if (this.match.breakOff) {
+        matchToCreate.firstFrame.breakOffById = this.match.breakOff.id
+        delete matchToCreate.breakOff
+      }
+      if (matchToCreate.firstFrame == {}) {
+        delete matchToCreate.firstFrame
+      }
+      this.$logger.log(matchToCreate)
 
       this.$axios
-        .post(process.env.VUE_APP_API + '/Matches', this.match)
-        .then(response => {
-          this.$logger.log(response)
+        .post(process.env.VUE_APP_API + '/Matches', matchToCreate)
+        .then(() => {
+          // TODO: Add new match to local storage
+          // TODO: Navigate to first frame instead of matches overview
+
+          // Navigate to matches
+          this.$router.push({ name: 'Matches' })
+
+          // Clear draft match from local storage
+          localStorage.removeItem('match:play')
         })
     },
     userFilter (item, queryText) {
@@ -391,6 +421,6 @@ export default {
       deep: true
     }
   },
-  name: "MatchesPlay"
+  name: 'MatchesPlay'
 };
 </script>
