@@ -101,18 +101,25 @@
                 <v-icon color="rgba(0,0,0,.54)">add</v-icon>
               </v-btn>
               <v-spacer></v-spacer>
-              <v-btn v-if="$store.state.authenticated&& $store.state.user.id !== user.id && user && !playerIsAFriend()" @click="addPlayerAsFriend(user)" flat>
+              <v-btn v-if="$store.state.authenticated && $store.state.user.id !== user.id && user && !playerIsAFriend()" @click="addPlayerAsFriend(user)" flat>
                 <v-icon color="rgba(0,0,0,.54)" class="mr-2">add</v-icon> Add as friend
-              </v-btn>
-              <v-btn v-else @click="removePlayerAsFriend(user)" flat>
-                <v-icon color="rgba(0,0,0,.54)" class="mr-2">remove</v-icon> Remove as friend
               </v-btn>
               <v-btn icon>
                 <v-icon color="rgba(0,0,0,.54)">search</v-icon>
               </v-btn>
-              <v-btn icon>
-                <v-icon color="rgba(0,0,0,.54)">more_vert</v-icon>
-              </v-btn>
+              <v-menu v-if="playerIsAFriend()" bottom left>
+                <v-btn
+                  slot="activator"
+                  icon
+                >
+                  <v-icon>more_vert</v-icon>
+                </v-btn>
+                <v-list>
+                  <v-list-tile v-if="$store.state.authenticated && $store.state.user.id !== user.id && playerIsAFriend()" @click="removePlayerAsFriend(user)">
+                    <v-list-tile-title>Remove as friend</v-list-tile-title>
+                  </v-list-tile>
+                </v-list>
+              </v-menu>
             </v-toolbar>
             <v-container grid-list-lg fluid class="pt-0">
               <v-layout v-if="user.friends && user.friends.length > 0" wrap>
