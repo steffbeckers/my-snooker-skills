@@ -8,7 +8,7 @@
       v-for="player in players" :key="player.id"
     >
       <v-card>
-        <v-card-title @click="$router.push({name: 'Profile', params: {username: player.username}})" primary-title>
+        <v-card-title style="cursor: pointer" @click="$router.push({ name: 'Profile', params: { username: player.username }})" primary-title>
           <v-avatar class="ml-1 mr-4" size="60px" :color="!player.profilePicture ? 'red' : 'transparent'">
             <img v-if="player.profilePicture" :src="profilePicture(player.profilePicture, 60)">
             <v-icon style="font-size: 42px;" dark v-else>person</v-icon>

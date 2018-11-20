@@ -41,6 +41,9 @@
     },
     "statistics": {
       "type": "object"
+    },
+    "firstFrame": {
+      "type": "object"
     }
   },
   "validations": [],

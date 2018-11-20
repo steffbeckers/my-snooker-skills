@@ -5,6 +5,17 @@
   "options": {
     "validateUpsert": true
   },
+  "mixins": {
+    "TimeStamp": {
+      "createdAt": "createdOn",
+      "updatedAt": "updatedOn",
+      "validateUpsert": true,
+      "required": false
+    },
+    "SoftDelete": {
+      "deletedAt": "deletedOn"
+    }
+  },
   "properties": {
     "type": {
       "type": "string",
@@ -20,7 +31,13 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "user": {
+      "type": "belongsTo",
+      "model": "User",
+      "foreignKey": "ownerId"
+    }
+  },
   "acls": [],
   "methods": {}
 }

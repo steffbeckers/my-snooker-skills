@@ -6,6 +6,7 @@ const Dashboard = () => import('@/pages/Dashboard')
 const Profile = () => import('@/pages/Profile')
 const Matches = () => import('@/pages/Matches')
 const MatchesPlay = () => import('@/pages/matches/Play')
+const MatchDetail = () => import('@/pages/matches/Detail')
 const Tournaments = () => import('@/pages/Tournaments')
 const FrameDetail = () => import('@/pages/frame/Detail')
 const Players = () => import('@/pages/Players')
@@ -74,6 +75,11 @@ export default new Router({
       component: Tournaments
     },
     // Matches
+    {
+      path: '/matches/:id',
+      name: 'Match',
+      component: MatchDetail
+    },
     {
       path: '/matches/play/against/:username',
       name: 'MatchesPlayAgainst',

@@ -14,8 +14,7 @@
     },
     "SoftDelete": {
       "deletedAt": "deletedOn"
-    },
-    "FireLoop": true
+    }
   },
   "properties": {
     "number": {
@@ -66,7 +65,8 @@
     },
     "players": {
       "type": "hasAndBelongsToMany",
-      "model": "user"
+      "model": "user",
+      "throughTable": "FramePlayer"
     },
     "breakOffBy": {
       "type": "belongsTo",

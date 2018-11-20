@@ -361,11 +361,18 @@ export default {
       // Body to create match
       this.$logger.log(this.match)
       let matchToCreate = { ...this.match }
+      // Scores
+      matchToCreate.scores = {}
+      this.match.players.forEach(p => {
+        matchToCreate.scores[p.id] = 0
+      });
+
       // Referee
       if (this.match.referee) {
         matchToCreate.refereeId = this.match.referee.id
         delete matchToCreate.referee
       }
+
       // First frame
       matchToCreate.firstFrame = {}
       if (this.match.wonToss) {
@@ -381,17 +388,17 @@ export default {
       }
       this.$logger.log(matchToCreate)
 
+      // API
       this.$axios
         .post(process.env.VUE_APP_API + '/Matches', matchToCreate)
-        .then(() => {
+        .then((response) => {
           // TODO: Add new match to local storage
-          // TODO: Navigate to first frame instead of matches overview
-
-          // Navigate to matches
-          this.$router.push({ name: 'Matches' })
 
           // Clear draft match from local storage
           localStorage.removeItem('match:play')
+
+          // Navigate to new match
+          this.$router.push({ name: 'Match', params: { id: response.data.id } })
         })
     },
     userFilter (item, queryText) {

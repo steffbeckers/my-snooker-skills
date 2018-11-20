@@ -14,8 +14,7 @@
     },
     "SoftDelete": {
       "deletedAt": "deletedOn"
-    },
-    "FireLoop": true
+    }
   },
   "properties": {
     "dateTime": {

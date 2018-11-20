@@ -37,29 +37,75 @@ module.exports = function(Match) {
       );
     }
 
-    // TODO: Real-time updates - On create of new match
-    // if (ctx.isNewInstance && ctx.options.accessToken != undefined && ctx.options.accessToken.userId != undefined) {
-    //   var filter = {
-    //     include: 'players'
-    //   };
-    //   Match.findById(ctx.instance.id, filter, function (err, match) {
-    //     Match.app.mx.IO.emit('new-match', { userId: ctx.options.accessToken.userId, match: match });
-    //   });
-    // }
     next();
   });
 
   Match.afterRemote('create', function(ctx, matchInstance, next) {
     // Link players to match
-    if (ctx && ctx.req && ctx.req.body && ctx.req.body.players) {
+    if (ctx &&
+        ctx.req &&
+        ctx.req.body &&
+        ctx.req.body.players &&
+        ctx.req.body.players.length) {
       ctx.req.body.players.forEach(function(player) {
         matchInstance.players.add(player.id);
       });
     }
 
-    // TODO: Create first frame
+    // Create first frame
+    var firstFrame = {};
+    firstFrame.ownerId = matchInstance.ownerId;
+    firstFrame.createdBy = matchInstance.ownerId;
+    firstFrame.updatedBy = matchInstance.ownerId;
+    firstFrame.state = 'started';
+    firstFrame.startDateTime = matchInstance.startDateTime;
+    firstFrame.players = ctx.req.body.players;
+    firstFrame.reds = matchInstance.reds;
+    firstFrame.number = 1;
 
-    next();
+    // Scores
+    firstFrame.scores = {};
+    ctx.req.body.players.forEach(function(player) {
+      firstFrame.scores[player.id] = 0;
+    });
+
+    // Handicaps
+    firstFrame.handicaps = matchInstance.handicaps;
+    // Choosing storing handicap on other player (toggle lines as comment)
+    // for (let i = 0; i < ctx.req.body.players.length; i++) {
+    //   const player = ctx.req.body.players[i];
+    //   for (let j = 0; j < ctx.req.body.players.length; j++) {
+    //     const otherPlayer = ctx.req.body.players[j];
+    //     if (player.id !== otherPlayer.id &&
+    //       firstFrame.handicaps[otherPlayer.id] < matchInstance.handicaps[player.id]) {
+    //       firstFrame.handicaps[otherPlayer.id] = matchInstance.handicaps[player.id];
+    //     }
+    //   }
+    // }
+
+    // Referee
+    if (matchInstance.refereeId) {
+      firstFrame.refereeId = matchInstance.refereeId;
+    }
+
+    // First frame specific
+    if (matchInstance.firstFrame) {
+      if (matchInstance.firstFrame.tossWonById) {
+        firstFrame.tossWonById = matchInstance.firstFrame.tossWonById;
+      }
+      if (matchInstance.firstFrame.breakOffById) {
+        firstFrame.breakOffById = matchInstance.firstFrame.breakOffById;
+      }
+      firstFrame.turnOfId =
+        firstFrame.breakOffById ||
+        firstFrame.tossWonById ||
+        firstFrame.players[0].id;
+    }
+
+    var Frame = Match.app.models.Frame;
+    Frame.create(firstFrame, function(err, frame) {
+      next();
+    });
   });
 
   // Concede match
@@ -81,7 +127,7 @@ module.exports = function(Match) {
       // Calculate winner (highest score)
       var highestScore = 0;
       matchJSON.players.forEach(player => {
-        var score = matchJSON.scores[String(player.id)].score;
+        var score = matchJSON.scores[String(player.id)];
         if (score > highestScore) {
           highestScore = score;
           match.winnerId = String(player.id);

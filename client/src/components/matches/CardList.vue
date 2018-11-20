@@ -8,7 +8,7 @@
       v-for="match in matches" :key="match.id"
     >
       <v-card v-if="match.players.length === 2">
-        <v-container grid-list-sm fluid class="pb-0">
+        <v-container style="cursor: pointer" @click="$router.push({ name: 'Match', params: { id: match.id }})" grid-list-sm fluid class="pb-0">
           <v-layout col>
             <v-flex>
               <div class="text-xs-center">
@@ -44,6 +44,9 @@
             <div slot="header"><strong>Started on:</strong> {{ match.startDateTime | formatDateTime }}</div>
             <v-card>
               <v-card-text class="pt-0 pl-4">
+                <div v-if="match.state">
+                  <strong>Status:</strong> {{ match.state === 'started' ? 'Playing' : '' }}
+                </div>
                 <div v-if="match.referee">
                   <strong>Referee:</strong> {{ match.referee.firstName }} {{ match.referee.lastName }}
                 </div>
