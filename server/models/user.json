@@ -75,6 +75,10 @@
       "type": "hasAndBelongsToMany",
       "model": "Subscription"
     },
+    "settings": {
+      "type": "hasMany",
+      "model": "Setting"
+    },
     "friends": {
       "type": "hasMany",
       "model": "user",

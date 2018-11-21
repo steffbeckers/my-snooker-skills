@@ -76,11 +76,6 @@ export default new Router({
     },
     // Matches
     {
-      path: '/matches/:id',
-      name: 'Match',
-      component: MatchDetail
-    },
-    {
       path: '/matches/play/against/:username',
       name: 'MatchesPlayAgainst',
       component: MatchesPlay,
@@ -91,6 +86,11 @@ export default new Router({
       name: 'MatchesPlay',
       component: MatchesPlay,
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/matches/:id',
+      name: 'Match',
+      component: MatchDetail
     },
     {
       path: '/matches',

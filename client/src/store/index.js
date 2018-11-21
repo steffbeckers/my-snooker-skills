@@ -65,6 +65,7 @@ export default new Vuex.Store({
     // Env
     env: process.env.NODE_ENV,
     debug: localStorage.getItem('debug') || process.env.NODE_ENV === 'development',
+    forceOffline: false,
     // Messages
     infos: [],
     successes: [],
@@ -90,6 +91,9 @@ export default new Vuex.Store({
         ) : false
   },
   mutations: {
+    forceOffline(state, bool) {
+      state.forceOffline = bool
+    },
     message(state, message) {
       switch (message.type) {
         case 'info':

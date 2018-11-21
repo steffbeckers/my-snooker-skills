@@ -354,13 +354,11 @@ export default {
   },
   methods: {
     start(e) {
-      // TODO: Local creation of match
-
       e.preventDefault() // Submit
 
       // Body to create match
-      this.$logger.log(this.match)
       let matchToCreate = { ...this.match }
+
       // Scores
       matchToCreate.scores = {}
       this.match.players.forEach(p => {
@@ -386,20 +384,31 @@ export default {
       if (matchToCreate.firstFrame == {}) {
         delete matchToCreate.firstFrame
       }
-      this.$logger.log(matchToCreate)
 
-      // API
-      this.$axios
-        .post(process.env.VUE_APP_API + '/Matches', matchToCreate)
-        .then((response) => {
-          // TODO: Add new match to local storage
+      // Check if we're on or offline
+      if (navigator.onLine && !this.$store.state.forceOffline) {
+        // API
+        this.$axios
+          .post(process.env.VUE_APP_API + '/Matches', matchToCreate)
+          .then((response) => {
+            // Clear draft match from local storage
+            localStorage.removeItem('match:play')
 
-          // Clear draft match from local storage
-          localStorage.removeItem('match:play')
+            // Navigate to new match
+            this.$router.push({ name: 'Match', params: { id: response.data.id } })
+          })
+      } else {
+        // IndexedDB
+        this.$db.matches
+          .add(matchToCreate)
+          .then((id) => {
+            // Clear draft match from local storage
+            localStorage.removeItem('match:play')
 
-          // Navigate to new match
-          this.$router.push({ name: 'Match', params: { id: response.data.id } })
-        })
+            // Navigate to new match
+            this.$router.push({ name: 'Match', params: { id: id } })
+          })
+      }
     },
     userFilter (item, queryText) {
       const firstName = item.firstName.toLowerCase()
