@@ -158,6 +158,139 @@ module.exports = function(Match) {
     },
   });
 
+  // Match list to query
+  Match.list = function(orderBy, orderDirection, skip, take, cb) {
+    // Default query
+    if (orderBy !== 'startDateTime' && orderBy !== 'startDateTime') {
+      orderBy = 'startDateTime';
+    }
+    if (orderDirection !== 'ASC' && orderDirection !== 'DESC') {
+      orderDirection = 'DESC';
+    }
+    if (skip === undefined) { skip = 0; }
+    if (take === undefined) { take = 200; }
+
+    var filter = {
+      include: [
+        {
+          relation: 'players',
+          scope: {
+            fields: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              profilePicture: true,
+            },
+          },
+        },
+        {
+          relation: 'frames',
+          scope: {
+            order: 'startDateTime DESC',
+          },
+        },
+        {
+          relation: 'referee',
+          scope: {
+            fields: {
+              firstName: true,
+              lastName: true,
+            },
+          },
+        },
+      ],
+      order: orderBy + ' ' + orderDirection,
+      skip: skip,
+      limit: take,
+    };
+
+    Match.find(filter, function(err, matches) {
+      // On error
+      if (err) {
+        cb(err);
+        return;
+      }
+
+      cb(null, matches);
+    });
+  };
+  Match.remoteMethod('list', {
+    http: {
+      path: '/list',
+      verb: 'get',
+    },
+    accepts: [
+      {
+        arg: 'orderBy',
+        type: 'string',
+        http: {
+          source: 'query',
+        },
+      },
+      {
+        arg: 'orderDirection',
+        type: 'string',
+        http: {
+          source: 'query',
+        },
+      },
+      {
+        arg: 'skip',
+        type: 'number',
+        http: {
+          source: 'query',
+        },
+      },
+      {
+        arg: 'take',
+        type: 'number',
+        http: {
+          source: 'query',
+        },
+      },
+    ],
+    returns: {
+      type: 'array',
+      root: true,
+    },
+  });
+
+  // Detail
+  Match.detail = function(id, cb) {
+    var filter = {
+      where: {
+        id: id,
+      },
+      include: [
+        {
+          relation: 'players',
+          scope: {
+            fields: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              username: true,
+              profilePicture: true,
+            },
+          },
+        },
+      ],
+    };
+    Match.findOne(filter, function(err, match) {
+      // On error
+      if (err) {
+        cb(err);
+      }
+
+      cb(null, match);
+    });
+  };
+  Match.remoteMethod('detail', {
+    http: {path: '/:id/detail', verb: 'get'},
+    accepts: {arg: 'id', type: 'string'},
+    returns: {type: 'object', root: true},
+  });
+
   // Get statistics of match
   Match.statistics = function(id, cb) {
     // Check on input

@@ -302,11 +302,14 @@
       :fixed="fixed"
       app
     >
-      <div id="build-info">
+      <div v-if="$vuetify.breakpoint.smAndUp" id="build-info">
         <v-icon class="mr-1">code</v-icon><span>Last updated on {{ buildDateTime | formatDateTime }} to v{{ version }}</span>
       </div>
-      <div id="report-bug">
-        <span>Report a</span><v-icon class="ml-1">bug_report</v-icon>
+      <div v-else id="build-info">
+        <v-icon class="mr-1">code</v-icon><span>{{ buildDateTime | formatDate }} - v{{ version }}</span>
+      </div>
+      <div id="report-bug" style="cursor: pointer">
+        <span v-if="$vuetify.breakpoint.smAndUp">Report a</span><v-icon class="ml-1">bug_report</v-icon>
       </div>
       <div id="copyright">
         <v-icon class="mr-1">copyright</v-icon><a href="https://steffbeckers.eu/" target="_blank">Steff</a>
@@ -362,7 +365,7 @@ export default {
           }
         },
         {
-          icon: 'list',
+          icon: 'people_outline',
           title: 'Matches',
           page: {
             name: 'Matches'

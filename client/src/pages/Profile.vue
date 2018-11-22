@@ -20,6 +20,9 @@
         <v-layout class="mt-2" align-center justify-space-around wrap>
           @{{ user.username }} &nbsp;&centerdot;&nbsp; Member since {{ user.createdOn | formatDateLongerEN }}
         </v-layout>
+        <v-layout class="mt-2" align-center justify-space-around wrap>
+          <span style="cursor: pointer" v-if="user.club && user.club.name"><v-icon small>place</v-icon> Plays in {{ user.club.name }}</span>
+        </v-layout>
         <v-layout v-if="user.bio" class="mt-2" align-center justify-space-around wrap>
           {{ user.bio }}
         </v-layout>
@@ -59,10 +62,10 @@
       </v-tabs>
       <v-tabs-items v-model="selectedTab">
         <v-tab-item value="matches">
-          <v-card>
+          <v-card class="elevation-0">
             <v-toolbar color="white" class="elevation-0">
               <v-toolbar-title color="rgba(0,0,0,.54)">
-                <v-icon color="rgba(0,0,0,.54)" class="mr-2">list</v-icon> Recent matches
+                <v-icon color="rgba(0,0,0,.54)" class="mr-2">people_outline</v-icon> Recent matches
               </v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn :to="{ name: 'MatchesPlayAgainst', params: { username: user.username } }" v-if="$store.state.authenticated && $store.state.user.id !== user.id && user && playerIsAFriend()" flat>
@@ -78,17 +81,17 @@
           </v-card>
         </v-tab-item>
         <v-tab-item value="tournaments">
-          <v-card>
+          <v-card class="elevation-0">
             <v-card-text>Recent tournaments</v-card-text>
           </v-card>
         </v-tab-item>
         <v-tab-item value="statistics">
-          <v-card>
+          <v-card class="elevation-0">
             <v-card-text>All statistics of this player</v-card-text>
           </v-card>
         </v-tab-item>
         <v-tab-item value="friends">
-          <v-card>
+          <v-card class="elevation-0">
             <v-toolbar color="white" class="elevation-0">
               <v-toolbar-title color="rgba(0,0,0,.54)">
                 <v-icon color="rgba(0,0,0,.54)" class="mr-2">people</v-icon>
@@ -162,7 +165,7 @@
           </v-card>
         </v-tab-item>
         <v-tab-item value="favorites">
-          <v-card>
+          <v-card class="elevation-0">
             <v-card-text>Favorites of this player</v-card-text>
           </v-card>
         </v-tab-item>

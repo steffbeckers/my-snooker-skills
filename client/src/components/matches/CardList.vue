@@ -21,7 +21,7 @@
                 </div>
               </div>
             </v-flex>
-            <v-flex fill-height>
+            <v-flex>
               <div class="text-xs-center display-2 mt-4" style="white-space: nowrap">
                 {{ match.scores[match.players[0].id] || 0 }} - {{ match.scores[match.players[1].id] || 0 }}
               </div>

@@ -1,32 +1,36 @@
 <template>
   <div>
-    <v-toolbar color="transparent" class="elevation-0">
-      <v-toolbar-title color="grey">
-        <v-icon class="mr-2">list</v-icon> Matches
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn v-if="$store.state.authenticated" :to="{ name: 'MatchesPlay' }" exact color="primary">
-        Play
-      </v-btn>
-      <v-btn icon>
-        <v-icon color="rgba(0,0,0,.54)">search</v-icon>
-      </v-btn>
-      <v-btn icon>
-        <v-icon color="rgba(0,0,0,.54)">more_vert</v-icon>
-      </v-btn>
-    </v-toolbar>
-    <v-container class="pt-2" grid-list-lg fluid>
-      <MatchesCardList v-if="listType === 'cards'" :matches="matches"></MatchesCardList>
-    </v-container>
+    <Loader v-if="!matches"></Loader>
+    <div v-if="matches">
+      <v-toolbar color="transparent" class="elevation-0">
+        <v-toolbar-title color="grey">
+          <v-icon class="mr-2">people_outline</v-icon> Matches
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn v-if="$store.state.authenticated" :to="{ name: 'MatchesPlay' }" exact color="primary">
+          Play
+        </v-btn>
+        <v-btn icon>
+          <v-icon color="rgba(0,0,0,.54)">search</v-icon>
+        </v-btn>
+        <v-btn icon>
+          <v-icon color="rgba(0,0,0,.54)">more_vert</v-icon>
+        </v-btn>
+      </v-toolbar>
+      <v-container class="pt-2" grid-list-lg fluid>
+        <MatchesCardList v-if="listType === 'cards'" :matches="matches"></MatchesCardList>
+      </v-container>
+    </div>
   </div>
-
 </template>
 
 <script>
+import Loader from '../components/Loader.vue'
+
 export default {
   data() {
     return {
-      matches: [],
+      matches: null,
       listType: 'cards'
     }
   },
@@ -35,45 +39,15 @@ export default {
   },
   methods: {
     listMatches() {
-      let filter = {
-        order: 'startDateTime DESC',
-        limit: 200,
-        include: [
-          {
-            relation: 'players',
-            scope: {
-              fields: {
-                id: true,
-                firstName: true,
-                lastName: true,
-                profilePicture: true
-              }
-            }
-          },
-          {
-            relation: 'frames',
-            scope: {
-              order: 'startDateTime DESC'
-            }
-          },
-          {
-            relation: 'referee',
-            scope: {
-              fields: {
-                firstName: true,
-                lastName: true
-              }
-            }
-          }
-        ]
-      }
-
       this.$axios
-        .get(process.env.VUE_APP_API + '/Matches?filter=' + encodeURI(JSON.stringify(filter)))
+        .get(process.env.VUE_APP_API + '/Matches/list')
         .then(response => {
           this.matches = response.data
         })
     }
+  },
+  components: {
+    Loader
   },
   name: 'Matches'
 }
