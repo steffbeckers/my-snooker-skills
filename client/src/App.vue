@@ -63,7 +63,7 @@
         />
       </v-progress-circular>
       <v-toolbar-title
-        v-if="!$store.state.drawer"
+        v-if="!$store.state.drawer && $vuetify.breakpoint.smAndUp"
         class="ml-3 mr-4"
       >
         <router-link style="text-decoration: none;" class="white--text" :to="{ name: 'Root' }">{{ title }}</router-link>
@@ -198,7 +198,7 @@
         <v-divider></v-divider>
         <v-list-tile :to="{ name: 'ProfileMatches', params: { username: $store.state.user.username }}" exact>
           <v-list-tile-action>
-            <v-icon light>list</v-icon>
+            <v-icon light>people_outline</v-icon>
           </v-list-tile-action>
           <v-list-tile-title>Matches</v-list-tile-title>
         </v-list-tile>

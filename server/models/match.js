@@ -54,6 +54,7 @@ module.exports = function(Match) {
 
     // Create first frame
     var firstFrame = {};
+    firstFrame.matchId = matchInstance.id;
     firstFrame.ownerId = matchInstance.ownerId;
     firstFrame.createdBy = matchInstance.ownerId;
     firstFrame.updatedBy = matchInstance.ownerId;
@@ -271,6 +272,23 @@ module.exports = function(Match) {
               lastName: true,
               username: true,
               profilePicture: true,
+            },
+          },
+        },
+        {
+          relation: 'frames',
+          scope: {
+            include: {
+              relation: 'players',
+              scope: {
+                fields: {
+                  id: true,
+                  firstName: true,
+                  lastName: true,
+                  username: true,
+                  profilePicture: true,
+                },
+              },
             },
           },
         },

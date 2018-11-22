@@ -21,7 +21,7 @@
           @{{ user.username }} &nbsp;&centerdot;&nbsp; Member since {{ user.createdOn | formatDateLongerEN }}
         </v-layout>
         <v-layout class="mt-2" align-center justify-space-around wrap>
-          <span style="cursor: pointer" v-if="user.club && user.club.name"><v-icon small>place</v-icon> Plays in {{ user.club.name }}</span>
+          <span style="cursor: pointer" v-if="user.club && user.club.name"><v-icon small>place</v-icon> {{ user.club.name }}</span>
         </v-layout>
         <v-layout v-if="user.bio" class="mt-2" align-center justify-space-around wrap>
           {{ user.bio }}
@@ -37,7 +37,7 @@
         <v-tabs-slider color="primary"></v-tabs-slider>
         <v-tab href="#matches">
           Matches
-          <v-icon>list</v-icon>
+          <v-icon>people_outline</v-icon>
         </v-tab>
         <v-tab href="#tournaments">
           Tournaments
