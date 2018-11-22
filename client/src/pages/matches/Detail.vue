@@ -15,7 +15,10 @@
           <v-icon class="mr-1" color="red">fiber_manual_record</v-icon>
           <div class="d-inline-block div-next-to-icon"><strong>Reds:</strong> {{ match.reds }}</div>
         </div>
-        <v-btn icon>
+        <v-btn v-if="$store.state.authenticated" icon>
+          <v-icon color="rgba(0,0,0,.54)">favorite</v-icon>
+        </v-btn>
+        <v-btn v-if="$store.state.authenticated" icon>
           <v-icon color="rgba(0,0,0,.54)">more_vert</v-icon>
         </v-btn>
       </v-toolbar>
