@@ -1,0 +1,52 @@
+{
+  "name": "Upload",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "admin": {
+    "defaultProperty": "url",
+    "listProperties": [
+      "property",
+      "url"
+    ]
+  },
+  "properties": {
+    "property": {
+      "type": "string",
+      "required": true
+    },
+    "type": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string",
+      "required": true
+    },
+    "filename": {
+      "type": "string"
+    },
+    "bucket": {
+      "type": "string"
+    },
+    "key": {
+      "type": "string"
+    },
+    "imageSet": {
+      "type": "object"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "owner": {
+      "type": "belongsTo",
+      "polymorphic": {
+        "foreignKey": "uploadableId",
+        "discriminator": "uploadableType"
+      }
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

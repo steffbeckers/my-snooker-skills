@@ -38,6 +38,14 @@
   "EmailFromAccount": {
     "dataSource": "emailFromAccount"
   },
+  "Container": {
+    "dataSource": "amazon",
+    "public": false
+  },
+  "Upload": {
+    "dataSource": "mongodb",
+    "public": false
+  },
   "user": {
     "dataSource": "mongodb",
     "public": true,

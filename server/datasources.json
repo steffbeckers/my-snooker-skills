@@ -6,6 +6,10 @@
     "name": "mongodb",
     "connector": "mongodb"
   },
+  "amazon": {
+    "provider": "amazon",
+    "connector": "loopback-component-storage"
+  },
   "emailFromSteff": {
     "name": "emailFromSteff",
     "connector": "mail"
