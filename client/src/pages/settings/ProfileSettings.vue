@@ -198,7 +198,7 @@ export default {
     if (user) this.$store.commit('updateMe', user)
   },
   methods: {
-    async uploadNewAvatar(file) {
+    uploadNewAvatar(file) {
       /*eslint no-console: ["error", { allow: ["log"] }] */
       if (this.$store.state.debug) console.log(file)
 
@@ -206,17 +206,20 @@ export default {
       if (!file) { return }
 
       // Check image size
-      this.newAvatarTooLarge = file.size > 512000
+      this.newAvatarTooLarge = file.size > 51200000
       if (this.newAvatarTooLarge) return
 
-      if (this.$store.state.debug) console.log(await this.getBase64(file))
+      let bodyFormData = new FormData()
+      bodyFormData.append('uploadedFile', file)
 
       this.$axios
-        .patch(process.env.VUE_APP_API + '/Users/' + this.$store.state.user.id, {
-          profilePicture: await this.getBase64(file),
-        }).then(response => {
+        .post(
+          process.env.VUE_APP_API + '/Users/' + this.$store.state.user.id + '/upload/profilePicture',
+          bodyFormData,
+          { headers: { 'Content-Type': 'multipart/form-data' }}
+        ).then(response => {
           // Update user in store
-          this.$store.commit('changeAvatar', response.data.profilePicture)
+          this.$store.commit('changeAvatar', response.data.url)
         })
     },
     getBase64(file) {

@@ -127,8 +127,8 @@ module.exports = function() {
         verb: 'post',
       },
       returns: {
-        arg: 'response',
         type: 'object',
+        root: true,
       },
     });
   };
@@ -174,8 +174,13 @@ function uploadable(model, instance, property, ctx, versionsByProperty, next) {
         console.log(e.toString());
         return next(e);
       }
-      // success - back to caller
-      next(null, results);
+
+      // Update the model's property to the URL from AWS
+      instance[property] = results.url;
+      instance.save().then(function(res) {
+        // Success - back to caller
+        next(null, results);
+      });
     }
   );
 
@@ -380,6 +385,10 @@ function uploadable(model, instance, property, ctx, versionsByProperty, next) {
             'AKIAIFGEYZTPCV6ZYSAA',
           secretAccessKey: process.env.AWS_S3_KEY ||
             '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',
+        },
+        cleanup: {
+          original: true,
+          versions: true,
         },
         original: {
           acl: 'public-read',
