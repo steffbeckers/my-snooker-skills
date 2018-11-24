@@ -142,7 +142,6 @@ module.exports = function() {
 // property: the upload property eg: 'photo', 'background' etc.
 // ctx: the context of the request
 // versions: array specifying the resize specs for the upload fileSet
-
 function uploadable(model, instance, property, ctx, versionsByProperty, next) {
   var req = ctx.req;
   var res = ctx.res;
@@ -455,6 +454,8 @@ function uploadable(model, instance, property, ctx, versionsByProperty, next) {
 
   // create new Upload instance
   function saveNewUploadInstance(instance, meta, images, cb) {
+    debugger;
+
     var original;
     for (var i = 0; i < images.length; i++) {
       if (images[i].original) {

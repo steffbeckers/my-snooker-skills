@@ -195,6 +195,12 @@ export default new Vuex.Store({
       // Save user
       localStorage.setItem('user', JSON.stringify(state.user))
     },
+    removeAvatar(state) {
+      delete state.user.profilePicture
+
+      // Save user
+      localStorage.setItem('user', JSON.stringify(state.user))
+    },
     changeProfile(state, user) {
       if (user.firstName) state.user.firstName = user.firstName
       if (user.lastName) state.user.lastName = user.lastName

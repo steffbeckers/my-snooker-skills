@@ -17,6 +17,9 @@
         <v-flex xs12 sm3>
           <p class="title">Avatar</p>
           <p :class="$vuetify.breakpoint.xs ? 'sub-title mb-0' : 'sub-title'">You can upload an avatar here or change it at <a href="https://www.gravatar.com/" target="_blank">gravatar.com</a></p>
+          <div class="mt-2" style="cursor: pointer" v-if="$store.state.user.profilePicture" @click="removeAvatar()">
+            <v-icon>delete</v-icon> Remove
+          </div>
         </v-flex>
         <v-flex class="text-xs-center" xs12 sm3>
           <v-avatar size="90px" :color="!$store.state.user.profilePicture ? 'red' : 'transparent'">
@@ -37,7 +40,7 @@
             accept="image/*"
             title="Choose new avatar"
             :fileChangedCallback="uploadNewAvatar"
-            class="pl-0"
+            class="pl-0 pr-0"
             :block="$vuetify.breakpoint.xs"
           ></upload-btn>
         </v-flex>
@@ -156,6 +159,12 @@
   </div>
 </template>
 
+<style scoped>
+div.upload-btn > label {
+  margin-left: 0px !important;
+}
+</style>
+
 <script>
 import UploadButton from 'vuetify-upload-button'
 import ImageUploader from 'vue-image-upload-resize'
@@ -220,6 +229,14 @@ export default {
         ).then(response => {
           // Update user in store
           this.$store.commit('changeAvatar', response.data.url)
+        })
+    },
+    removeAvatar() {
+      this.$axios
+        .patch(process.env.VUE_APP_API + '/Users/' + this.$store.state.user.id, { profilePicture: null })
+        .then(response => {
+          // Update user in store
+          this.$store.commit('removeAvatar')
         })
     },
     getBase64(file) {

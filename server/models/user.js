@@ -510,29 +510,34 @@ module.exports = function(user) {
   user.on('attached', function() {
     // Define the variations for various UI uses that
     // will be created by s3-uploader on upload
-    var versions = [
-      {
-        suffix: 'large',
-        quality: 90,
-        maxHeight: 1024,
-        maxWidth: 1024,
-      }, {
-        suffix: 'medium',
-        quality: 90,
-        maxHeight: 480,
-        maxWidth: 480,
-      }, {
-        suffix: 'small',
-        quality: 90,
-        maxHeight: 150,
-        maxWidth: 150,
-      }, {
-        suffix: 'thumb',
-        quality: 90,
-        maxHeight: 60,
-        maxWidth: 60,
-      },
-    ];
+    var versions = {
+      profilePicture: [
+        {
+          suffix: 'large',
+          quality: 90,
+          maxHeight: 1024,
+          maxWidth: 1024,
+        },
+        {
+          suffix: 'medium',
+          quality: 90,
+          maxHeight: 480,
+          maxWidth: 480,
+        },
+        {
+          suffix: 'small',
+          quality: 90,
+          maxHeight: 150,
+          maxWidth: 150,
+        },
+        {
+          suffix: 'thumb',
+          quality: 90,
+          maxHeight: 60,
+          maxWidth: 60,
+        },
+      ],
+    };
 
     var uploadable = require('../../server/lib/uploadable')();
     // Pass the model class, model name and the array of variations
