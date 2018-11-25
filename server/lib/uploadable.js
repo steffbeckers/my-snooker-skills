@@ -397,7 +397,6 @@ function uploadable(model, instance, property, ctx, versionsByProperty, next) {
       };
 
       // console.log(options);
-
       client = new Uploader(bucket, options);
 
       try {
@@ -454,8 +453,6 @@ function uploadable(model, instance, property, ctx, versionsByProperty, next) {
 
   // create new Upload instance
   function saveNewUploadInstance(instance, meta, images, cb) {
-    debugger;
-
     var original;
     for (var i = 0; i < images.length; i++) {
       if (images[i].original) {

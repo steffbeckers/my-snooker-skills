@@ -513,25 +513,29 @@ module.exports = function(user) {
     var versions = {
       profilePicture: [
         {
-          suffix: 'large',
+          suffix: '-large',
+          // aspect: '1:1',
           quality: 90,
           maxHeight: 1024,
           maxWidth: 1024,
         },
         {
-          suffix: 'medium',
+          suffix: '-medium',
+          // aspect: '1:1',
           quality: 90,
           maxHeight: 480,
           maxWidth: 480,
         },
         {
-          suffix: 'small',
+          suffix: '-small',
+          // aspect: '1:1',
           quality: 90,
           maxHeight: 150,
           maxWidth: 150,
         },
         {
-          suffix: 'thumb',
+          suffix: '-thumb',
+          // aspect: '1:1',
           quality: 90,
           maxHeight: 60,
           maxWidth: 60,

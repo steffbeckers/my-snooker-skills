@@ -234,7 +234,7 @@ export default {
     removeAvatar() {
       this.$axios
         .patch(process.env.VUE_APP_API + '/Users/' + this.$store.state.user.id, { profilePicture: null })
-        .then(response => {
+        .then(() => {
           // Update user in store
           this.$store.commit('removeAvatar')
         })
