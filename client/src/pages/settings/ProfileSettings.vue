@@ -1,153 +1,189 @@
 <template>
-  <v-container v-if="$store.state.authenticated" grid-list-lg fluid>
-    <v-breadcrumbs v-if="$vuetify.breakpoint.smAndUp">
-      <v-icon slot="divider">fiber_manual_record</v-icon>
-      <v-breadcrumbs-item>
-        Settings
-      </v-breadcrumbs-item>
-      <v-breadcrumbs-item>
-        Profile
-      </v-breadcrumbs-item>
-    </v-breadcrumbs>
-    <v-layout :class="$vuetify.breakpoint.smAndUp ? 'pt-3 pb-3' : 'pb-3'" row wrap>
-      <v-flex xs12 sm3>
-        <p class="title">Avatar</p>
-        <p :class="$vuetify.breakpoint.xs ? 'sub-title mb-0' : 'sub-title'">You can upload an avatar here or change it at <a href="https://www.gravatar.com/" target="_blank">gravatar.com</a></p>
-      </v-flex>
-      <v-flex class="text-xs-center" xs12 sm3>
-        <v-avatar size="90px" :color="!$store.state.user.profilePicture ? 'red' : 'transparent'">
-          <img v-if="$store.state.user.profilePicture" :src="$store.state.user.profilePicture">
-          <v-icon style="font-size: 26px;" dark v-else>person</v-icon>
-        </v-avatar>
-      </v-flex>
-      <v-flex xs12 sm6>
-        <p class="body-2 mb-2">Upload new avatar</p>
-        <!-- <upload-btn
-          accept="image/*"
-          title="Choose new avatar"
-          :fileChangedCallback="uploadNewAvatar"
-        >
-        </upload-btn> -->
-        <p class="mt-2">The maximum image size allowed is 500KB.</p>
-      </v-flex>
-    </v-layout>
-    <v-layout class="pt-3 pb-3" row wrap>
-      <v-flex xs12 sm4>
-        <p class="title">Main settings</p>
-        <p :class="$vuetify.breakpoint.xs ? 'mb-0' : ''">This information will appear on your profile.</p>
-      </v-flex>
-      <v-flex xs12 sm8>
-        <v-form
-          ref="changeProfileForm"
-          v-model="changeProfileFormValid"
-          @submit="changeProfile"
-        >
-          <v-layout row wrap>
-            <v-flex xs12>
-              <v-alert
-                :value="!$store.state.user.emailVerified && !resentVerificationEmail"
-                type="warning"
-                transition="scale-transition"
-              >
-                Please check your mailbox and verify your email address by clicking the verification link.
-              </v-alert>
-              <v-btn
-                v-if="!$store.state.user.emailVerified && !resentVerificationEmail"
-                class="mt-3 mb-3 white--text"
-                color="warning"
-                block
-                :disabled="$store.state.loading || !email"
-                @click="resendVerificationEmail"
-              >
-                Resend verification email
-              </v-btn>
-              <v-alert
-                :value="resentVerificationEmail"
-                type="success"
-                dismissible
-                transition="scale-transition"
-              >
-                We resent you a verification email. Please check your mailbox and verify your email address by clicking the verification link.
-              </v-alert>
-            </v-flex>
-            <v-flex xs6>
-              <v-text-field
-                prepend-icon="person"
-                name="firstName"
-                label="First name"
-                type="text"
-                v-model="firstName"
-                :rules="firstNameRules"
-                @input="profileChanged = false"
-                :disabled="!$store.state.user.emailVerified"
-                clearable
-              ></v-text-field>
-            </v-flex>
-            <v-flex xs6>
-              <v-text-field
-                prepend-icon="perm_identity"
-                name="lastName"
-                label="Last name"
-                type="text"
-                v-model="lastName"
-                :rules="lastNameRules"
-                @input="profileChanged = false"
-                :disabled="!$store.state.user.emailVerified"
-                clearable
-              ></v-text-field>
-            </v-flex>
-            <v-flex xs12>
-              <v-text-field
-                prepend-icon="email"
-                name="email"
-                label="Email"
-                type="text"
-                v-model="email"
-                :rules="emailRules"
-                :error-messages="emailErrors"
-                @input="emailErrors = []; profileChanged = false"
-                clearable
-              ></v-text-field>
-            </v-flex>
-            <v-flex>
-              <v-textarea
-                prepend-icon="subject"
-                name="bio"
-                label="Bio"
-                v-model="bio"
-                :rules="bioRules"
-                @input="profileChanged = false"
-                :disabled="!$store.state.user.emailVerified"
-                counter
-                clearable
-              ></v-textarea>
-            </v-flex>
-          </v-layout>
-          <v-btn
-            color="primary"
-            :disabled="
-              !changeProfileFormValid ||
-              $store.state.loading ||
-              $store.state.user.firstName === this.firstName &&
-              $store.state.user.lastName === this.lastName &&
-              $store.state.user.email === this.email &&
-              $store.state.user.bio === this.bio
-            "
-            type="submit"
-            :block="$vuetify.breakpoint.xs"
+  <div>
+    <v-toolbar color="transparent" class="elevation-0">
+      <v-toolbar-title color="grey">
+        <v-icon class="mr-2">settings</v-icon> Profile
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn :to="{ name: 'AccountSettings' }" exact flat>
+        Account settings
+      </v-btn>
+      <v-btn icon>
+        <v-icon color="rgba(0,0,0,.54)">more_vert</v-icon>
+      </v-btn>
+    </v-toolbar>
+    <v-container v-if="$store.state.authenticated" class="pt-1" grid-list-lg fluid>
+      <v-layout class="pb-3" row wrap>
+        <v-flex xs12 sm3>
+          <p class="title">Avatar</p>
+          <p :class="$vuetify.breakpoint.xs ? 'sub-title mb-0' : 'sub-title'">You can upload an avatar here or change it at <a href="https://www.gravatar.com/" target="_blank">gravatar.com</a></p>
+          <div class="mt-2" style="cursor: pointer" v-if="$store.state.user.profilePicture" @click="removeAvatar()">
+            <v-icon>delete</v-icon> Remove
+          </div>
+        </v-flex>
+        <v-flex class="text-xs-center" xs12 sm3>
+          <v-avatar
+            size="140px"
+            :color="!$store.state.user.profilePicture ? 'red' : 'transparent'"
           >
-            Update profile
-          </v-btn>
-        </v-form>
-      </v-flex>
-    </v-layout>
-  </v-container>
+            <img
+              v-if="$store.state.user.profilePicture && typeof $store.state.user.profilePicture === 'object' && $store.state.user.profilePicture.small"
+              :src="$store.state.user.profilePicture.small"
+            >
+            <img
+              v-if="$store.state.user.profilePicture && typeof $store.state.user.profilePicture === 'string'"
+              :src="$store.state.user.profilePicture"
+            >
+            <v-icon v-if="!$store.state.user.profilePicture" style="font-size: 60px;" dark>person</v-icon>
+          </v-avatar>
+        </v-flex>
+        <v-flex xs12 sm6>
+          <p class="body-2 mb-2">Upload new avatar</p>
+          <v-alert
+            :value="newAvatarTooLarge"
+            type="error"
+            transition="scale-transition"
+          >
+            This image is too big. Try uploading a smaller image.
+          </v-alert>
+          <upload-btn
+            accept="image/*"
+            title="Choose new avatar"
+            :fileChangedCallback="uploadNewAvatar"
+            class="pl-0 pr-0"
+            :block="$vuetify.breakpoint.xs"
+          ></upload-btn>
+        </v-flex>
+      </v-layout>
+      <v-layout class="pt-3 pb-3" row wrap>
+        <v-flex xs12 sm4>
+          <p class="title">Main settings</p>
+          <p :class="$vuetify.breakpoint.xs ? 'mb-0' : ''">This information will appear on your profile.</p>
+        </v-flex>
+        <v-flex xs12 sm8>
+          <v-form
+            ref="changeProfileForm"
+            v-model="changeProfileFormValid"
+            @submit="changeProfile"
+          >
+            <v-layout row wrap>
+              <v-flex xs12>
+                <v-alert
+                  :value="!$store.state.user.emailVerified && !resentVerificationEmail"
+                  type="warning"
+                  transition="scale-transition"
+                >
+                  Please check your mailbox and verify your email address by clicking the verification link.
+                </v-alert>
+                <v-btn
+                  v-if="!$store.state.user.emailVerified && !resentVerificationEmail"
+                  class="mt-3 mb-3 white--text"
+                  color="warning"
+                  block
+                  :disabled="$store.state.loading || !email"
+                  @click="resendVerificationEmail"
+                >
+                  Resend verification email
+                </v-btn>
+                <v-alert
+                  :value="resentVerificationEmail"
+                  type="success"
+                  dismissible
+                  transition="scale-transition"
+                >
+                  We resent you a verification email. Please check your mailbox and verify your email address by clicking the verification link.
+                </v-alert>
+              </v-flex>
+              <v-flex xs6>
+                <v-text-field
+                  prepend-icon="person"
+                  name="firstName"
+                  label="First name"
+                  type="text"
+                  v-model="firstName"
+                  :rules="firstNameRules"
+                  @input="profileChanged = false"
+                  :disabled="!$store.state.user.emailVerified"
+                  clearable
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs6>
+                <v-text-field
+                  prepend-icon="perm_identity"
+                  name="lastName"
+                  label="Last name"
+                  type="text"
+                  v-model="lastName"
+                  :rules="lastNameRules"
+                  @input="profileChanged = false"
+                  :disabled="!$store.state.user.emailVerified"
+                  clearable
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs12>
+                <v-text-field
+                  prepend-icon="email"
+                  name="email"
+                  label="Email"
+                  type="text"
+                  v-model="email"
+                  :rules="emailRules"
+                  :error-messages="emailErrors"
+                  @input="emailErrors = []; profileChanged = false"
+                  clearable
+                ></v-text-field>
+              </v-flex>
+              <v-flex>
+                <v-textarea
+                  prepend-icon="subject"
+                  name="bio"
+                  label="Bio"
+                  v-model="bio"
+                  :rules="bioRules"
+                  @input="profileChanged = false"
+                  :disabled="!$store.state.user.emailVerified"
+                  counter
+                  clearable
+                ></v-textarea>
+              </v-flex>
+            </v-layout>
+            <v-btn
+              color="primary"
+              :disabled="
+                !changeProfileFormValid ||
+                $store.state.loading ||
+                $store.state.user.firstName === this.firstName &&
+                $store.state.user.lastName === this.lastName &&
+                $store.state.user.email === this.email &&
+                $store.state.user.bio === this.bio
+              "
+              type="submit"
+              :block="$vuetify.breakpoint.xs"
+            >
+              Update profile
+            </v-btn>
+          </v-form>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </div>
 </template>
 
+<style scoped>
+div.upload-btn > label {
+  margin-left: 0px !important;
+}
+</style>
+
 <script>
+import UploadButton from 'vuetify-upload-button'
+import ImageUploader from 'vue-image-upload-resize'
+
 export default {
   data() {
     return {
+      newAvatarTooLarge: false,
+      hasImage: false,
       changeProfileFormValid: false,
       firstName: this.$store.state.user.firstName,
       firstNameRules: [
@@ -181,6 +217,46 @@ export default {
     if (user) this.$store.commit('updateMe', user)
   },
   methods: {
+    uploadNewAvatar(file) {
+      /*eslint no-console: ["error", { allow: ["log"] }] */
+      if (this.$store.state.debug) console.log(file)
+
+      // Do nothing when file is undefined
+      if (!file) { return }
+
+      // Check image size
+      this.newAvatarTooLarge = file.size > 51200000
+      if (this.newAvatarTooLarge) return
+
+      let bodyFormData = new FormData()
+      bodyFormData.append('uploadedFile', file)
+
+      this.$axios
+        .post(
+          process.env.VUE_APP_API + '/Users/' + this.$store.state.user.id + '/upload/profilePicture',
+          bodyFormData,
+          { headers: { 'Content-Type': 'multipart/form-data' }}
+        ).then(response => {
+          // Update user in store
+          this.$store.commit('changeAvatar', response.data.imageSetForUI)
+        })
+    },
+    removeAvatar() {
+      this.$axios
+        .patch(process.env.VUE_APP_API + '/Users/' + this.$store.state.user.id, { profilePicture: null })
+        .then(() => {
+          // Update user in store
+          this.$store.commit('removeAvatar')
+        })
+    },
+    getBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    },
     changeProfile(e) {
       e.preventDefault() // Submit
 
@@ -236,6 +312,10 @@ export default {
           }
         })
     }
+  },
+  components: {
+    'upload-btn': UploadButton,
+    'image-uploader': ImageUploader,
   },
   name: 'ProfileSettings'
 }

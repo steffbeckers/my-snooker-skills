@@ -1,15 +1,12 @@
 <template>
   <div>
-    <Loader v-if="!matches"></Loader>
-    <div v-if="matches">
+    <Loader v-if="!players"></Loader>
+    <div v-if="players">
       <v-toolbar color="transparent" class="elevation-0">
         <v-toolbar-title color="grey">
-          <v-icon class="mr-2">people_outline</v-icon> Matches
+          <v-icon class="mr-2">people</v-icon> Players
         </v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-btn v-if="$store.state.authenticated" :to="{ name: 'MatchesPlay' }" exact color="primary">
-          Play
-        </v-btn>
         <v-btn icon>
           <v-icon color="rgba(0,0,0,.54)">search</v-icon>
         </v-btn>
@@ -18,7 +15,7 @@
         </v-btn>
       </v-toolbar>
       <v-container class="pt-2" grid-list-lg fluid>
-        <MatchesCardList v-if="listType === 'cards'" :matches="matches"></MatchesCardList>
+        <PlayersCardList v-if="listType === 'cards'" :players="players"></PlayersCardList>
       </v-container>
     </div>
   </div>
@@ -30,25 +27,25 @@ import Loader from '../components/Loader.vue'
 export default {
   data() {
     return {
-      matches: null,
-      listType: 'cards'
-    }
+      players: null,
+      listType: "cards"
+    };
   },
   created() {
-    this.listMatches()
+    this.listPlayers();
   },
   methods: {
-    listMatches() {
+    listPlayers() {
       this.$axios
-        .get(process.env.VUE_APP_API + '/Matches/list')
+        .get(process.env.VUE_APP_API + "/Users/list")
         .then(response => {
-          this.matches = response.data
-        })
+          this.players = response.data;
+        });
     }
   },
   components: {
     Loader
   },
-  name: 'Matches'
-}
+  name: "Players"
+};
 </script>

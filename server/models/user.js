@@ -170,17 +170,14 @@ module.exports = function(user) {
       }
     });
   };
-  user.remoteMethod(
-    'resendVerificationEmail',
-    {
-      http: {path: '/resendVerificationEmailTo', verb: 'post'},
-      accepts: {
-        arg: 'usernameOrEmail',
-        type: 'string',
-      },
-      returns: {type: 'object', root: true},
-    }
-  );
+  user.remoteMethod('resendVerificationEmail', {
+    http: {path: '/resendVerificationEmailTo', verb: 'post'},
+    accepts: {
+      arg: 'usernameOrEmail',
+      type: 'string',
+    },
+    returns: {type: 'object', root: true},
+  });
 
   // Send password reset email
   user.on('resetPasswordRequest', function(info) {
@@ -219,7 +216,7 @@ module.exports = function(user) {
 
     // Overwrite user with roles
     var filter = {
-      include: ['roles', 'subscriptions', 'identities', 'club', 'address'],
+      include: ['roles', 'friends', 'subscriptions', 'identities', 'club', 'address'],
     };
     user.findById(ctx.result.userId, filter, function(err, userInstance) {
       var userJSON = userInstance.toJSON();
@@ -230,6 +227,19 @@ module.exports = function(user) {
         simpleRoleArray.push(role.name);
       });
       userJSON.roles = simpleRoleArray;
+
+      // Simplify friends in array
+      var simpleFriendsArray = [];
+      userJSON.friends.forEach(friend => {
+        simpleFriendsArray.push({
+          id: friend.id,
+          firstName: friend.firstName,
+          lastName: friend.lastName,
+          username: friend.username,
+          profilePicture: friend.profilePicture,
+        });
+      });
+      userJSON.friends = simpleFriendsArray;
 
       // Simplify subscriptions in string array
       var simpleSubscriptionArray = [];
@@ -256,6 +266,7 @@ module.exports = function(user) {
           firstName: true,
           lastName: true,
           username: true,
+          profilePicture: true,
         },
         order: 'firstName ASC',
         limit: 10,
@@ -274,6 +285,7 @@ module.exports = function(user) {
           firstName: true,
           lastName: true,
           username: true,
+          profilePicture: true,
         },
         order: 'firstName ASC',
         limit: 10,
@@ -302,7 +314,11 @@ module.exports = function(user) {
     },
   });
 
-  user.list = function(orderBy, orderDirection, skip, take, cb) {
+  // Players list to query
+  user.list = function(orderBy, orderDirection, skip, take, options, cb) {
+    const token = options && options.accessToken;
+    const userId = token && token.userId;
+
     // Check on input
     if (orderBy !== 'firstName' && orderBy !== 'lastName') {
       orderBy = 'firstName';
@@ -318,7 +334,12 @@ module.exports = function(user) {
         id: true,
         firstName: true,
         lastName: true,
+        username: true,
+        profilePicture: true,
+        createdOn: true,
       },
+      include: 'club',
+      where: {id: {neq: userId}}, // Exclude the logged in player
       order: orderBy + ' ' + orderDirection,
       skip: skip,
       limit: take,
@@ -362,6 +383,11 @@ module.exports = function(user) {
           source: 'query',
         },
       },
+      {
+        arg: 'options',
+        type: 'object',
+        http: 'optionsFromRequest',
+      },
     ],
     returns: {
       type: 'array',
@@ -374,7 +400,7 @@ module.exports = function(user) {
     console.log('> user.me triggered');
 
     var filter = {
-      include: ['roles', 'subscriptions', 'identities', 'club', 'address'],
+      include: ['roles', 'friends', 'subscriptions', 'identities', 'club', 'address'],
     };
     user.findById(options.accessToken.userId, filter,
       function(err, userInstance) {
@@ -386,6 +412,19 @@ module.exports = function(user) {
           simpleRoleArray.push(role.name);
         });
         userJSON.roles = simpleRoleArray;
+
+        // Simplify friends in array
+        var simpleFriendsArray = [];
+        userJSON.friends.forEach(friend => {
+          simpleFriendsArray.push({
+            id: friend.id,
+            firstName: friend.firstName,
+            lastName: friend.lastName,
+            username: friend.username,
+            profilePicture: friend.profilePicture,
+          });
+        });
+        userJSON.friends = simpleFriendsArray;
 
         // Simplify subscriptions in string array
         var simpleSubscriptionArray = [];
@@ -433,6 +472,7 @@ module.exports = function(user) {
           relation: 'friends',
           scope: {
             fields: {
+              id: true,
               firstName: true,
               lastName: true,
               username: true,
@@ -464,6 +504,48 @@ module.exports = function(user) {
     http: {path: '/:username/profile', verb: 'get'},
     accepts: {arg: 'username', type: 'string'},
     returns: {type: 'object', root: true},
+  });
+
+  // Uploads
+  user.on('attached', function() {
+    // Define the variations for various UI uses that
+    // will be created by s3-uploader on upload
+    var versions = {
+      profilePicture: [
+        {
+          suffix: '-large',
+          aspect: '1:1',
+          quality: 90,
+          maxHeight: 1024,
+          maxWidth: 1024,
+        },
+        {
+          suffix: '-medium',
+          aspect: '1:1',
+          quality: 90,
+          maxHeight: 480,
+          maxWidth: 480,
+        },
+        {
+          suffix: '-small',
+          aspect: '1:1',
+          quality: 90,
+          maxHeight: 150,
+          maxWidth: 150,
+        },
+        {
+          suffix: '-thumb',
+          aspect: '1:1',
+          quality: 90,
+          maxHeight: 60,
+          maxWidth: 60,
+        },
+      ],
+    };
+
+    var uploadable = require('../../server/lib/uploadable')();
+    // Pass the model class, model name and the array of variations
+    uploadable(user, 'user', versions);
   });
 
   // Statistics

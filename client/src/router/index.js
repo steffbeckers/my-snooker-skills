@@ -5,6 +5,11 @@ import Router from 'vue-router'
 const Dashboard = () => import('@/pages/Dashboard')
 const Profile = () => import('@/pages/Profile')
 const Matches = () => import('@/pages/Matches')
+const MatchesPlay = () => import('@/pages/matches/Play')
+const MatchDetail = () => import('@/pages/matches/Detail')
+const Tournaments = () => import('@/pages/Tournaments')
+const FrameDetail = () => import('@/pages/frame/Detail')
+const Players = () => import('@/pages/Players')
 const Clubs = () => import('@/pages/Clubs')
 
 // Settings
@@ -20,11 +25,11 @@ const Login = () => import('@/pages/account/Login')
 const Logout = () => import('@/pages/account/Logout')
 
 // Training
-const Scoreboard = () => import('@/pages/training/Scoreboard')
+const TrainingOverview = () => import('@/pages/training/Overview')
+const TrainingScoreboard = () => import('@/pages/training/Scoreboard')
 
-// Components (for testing)
+// Generic components
 const Loader = () => import('@/components/Loader')
-const Camera = () => import('@/components/Camera')
 
 // Errors
 const PageNotFound = () => import('@/errors/PageNotFound')
@@ -40,16 +45,16 @@ export default new Router({
       name: 'LoaderComponent',
       component: Loader
     },
-    {
-      path: '/components/camera',
-      name: 'CameraComponent',
-      component: Camera
-    },
     // Training
     {
       path: '/training/scoreboard',
       name: 'TrainingScoreboard',
-      component: Scoreboard
+      component: TrainingScoreboard
+    },
+    {
+      path: '/training',
+      name: 'TrainingOverview',
+      component: TrainingOverview
     },
     // Clubs
     {
@@ -57,11 +62,46 @@ export default new Router({
       name: 'Clubs',
       component: Clubs
     },
+    // Players
+    {
+      path: '/players',
+      name: 'Players',
+      component: Players
+    },
+    // Tournaments
+    {
+      path: '/tournaments',
+      name: 'Tournaments',
+      component: Tournaments
+    },
     // Matches
+    {
+      path: '/matches/play/against/:username',
+      name: 'MatchesPlayAgainst',
+      component: MatchesPlay,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/matches/play',
+      name: 'MatchesPlay',
+      component: MatchesPlay,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/matches/:id',
+      name: 'Match',
+      component: MatchDetail
+    },
     {
       path: '/matches',
       name: 'Matches',
       component: Matches
+    },
+    // Frame
+    {
+      path: '/frame/:id',
+      name: 'Frame',
+      component: FrameDetail
     },
     // Social auth
     {

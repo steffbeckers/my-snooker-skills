@@ -13,7 +13,6 @@
       "loopback/server/mixins",
       "../common/mixins",
       "./mixins",
-      "../node_modules/@mean-expert/loopback-component-realtime/dist/mixins",
       "../node_modules/loopback-ds-timestamp-mixin",
       "../node_modules/loopback-softdelete-mixin3"
     ]
@@ -38,6 +37,14 @@
   },
   "EmailFromAccount": {
     "dataSource": "emailFromAccount"
+  },
+  "Container": {
+    "dataSource": "amazon",
+    "public": false
+  },
+  "Upload": {
+    "dataSource": "mongodb",
+    "public": false
   },
   "user": {
     "dataSource": "mongodb",
@@ -119,6 +126,6 @@
   },
   "Setting": {
     "dataSource": "mongodb",
-    "public": false
+    "public": true
   }
 }

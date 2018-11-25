@@ -42,10 +42,10 @@
       }
     },
     "profilePicture": {
-      "type": "string"
+      "type": "object"
     },
     "profileBanner": {
-      "type": "string"
+      "type": "object"
     }
   },
   "validations": [],
@@ -74,6 +74,10 @@
     "subscriptions": {
       "type": "hasAndBelongsToMany",
       "model": "Subscription"
+    },
+    "settings": {
+      "type": "hasMany",
+      "model": "Setting"
     },
     "friends": {
       "type": "hasMany",

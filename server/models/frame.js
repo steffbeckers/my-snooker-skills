@@ -2,65 +2,49 @@
 
 var app = require('../../server/server');
 
-var elasticsearch = require('elasticsearch');
-var esClient = new elasticsearch.Client({
-  host: '141.135.159.251:9200',
-});
+// var elasticsearch = require('elasticsearch');
+// var esClient = new elasticsearch.Client({
+//   host: '141.135.159.251:9200',
+// });
 
 module.exports = function(Frame) {
   // Set createdBy, updatedBy before saving the model
   Frame.observe('before save', function setAutoData(context, next) {
     if (context.instance) {
       if (context.isNewInstance) {
-        context.instance.createdBy = context.options.accessToken.userId;
-        context.instance.ownerId = context.options.accessToken.userId;
+        if (!context.instance.createdBy) {
+          context.instance.createdBy = context.options.accessToken.userId;
+        }
+        if (!context.instance.ownerId) {
+          context.instance.ownerId = context.options.accessToken.userId;
+        }
+        // Update state to started
+        if (!context.instance.state) {
+          context.instance.state = 'started';
+        }
+        // Start date time
+        if (!context.instance.startDateTime) {
+          context.instance.startDateTime = new Date().toISOString();
+        }
       }
-      context.instance.updatedBy = context.options.accessToken.userId;
+      if (!context.instance.updatedBy) {
+        context.instance.updatedBy = context.options.accessToken.userId;
+      }
     }
+
     next();
   });
 
   // After save
   Frame.observe('after save', function afterSave(ctx, next) {
-    // Elasticsearch - Add frame to elasticsearch after end
-    if (ctx.instance && ctx.instance.endDateTime) {
-      esClient.ping({
-        requestTimeout: 3000,
-      }, function(error) {
-        if (error) {
-          console.log('elasticsearch cluster is down.');
-        } else {
-          console.log('Connected to elasticsearch!');
-          console.log('NODE_ENV: ' + process.env.NODE_ENV);
-
-          // Retrieve all data of frame
-          Frame.findById(ctx.instance.id, {
-            include: [
-              'players',
-              {
-                relation: 'breaks',
-                scope: {
-                  order: 'dateTime DESC',
-                },
-              },
-            ],
-          }, function(err, frame) {
-            frame = frame.toJSON();
-
-            // Send to Elasticsearch
-            esClient.index({
-              index: 'snooker' +
-                (process.env.NODE_ENV === 'local' ? '-local' : ''),
-              type: 'frame',
-              body: frame,
-              id: String(frame.id),
-            }).then(function(resp) {
-              console.log('Frame synced to elasticsearch!', resp);
-            }, function(err) {
-              console.error('Error syncing Frame to elasticsearch.', err);
-            });
-          });
-        }
+    // Link players to frame
+    if (ctx &&
+      ctx.instance &&
+      ctx.instance.__cachedRelations &&
+      ctx.instance.__cachedRelations.players &&
+      ctx.instance.__cachedRelations.players.length) {
+      ctx.instance.__cachedRelations.players.forEach(function(player) {
+        ctx.instance.players.add(player.id);
       });
     }
 
@@ -72,33 +56,77 @@ module.exports = function(Frame) {
         frameId: ctx.where.and[0].id,
       }, function(err, result) {});
     }
-    // Real-time updates
-    if (!ctx.isNewInstance &&
-      ctx.options.accessToken != undefined &&
-      ctx.options.accessToken.userId != undefined) {
-      var filter = {
-        include: [
-          {
-            match: 'players',
-          },
-          'players',
-          {
-            relation: 'breaks',
-            scope: {
-              order:
-              'dateTime DESC',
-            },
-          },
-        ],
-      };
-      Frame.findById(ctx.instance.id, filter, function(err, frame) {
-        Frame.app.mx.IO.emit('update-frame:' + ctx.instance.id, {
-          userId: ctx.options.accessToken.userId,
-          token10: ctx.options.accessToken.id.toString().substr(0, 10),
-          frame: frame,
-        });
-      });
-    }
+
+    // // Real-time updates
+    // if (!ctx.isNewInstance &&
+    //   ctx.options.accessToken != undefined &&
+    //   ctx.options.accessToken.userId != undefined) {
+    //   var filter = {
+    //     include: [
+    //       {
+    //         match: 'players',
+    //       },
+    //       'players',
+    //       {
+    //         relation: 'breaks',
+    //         scope: {
+    //           order:
+    //           'dateTime DESC',
+    //         },
+    //       },
+    //     ],
+    //   };
+    //   Frame.findById(ctx.instance.id, filter, function(err, frame) {
+    //     Frame.app.mx.IO.emit('update-frame:' + ctx.instance.id, {
+    //       userId: ctx.options.accessToken.userId,
+    //       token10: ctx.options.accessToken.id.toString().substr(0, 10),
+    //       frame: frame,
+    //     });
+    //   });
+    // }
+
+    // // Elasticsearch - Add frame to elasticsearch after end
+    // if (ctx.instance && ctx.instance.endDateTime) {
+    //   esClient.ping({
+    //     requestTimeout: 3000,
+    //   }, function(error) {
+    //     if (error) {
+    //       console.log('elasticsearch cluster is down.');
+    //     } else {
+    //       console.log('Connected to elasticsearch!');
+    //       console.log('NODE_ENV: ' + process.env.NODE_ENV);
+
+    //       // Retrieve all data of frame
+    //       Frame.findById(ctx.instance.id, {
+    //         include: [
+    //           'players',
+    //           {
+    //             relation: 'breaks',
+    //             scope: {
+    //               order: 'dateTime DESC',
+    //             },
+    //           },
+    //         ],
+    //       }, function(err, frame) {
+    //         frame = frame.toJSON();
+
+    //         // Send to Elasticsearch
+    //         esClient.index({
+    //           index: 'snooker' +
+    //             (process.env.NODE_ENV === 'local' ? '-local' : ''),
+    //           type: 'frame',
+    //           body: frame,
+    //           id: String(frame.id),
+    //         }).then(function(resp) {
+    //           console.log('Frame synced to elasticsearch!', resp);
+    //         }, function(err) {
+    //           console.error('Error syncing Frame to elasticsearch.', err);
+    //         });
+    //       });
+    //     }
+    //   });
+    // }
+
     next();
   });
 
@@ -166,8 +194,7 @@ module.exports = function(Frame) {
       // Calculate winner (highest score)
       var highestScore = 0;
       frameJSON.players.forEach(player => {
-        var score = frameJSON.scores[String(player.id)].scoreOverride ||
-                    frameJSON.scores[String(player.id)].score;
+        var score = frameJSON.scores[String(player.id)];
         if (score > highestScore) {
           highestScore = score;
           frame.winnerId = String(player.id);
@@ -197,7 +224,7 @@ module.exports = function(Frame) {
       // Add point for winner on match
       matchJSON.players.forEach(player => {
         if (String(player.id) == output.winnerId) {
-          match.scores[String(player.id)].score += 1;
+          match.scores[String(player.id)] += 1;
         }
       });
 

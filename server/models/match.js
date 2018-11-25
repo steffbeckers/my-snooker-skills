@@ -11,6 +11,12 @@ module.exports = function(Match) {
       if (context.isNewInstance) {
         context.instance.createdBy = context.options.accessToken.userId;
         context.instance.ownerId = context.options.accessToken.userId;
+        // Update state to started
+        context.instance.state = 'started';
+        // Start date time
+        if (!context.instance.startDateTime) {
+          context.instance.startDateTime = new Date().toISOString();
+        }
       }
       context.instance.updatedBy = context.options.accessToken.userId;
     }
@@ -31,16 +37,76 @@ module.exports = function(Match) {
       );
     }
 
-    // TODO: Real-time updates - On create of new match
-    // if (ctx.isNewInstance && ctx.options.accessToken != undefined && ctx.options.accessToken.userId != undefined) {
-    //   var filter = {
-    //     include: 'players'
-    //   };
-    //   Match.findById(ctx.instance.id, filter, function (err, match) {
-    //     Match.app.mx.IO.emit('new-match', { userId: ctx.options.accessToken.userId, match: match });
-    //   });
-    // }
     next();
+  });
+
+  Match.afterRemote('create', function(ctx, matchInstance, next) {
+    // Link players to match
+    if (ctx &&
+        ctx.req &&
+        ctx.req.body &&
+        ctx.req.body.players &&
+        ctx.req.body.players.length) {
+      ctx.req.body.players.forEach(function(player) {
+        matchInstance.players.add(player.id);
+      });
+    }
+
+    // Create first frame
+    var firstFrame = {};
+    firstFrame.matchId = matchInstance.id;
+    firstFrame.ownerId = matchInstance.ownerId;
+    firstFrame.createdBy = matchInstance.ownerId;
+    firstFrame.updatedBy = matchInstance.ownerId;
+    firstFrame.state = 'started';
+    firstFrame.startDateTime = matchInstance.startDateTime;
+    firstFrame.players = ctx.req.body.players;
+    firstFrame.reds = matchInstance.reds;
+    firstFrame.number = 1;
+
+    // Scores
+    firstFrame.scores = {};
+    ctx.req.body.players.forEach(function(player) {
+      firstFrame.scores[player.id] = 0;
+    });
+
+    // Handicaps
+    firstFrame.handicaps = matchInstance.handicaps;
+    // Choosing storing handicap on other player (toggle lines as comment)
+    // for (let i = 0; i < ctx.req.body.players.length; i++) {
+    //   const player = ctx.req.body.players[i];
+    //   for (let j = 0; j < ctx.req.body.players.length; j++) {
+    //     const otherPlayer = ctx.req.body.players[j];
+    //     if (player.id !== otherPlayer.id &&
+    //       firstFrame.handicaps[otherPlayer.id] < matchInstance.handicaps[player.id]) {
+    //       firstFrame.handicaps[otherPlayer.id] = matchInstance.handicaps[player.id];
+    //     }
+    //   }
+    // }
+
+    // Referee
+    if (matchInstance.refereeId) {
+      firstFrame.refereeId = matchInstance.refereeId;
+    }
+
+    // First frame specific
+    if (matchInstance.firstFrame) {
+      if (matchInstance.firstFrame.tossWonById) {
+        firstFrame.tossWonById = matchInstance.firstFrame.tossWonById;
+      }
+      if (matchInstance.firstFrame.breakOffById) {
+        firstFrame.breakOffById = matchInstance.firstFrame.breakOffById;
+      }
+      firstFrame.turnOfId =
+        firstFrame.breakOffById ||
+        firstFrame.tossWonById ||
+        firstFrame.players[0].id;
+    }
+
+    var Frame = Match.app.models.Frame;
+    Frame.create(firstFrame, function(err, frame) {
+      next();
+    });
   });
 
   // Concede match
@@ -62,7 +128,7 @@ module.exports = function(Match) {
       // Calculate winner (highest score)
       var highestScore = 0;
       matchJSON.players.forEach(player => {
-        var score = matchJSON.scores[String(player.id)].score;
+        var score = matchJSON.scores[String(player.id)];
         if (score > highestScore) {
           highestScore = score;
           match.winnerId = String(player.id);
@@ -91,6 +157,156 @@ module.exports = function(Match) {
       type: 'object',
       root: true,
     },
+  });
+
+  // Match list to query
+  Match.list = function(orderBy, orderDirection, skip, take, cb) {
+    // Default query
+    if (orderBy !== 'startDateTime' && orderBy !== 'startDateTime') {
+      orderBy = 'startDateTime';
+    }
+    if (orderDirection !== 'ASC' && orderDirection !== 'DESC') {
+      orderDirection = 'DESC';
+    }
+    if (skip === undefined) { skip = 0; }
+    if (take === undefined) { take = 200; }
+
+    var filter = {
+      include: [
+        {
+          relation: 'players',
+          scope: {
+            fields: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              profilePicture: true,
+            },
+          },
+        },
+        {
+          relation: 'frames',
+          scope: {
+            order: 'startDateTime DESC',
+          },
+        },
+        {
+          relation: 'referee',
+          scope: {
+            fields: {
+              firstName: true,
+              lastName: true,
+            },
+          },
+        },
+      ],
+      order: orderBy + ' ' + orderDirection,
+      skip: skip,
+      limit: take,
+    };
+
+    Match.find(filter, function(err, matches) {
+      // On error
+      if (err) {
+        cb(err);
+        return;
+      }
+
+      cb(null, matches);
+    });
+  };
+  Match.remoteMethod('list', {
+    http: {
+      path: '/list',
+      verb: 'get',
+    },
+    accepts: [
+      {
+        arg: 'orderBy',
+        type: 'string',
+        http: {
+          source: 'query',
+        },
+      },
+      {
+        arg: 'orderDirection',
+        type: 'string',
+        http: {
+          source: 'query',
+        },
+      },
+      {
+        arg: 'skip',
+        type: 'number',
+        http: {
+          source: 'query',
+        },
+      },
+      {
+        arg: 'take',
+        type: 'number',
+        http: {
+          source: 'query',
+        },
+      },
+    ],
+    returns: {
+      type: 'array',
+      root: true,
+    },
+  });
+
+  // Detail
+  Match.detail = function(id, cb) {
+    var filter = {
+      where: {
+        id: id,
+      },
+      include: [
+        {
+          relation: 'players',
+          scope: {
+            fields: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              username: true,
+              profilePicture: true,
+            },
+          },
+        },
+        {
+          relation: 'frames',
+          scope: {
+            include: {
+              relation: 'players',
+              scope: {
+                fields: {
+                  id: true,
+                  firstName: true,
+                  lastName: true,
+                  username: true,
+                  profilePicture: true,
+                },
+              },
+            },
+          },
+        },
+      ],
+    };
+    Match.findOne(filter, function(err, match) {
+      // On error
+      if (err) {
+        cb(err);
+      }
+
+      cb(null, match);
+    });
+  };
+  Match.remoteMethod('detail', {
+    http: {path: '/:id/detail', verb: 'get'},
+    accepts: {arg: 'id', type: 'string'},
+    returns: {type: 'object', root: true},
   });
 
   // Get statistics of match

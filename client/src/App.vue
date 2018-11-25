@@ -43,7 +43,7 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar fixed app :clipped-left="clipped" color="primary" class="white--text">
+    <v-toolbar v-if="$store.state.showTopNav" fixed app :clipped-left="clipped" color="primary" class="white--text">
       <v-toolbar-side-icon class="white--text" @click.stop="$store.commit('drawer', !$store.state.drawer)"></v-toolbar-side-icon>
       <v-progress-circular
         class="ml-2"
@@ -52,6 +52,8 @@
         indeterminate
         color="red"
         v-if="!$store.state.drawer"
+        @click="$router.push({ name: 'Root' })"
+        style="cursor: pointer"
       >
         <img
           v-if="!$store.state.loading"
@@ -63,15 +65,16 @@
         />
       </v-progress-circular>
       <v-toolbar-title
-        v-if="!$store.state.drawer"
+        v-if="!$store.state.drawer && $vuetify.breakpoint.smAndUp"
         class="ml-3 mr-4"
       >
         <router-link style="text-decoration: none;" class="white--text" :to="{ name: 'Root' }">{{ title }}</router-link>
       </v-toolbar-title>
       <v-toolbar-items v-if="$vuetify.breakpoint.mdAndUp">
         <v-btn class="white--text" :to="{ name: 'Matches' }" exact flat>Matches</v-btn>
-        <v-btn class="white--text" exact flat>Tournaments</v-btn>
-        <v-btn class="white--text" exact flat>Players</v-btn>
+        <v-btn class="white--text" :to="{ name: 'Tournaments' }" exact flat>Tournaments</v-btn>
+        <v-btn class="white--text" :to="{ name: 'Players' }" exact flat>Players</v-btn>
+        <!-- <v-btn class="white--text" exact flat>Clubs</v-btn> -->
       </v-toolbar-items>
       <v-spacer></v-spacer>
       <!-- <v-text-field
@@ -82,16 +85,16 @@
         class="hidden-sm-and-down"
       ></v-text-field>
       <v-spacer></v-spacer> -->
-      <v-btn class="white--text" v-if="!$store.state.authenticated" icon>
+      <v-btn class="white--text mr-2" v-if="!$store.state.authenticated" icon>
         <v-icon>g_translate</v-icon>
       </v-btn>
       <v-toolbar-items
         v-if="!$store.state.authenticated && $vuetify.breakpoint.smAndUp"
       >
-        <v-btn class="white--text" :to="{ name: 'Register' }" exact flat><v-icon class="mr-2">person_add</v-icon>Register</v-btn>
+        <v-btn v-if="$vuetify.breakpoint.mdAndUp" class="white--text" :to="{ name: 'Register' }" exact flat><v-icon class="mr-2">person_add</v-icon>Register</v-btn>
         <v-btn class="white--text" :to="{ name: 'Login' }" exact flat><v-icon class="mr-2">exit_to_app</v-icon>Login</v-btn>
       </v-toolbar-items>
-      <v-btn
+      <!-- <v-btn
         v-if="!$store.state.authenticated && $vuetify.breakpoint.xs"
         class="white--text"
         :to="{ name: 'Register' }"
@@ -99,7 +102,7 @@
         icon
       >
         <v-icon>person_add</v-icon>
-      </v-btn>
+      </v-btn> -->
       <v-btn
         v-if="!$store.state.authenticated && $vuetify.breakpoint.xs"
         class="white--text"
@@ -180,8 +183,15 @@
         <v-list class="pa-0">
           <v-list-tile @click="$router.push({name: 'Profile', params: {username: $store.state.user.username}})" class="white--text" avatar>
             <v-list-tile-avatar color="white">
-              <img v-if="$store.state.user && $store.state.user.profilePicture" :src="$store.state.user.profilePicture">
-              <v-icon class="primary--text" v-else>person</v-icon>
+              <img
+                v-if="$store.state.user.profilePicture && typeof $store.state.user.profilePicture === 'object' && $store.state.user.profilePicture.thumb"
+                :src="$store.state.user.profilePicture.thumb"
+              >
+              <img
+                v-if="$store.state.user.profilePicture && typeof $store.state.user.profilePicture === 'string'"
+                :src="$store.state.user.profilePicture"
+              >
+              <v-icon v-if="!$store.state.user.profilePicture" class="primary--text">person</v-icon>
             </v-list-tile-avatar>
             <v-list-tile-content>
               <v-list-tile-title class="white--text">{{ $store.state.user.firstName }} {{ $store.state.user.lastName }}</v-list-tile-title>
@@ -197,7 +207,7 @@
         <v-divider></v-divider>
         <v-list-tile :to="{ name: 'ProfileMatches', params: { username: $store.state.user.username }}" exact>
           <v-list-tile-action>
-            <v-icon light>list</v-icon>
+            <v-icon light>people_outline</v-icon>
           </v-list-tile-action>
           <v-list-tile-title>Matches</v-list-tile-title>
         </v-list-tile>
@@ -231,6 +241,12 @@
         >
           <v-list-tile slot="activator">
             <v-list-tile-title>Training</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile :to="{ name: 'TrainingOverview' }" exact>
+            <v-list-tile-action>
+              <v-icon light>apps</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-title>Overview</v-list-tile-title>
           </v-list-tile>
           <v-list-tile :to="{ name: 'TrainingScoreboard' }" exact>
             <v-list-tile-action>
@@ -291,12 +307,22 @@
       </v-list>
     </v-navigation-drawer>
     <v-footer
+      v-if="$store.state.showFooter"
       :fixed="fixed"
       app
-      style="padding-right: 0px;"
     >
-      <div id="buildInfo" class="ml-2">Last update: {{ buildDateTime }} - Version: {{ version }}</div>
-      <div id="copyright" class="mr-2">&copy; <a href="https://steffbeckers.eu/">Steff</a></div>
+      <div v-if="$vuetify.breakpoint.smAndUp" id="build-info">
+        <v-icon class="mr-1">code</v-icon><span>Last updated on {{ buildDateTime | formatDateTime }} to v{{ version }}</span>
+      </div>
+      <div v-else id="build-info">
+        <v-icon class="mr-1">code</v-icon><span>{{ buildDateTime | formatDate }} - v{{ version }}</span>
+      </div>
+      <div id="report-bug" style="cursor: pointer">
+        <span v-if="$vuetify.breakpoint.smAndUp">Report a</span><v-icon class="ml-1">bug_report</v-icon>
+      </div>
+      <div id="copyright">
+        <v-icon class="mr-1">copyright</v-icon><a href="https://steffbeckers.eu/" target="_blank">Steff</a>
+      </div>
     </v-footer>
   </v-app>
 </template>
@@ -306,23 +332,29 @@ main.content {
   margin-bottom: 60px;
 }
 
-#buildInfo {
-  color: #ffffff;
-  font-size: 11px;
-  line-height: 11px;
-}
-
-#copyright {
+.v-footer {
   color: #868e96;
-  margin-left: auto;
+  font-size: 12px;
+  line-height: 32px;
+
+  display: flex;
+  justify-content: space-between;
+
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
-#copyright a {
+.v-footer a {
   text-decoration: none;
 }
 
-#copyright a:hover {
+.v-footer a:hover {
   text-decoration: underline;
+}
+
+.v-footer .v-icon {
+  position: relative;
+  top: 5px;
 }
 </style>
 
@@ -342,7 +374,7 @@ export default {
           }
         },
         {
-          icon: 'list',
+          icon: 'people_outline',
           title: 'Matches',
           page: {
             name: 'Matches'
@@ -350,11 +382,17 @@ export default {
         },
         {
           icon: 'line_style',
-          title: 'Tournaments'
+          title: 'Tournaments',
+          page: {
+            name: 'Tournaments'
+          }
         },
         {
           icon: 'people',
-          title: 'Players'
+          title: 'Players',
+          page: {
+            name: 'Players'
+          }
         },
         {
           icon: 'place',
@@ -394,9 +432,19 @@ export default {
     }
   },
   watch: {
+    $route: function () {
+      // Check if given route is true, if it is then hide Nav.
+      // if (this.$route.name === 'TrainingScoreboard') {
+      //   this.$store.commit('showTopNav', false)
+      //   this.$store.commit('showFooter', false)
+      // } else {
+      //   this.$store.commit('showTopNav', true)
+      //   this.$store.commit('showFooter', true)
+      // }
+    },
     settingsDropdown(bool) {
       localStorage.setItem('login:settingsDropdown', bool)
-    }
+    },
   },
   name: 'App'
 }

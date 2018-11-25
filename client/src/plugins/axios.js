@@ -21,7 +21,7 @@ Vue.prototype.$axios.interceptors.request.use(
 )
 
 // Global response interceptor
-var statusCode0Count = 0
+window.statusCode0Count = 0
 Vue.prototype.$axios.interceptors.response.use(
   function(response) {
     // Loader
@@ -29,7 +29,7 @@ Vue.prototype.$axios.interceptors.response.use(
 
     // Logging
     if (process.env.NODE_ENV === 'development') {
-      Vue.prototype.$logger.log(response.request.responseURL)
+      Vue.prototype.$logger.log(response.config.method.toUpperCase(), response.request.responseURL)
       Vue.prototype.$logger.log(response.status, response.data)
     }
 
@@ -40,8 +40,8 @@ Vue.prototype.$axios.interceptors.response.use(
     store.commit('loader', false)
 
     // If request status is 0 (no connection to API)
-    if (error.request.status === 0 && statusCode0Count === 0) {
-      statusCode0Count++
+    if (error.request.status === 0 && window.statusCode0Count === 0) {
+      window.statusCode0Count++
       // Custom response
       error.response = {data: {error: {message: 'You are offline. Please try to reconnect to the internet.'}}}
 

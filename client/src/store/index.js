@@ -64,6 +64,8 @@ export default new Vuex.Store({
   state: {
     // Env
     env: process.env.NODE_ENV,
+    debug: localStorage.getItem('debug') || process.env.NODE_ENV === 'development',
+    forceOffline: false,
     // Messages
     infos: [],
     successes: [],
@@ -72,7 +74,9 @@ export default new Vuex.Store({
     // Loading
     loading: false,
     loadingCounter: 0,
-    // Drawers
+    // Layout
+    showTopNav: true,
+    showFooter: true,
     drawer: false,
     rightDrawer: false,
     // Auth
@@ -87,27 +91,34 @@ export default new Vuex.Store({
         ) : false
   },
   mutations: {
+    forceOffline(state, bool) {
+      state.forceOffline = bool
+    },
     message(state, message) {
       switch (message.type) {
         case 'info':
-          state.infos.push({message: message.value})
+          state.infos.push({message: message.value, keepOnNav: message.keepOnNav || 0})
           break
         case 'success':
-          state.successes.push({message: message.value})
+          state.successes.push({message: message.value, keepOnNav: message.keepOnNav || 0})
           break
         case 'warning':
-          state.warnings.push({message: message.value})
+          state.warnings.push({message: message.value, keepOnNav: message.keepOnNav || 0})
           break
         case 'error':
-          state.errors.push({message: message.value})
+          state.errors.push({message: message.value, keepOnNav: message.keepOnNav || 0})
           break
       }
     },
     resetMessages(state) {
-      state.infos = []
-      state.successes = []
-      state.warnings = []
-      state.errors = []
+      state.infos = state.infos.filter(i => i.keepOnNav && i.keepOnNav > 0 || i.keepOnNav === -1)
+      state.infos.forEach(i => { if (i.keepOnNav > 0) i.keepOnNav-- })
+      state.successes = state.successes.filter(i => i.keepOnNav && i.keepOnNav > 0 || i.keepOnNav === -1)
+      state.successes.forEach(i => { if (i.keepOnNav > 0) i.keepOnNav-- })
+      state.warnings = state.warnings.filter(i => i.keepOnNav && i.keepOnNav > 0 || i.keepOnNav === -1)
+      state.warnings.forEach(i => { if (i.keepOnNav > 0) i.keepOnNav-- })
+      state.errors = state.errors.filter(i => i.keepOnNav && i.keepOnNav > 0 || i.keepOnNav === -1)
+      state.errors.forEach(i => { if (i.keepOnNav > 0) i.keepOnNav-- })
     },
     loader(state, bool) {
       if (bool) {
@@ -119,6 +130,12 @@ export default new Vuex.Store({
       state.loadingCounter > 0
         ? (state.loading = true)
         : (state.loading = false)
+    },
+    showTopNav(state, bool) {
+      state.showTopNav = bool
+    },
+    showFooter(state, bool) {
+      state.showFooter = bool
     },
     drawer(state, bool) {
       state.drawer = bool
@@ -176,6 +193,18 @@ export default new Vuex.Store({
       // Update login username
       localStorage.setItem('login:usernameOrEmail', state.user.username)
     },
+    changeAvatar(state, imagePathOrSet) {
+      state.user.profilePicture = imagePathOrSet
+
+      // Save user
+      localStorage.setItem('user', JSON.stringify(state.user))
+    },
+    removeAvatar(state) {
+      delete state.user.profilePicture
+
+      // Save user
+      localStorage.setItem('user', JSON.stringify(state.user))
+    },
     changeProfile(state, user) {
       if (user.firstName) state.user.firstName = user.firstName
       if (user.lastName) state.user.lastName = user.lastName
@@ -203,6 +232,78 @@ export default new Vuex.Store({
 
       // Save user
       localStorage.setItem('user', JSON.stringify(state.user))
+    },
+    addFriend(state, user) {
+      // User should be authenticated
+      if (!state.authenticated) return
+
+      // When friends could be undefined
+      if (state.user.friends === undefined) {
+        state.user.friends = []
+      }
+
+      // Check if the friend isn't added already
+      let found = state.user.friends.some((friend) => {
+        return friend.id === user.id
+      })
+      if (!found) {
+        // Add the user to friends
+        state.user.friends.push({
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          username: user.username,
+          profilePicture: user.profilePicture
+        })
+        // Trigger update
+        state.user.friends = [...state.user.friends]
+      }
+
+      // Save user
+      localStorage.setItem('user', JSON.stringify(state.user))
+    },
+    removeFriend(state, user) {
+      // User should be authenticated
+      if (!state.authenticated) return
+
+      // Check if the friend is added
+      let found = state.user.friends.some((friend) => {
+        return friend.id === user.id
+      })
+      if (found) {
+        // Remove the user from friends
+        let index = state.user.friends.map(f => f.id).indexOf(user.id);
+        if (index >= 0) state.user.friends.splice(index, 1)
+        // Trigger update
+        state.user.friends = [...state.user.friends]
+      }
+
+      // Save user
+      localStorage.setItem('user', JSON.stringify(state.user))
+    }
+  },
+  actions: {
+    addPlayerAsFriend({ commit, state }, player) {
+      Vue.prototype.$axios
+        .put(process.env.VUE_APP_API + '/Users/' + state.user.id + '/friends/rel/' + player.id)
+        .then(() => {
+          // Add player to friends in state
+          commit('addFriend', player)
+        })
+        .catch(error => {
+          Vue.prototype.$logger.error(error)
+        })
+    },
+    removePlayerAsFriend({ commit, state }, player) {
+      Vue.prototype.$axios
+        .delete(process.env.VUE_APP_API + '/Users/' + state.user.id + '/friends/rel/' + player.id)
+        .then(() => {
+          // Remove player from friends in state
+          commit('removeFriend', player)
+        })
+        .catch(error => {
+          Vue.prototype.$logger.error(error)
+        })
     }
   },
   modules: {

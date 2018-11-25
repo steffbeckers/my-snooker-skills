@@ -15,22 +15,24 @@
           prepend-icon="search"
           single-line
         ></v-text-field>
-
         <v-btn icon>
           <v-icon>my_location</v-icon>
         </v-btn>
-
         <v-btn icon>
           <v-icon>more_vert</v-icon>
         </v-btn>
       </v-toolbar>
     </v-card>
-    <v-container grid-list-lg fluid>
-      <v-layout row>
-        <v-flex>
-          <div class="title">Clubs</div>
-        </v-flex>
-      </v-layout>
+    <v-toolbar color="transparent" class="elevation-0">
+      <v-toolbar-title color="grey">
+        <v-icon class="mr-2">place</v-icon> Clubs
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon>
+        <v-icon color="rgba(0,0,0,.54)">more_vert</v-icon>
+      </v-btn>
+    </v-toolbar>
+    <v-container class="pt-1" grid-list-lg fluid>
     </v-container>
   </div>
 </template>
