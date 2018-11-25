@@ -1,6 +1,6 @@
 FROM node:8
 
-RUN sudo apt-get install imagemagick
+RUN apk --update add imagemagick
 
 WORKDIR /app
 
