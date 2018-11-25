@@ -35,8 +35,8 @@
   "session": {},
   "auth": {},
   "parse": {
-    "body-parser#json": { "params" : { "limit" : "10mb"} },
-    "body-parser#urlencoded": {"params": { "limit" : "10mb", "extended": true }}
+    "body-parser#json": { "params" : { "limit" : "50mb"} },
+    "body-parser#urlencoded": {"params": { "limit" : "50mb", "extended": true }}
   },
   "routes": {
     "loopback#rest": {
