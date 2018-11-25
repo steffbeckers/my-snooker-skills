@@ -514,28 +514,28 @@ module.exports = function(user) {
       profilePicture: [
         {
           suffix: '-large',
-          // aspect: '1:1',
+          aspect: '1:1',
           quality: 90,
           maxHeight: 1024,
           maxWidth: 1024,
         },
         {
           suffix: '-medium',
-          // aspect: '1:1',
+          aspect: '1:1',
           quality: 90,
           maxHeight: 480,
           maxWidth: 480,
         },
         {
           suffix: '-small',
-          // aspect: '1:1',
+          aspect: '1:1',
           quality: 90,
           maxHeight: 150,
           maxWidth: 150,
         },
         {
           suffix: '-thumb',
-          // aspect: '1:1',
+          aspect: '1:1',
           quality: 90,
           maxHeight: 60,
           maxWidth: 60,
