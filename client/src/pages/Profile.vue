@@ -251,18 +251,22 @@ export default {
       this.$axios
         .get(process.env.VUE_APP_API + '/Users/' + this.$route.params.username + '/profile')
         .then(response => {
+          // Custom info message when the player isn't found or deleted
+          if (response.data === null) {
+            this.$store.commit('message', {
+              type: 'info',
+              value: `Player with username: @${this.$route.params.username} could not be found or might be deleted.`,
+              keepOnNav: 1 // time(s) or -1 for until manually hidden by user
+            })
+            // Always return to the players overview page
+            this.$router.push({ name: 'Players' })
+          }
+
           this.user = response.data
         })
         .catch(error => {
           this.$logger.error(error)
         })
-    },
-    profilePicture(url, size) {
-      // Google standard
-      if (typeof url === 'string' && url.includes('google') && url.includes('?sz=50')) {
-        url = url.replace('sz=50', 'sz=' + size)
-      }
-      return url
     },
     playerIsAFriend() {
       // User needs to be loaded
