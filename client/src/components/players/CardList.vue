@@ -8,10 +8,21 @@
       v-for="player in players" :key="player.id"
     >
       <v-card>
-        <v-card-title style="cursor: pointer" @click="$router.push({ name: 'Profile', params: { username: player.username }})" primary-title>
-          <v-avatar class="ml-1 mr-4" size="60px" :color="!player.profilePicture ? 'red' : 'transparent'">
-            <img v-if="player.profilePicture" :src="profilePicture(player.profilePicture, 60)">
-            <v-icon style="font-size: 42px;" dark v-else>person</v-icon>
+        <v-card-title :class="!$store.state.authenticated ? 'pb-4' : ''" style="cursor: pointer" @click="$router.push({ name: 'Profile', params: { username: player.username }})" primary-title>
+          <v-avatar
+            class="ml-1 mr-4"
+            size="60px"
+            :color="!player.profilePicture ? 'red' : 'transparent'"
+          >
+            <img
+              v-if="player.profilePicture && typeof player.profilePicture === 'object' && player.profilePicture.thumb"
+              :src="player.profilePicture.thumb"
+            >
+            <img
+              v-if="player.profilePicture && typeof player.profilePicture === 'string'"
+              :src="player.profilePicture"
+            >
+            <v-icon v-if="!player.profilePicture" style="font-size: 30px;" dark>person</v-icon>
           </v-avatar>
           <div>
             <div class="headline">{{ player.firstName }} {{ player.lastName }}</div>

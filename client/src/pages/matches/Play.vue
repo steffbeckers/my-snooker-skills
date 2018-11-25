@@ -36,9 +36,18 @@
                 slot-scope="data"
               >
                 <template>
-                  <v-list-tile-avatar :color="!data.item.profilePicture ? 'red' : 'transparent'">
-                    <img v-if="data.item.profilePicture" :src="data.item.profilePicture">
-                    <v-icon dark v-else>person</v-icon>
+                  <v-list-tile-avatar
+                    :color="!data.item.profilePicture ? 'red' : 'transparent'"
+                  >
+                    <img
+                      v-if="data.item.profilePicture && typeof data.item.profilePicture === 'object' && data.item.profilePicture.thumb"
+                      :src="data.item.profilePicture.thumb"
+                    >
+                    <img
+                      v-if="data.item.profilePicture && typeof data.item.profilePicture === 'string'"
+                      :src="data.item.profilePicture"
+                    >
+                    <v-icon v-if="!data.item.profilePicture" dark>person</v-icon>
                   </v-list-tile-avatar>
                   <v-list-tile-content>
                     <v-list-tile-title>{{ data.item.firstName }} {{ data.item.lastName }}</v-list-tile-title>
@@ -58,9 +67,21 @@
               >
                 <v-card>
                   <v-card-title primary-title>
-                    <v-avatar @click="$router.push({name: 'Profile', params: {username: player.username}})" class="ml-1 mr-4" size="60px" :color="!player.profilePicture ? 'red' : 'transparent'">
-                      <img v-if="player.profilePicture" :src="player.profilePicture">
-                      <v-icon style="font-size: 42px;" dark v-else>person</v-icon>
+                    <v-avatar
+                      @click="$router.push({name: 'Profile', params: {username: player.username}})"
+                      class="ml-1 mr-4"
+                      size="60px"
+                      :color="!player.profilePicture ? 'red' : 'transparent'"
+                    >
+                      <img
+                        v-if="player.profilePicture && typeof player.profilePicture === 'object' && player.profilePicture.thumb"
+                        :src="player.profilePicture.thumb"
+                      >
+                      <img
+                        v-if="player.profilePicture && typeof player.profilePicture === 'string'"
+                        :src="player.profilePicture"
+                      >
+                      <v-icon v-if="!player.profilePicture" style="font-size: 42px;" dark>person</v-icon>
                     </v-avatar>
                     <div @click="$router.push({name: 'Profile', params: {username: player.username}})">
                       <div class="headline">{{ player.firstName }} {{ player.lastName }}</div>
@@ -147,9 +168,18 @@
                     slot-scope="data"
                   >
                     <template>
-                      <v-list-tile-avatar :color="!data.item.profilePicture ? 'red' : 'transparent'">
-                        <img v-if="data.item.profilePicture" :src="data.item.profilePicture">
-                        <v-icon dark v-else>person</v-icon>
+                      <v-list-tile-avatar
+                        :color="!data.item.profilePicture ? 'red' : 'transparent'"
+                      >
+                        <img
+                          v-if="data.item.profilePicture && typeof data.item.profilePicture === 'object' && data.item.profilePicture.thumb"
+                          :src="data.item.profilePicture.thumb"
+                        >
+                        <img
+                          v-if="data.item.profilePicture && typeof data.item.profilePicture === 'string'"
+                          :src="data.item.profilePicture"
+                        >
+                        <v-icon v-if="!data.item.profilePicture" dark>person</v-icon>
                       </v-list-tile-avatar>
                       <v-list-tile-content>
                         <v-list-tile-title>{{ data.item.firstName }} {{ data.item.lastName }}</v-list-tile-title>
@@ -177,9 +207,18 @@
                       <v-list-tile-content v-text="data.item"></v-list-tile-content>
                     </template>
                     <template v-else>
-                      <v-list-tile-avatar :color="!data.item.profilePicture ? 'red' : 'transparent'">
-                        <img v-if="data.item.profilePicture" :src="data.item.profilePicture">
-                        <v-icon dark v-else>person</v-icon>
+                      <v-list-tile-avatar
+                        :color="!data.item.profilePicture ? 'red' : 'transparent'"
+                      >
+                        <img
+                          v-if="data.item.profilePicture && typeof data.item.profilePicture === 'object' && data.item.profilePicture.thumb"
+                          :src="data.item.profilePicture.thumb"
+                        >
+                        <img
+                          v-if="data.item.profilePicture && typeof data.item.profilePicture === 'string'"
+                          :src="data.item.profilePicture"
+                        >
+                        <v-icon v-if="!data.item.profilePicture" dark>person</v-icon>
                       </v-list-tile-avatar>
                       <v-list-tile-content>
                         <v-list-tile-title>{{ data.item.firstName }} {{ data.item.lastName }}</v-list-tile-title>
@@ -207,9 +246,18 @@
                       <v-list-tile-content v-text="data.item"></v-list-tile-content>
                     </template>
                     <template v-else>
-                      <v-list-tile-avatar :color="!data.item.profilePicture ? 'red' : 'transparent'">
-                        <img v-if="data.item.profilePicture" :src="data.item.profilePicture">
-                        <v-icon dark v-else>person</v-icon>
+                      <v-list-tile-avatar
+                        :color="!data.item.profilePicture ? 'red' : 'transparent'"
+                      >
+                        <img
+                          v-if="data.item.profilePicture && typeof data.item.profilePicture === 'object' && data.item.profilePicture.thumb"
+                          :src="data.item.profilePicture.thumb"
+                        >
+                        <img
+                          v-if="data.item.profilePicture && typeof data.item.profilePicture === 'string'"
+                          :src="data.item.profilePicture"
+                        >
+                        <v-icon v-if="!data.item.profilePicture" dark>person</v-icon>
                       </v-list-tile-avatar>
                       <v-list-tile-content>
                         <v-list-tile-title>{{ data.item.firstName }} {{ data.item.lastName }}</v-list-tile-title>

@@ -97,24 +97,28 @@ export default new Vuex.Store({
     message(state, message) {
       switch (message.type) {
         case 'info':
-          state.infos.push({message: message.value})
+          state.infos.push({message: message.value, keepOnNav: message.keepOnNav || 0})
           break
         case 'success':
-          state.successes.push({message: message.value})
+          state.successes.push({message: message.value, keepOnNav: message.keepOnNav || 0})
           break
         case 'warning':
-          state.warnings.push({message: message.value})
+          state.warnings.push({message: message.value, keepOnNav: message.keepOnNav || 0})
           break
         case 'error':
-          state.errors.push({message: message.value})
+          state.errors.push({message: message.value, keepOnNav: message.keepOnNav || 0})
           break
       }
     },
     resetMessages(state) {
-      state.infos = []
-      state.successes = []
-      state.warnings = []
-      state.errors = []
+      state.infos = state.infos.filter(i => i.keepOnNav && i.keepOnNav > 0 || i.keepOnNav === -1)
+      state.infos.forEach(i => { if (i.keepOnNav > 0) i.keepOnNav-- })
+      state.successes = state.successes.filter(i => i.keepOnNav && i.keepOnNav > 0 || i.keepOnNav === -1)
+      state.successes.forEach(i => { if (i.keepOnNav > 0) i.keepOnNav-- })
+      state.warnings = state.warnings.filter(i => i.keepOnNav && i.keepOnNav > 0 || i.keepOnNav === -1)
+      state.warnings.forEach(i => { if (i.keepOnNav > 0) i.keepOnNav-- })
+      state.errors = state.errors.filter(i => i.keepOnNav && i.keepOnNav > 0 || i.keepOnNav === -1)
+      state.errors.forEach(i => { if (i.keepOnNav > 0) i.keepOnNav-- })
     },
     loader(state, bool) {
       if (bool) {
@@ -189,8 +193,8 @@ export default new Vuex.Store({
       // Update login username
       localStorage.setItem('login:usernameOrEmail', state.user.username)
     },
-    changeAvatar(state, image) {
-      state.user.profilePicture = image
+    changeAvatar(state, imagePathOrSet) {
+      state.user.profilePicture = imagePathOrSet
 
       // Save user
       localStorage.setItem('user', JSON.stringify(state.user))

@@ -22,9 +22,19 @@
           </div>
         </v-flex>
         <v-flex class="text-xs-center" xs12 sm3>
-          <v-avatar size="90px" :color="!$store.state.user.profilePicture ? 'red' : 'transparent'">
-            <img v-if="$store.state.user.profilePicture" :src="$store.state.user.profilePicture">
-            <v-icon style="font-size: 26px;" dark v-else>person</v-icon>
+          <v-avatar
+            size="140px"
+            :color="!$store.state.user.profilePicture ? 'red' : 'transparent'"
+          >
+            <img
+              v-if="$store.state.user.profilePicture && typeof $store.state.user.profilePicture === 'object' && $store.state.user.profilePicture.small"
+              :src="$store.state.user.profilePicture.small"
+            >
+            <img
+              v-if="$store.state.user.profilePicture && typeof $store.state.user.profilePicture === 'string'"
+              :src="$store.state.user.profilePicture"
+            >
+            <v-icon v-if="!$store.state.user.profilePicture" style="font-size: 60px;" dark>person</v-icon>
           </v-avatar>
         </v-flex>
         <v-flex xs12 sm6>
@@ -228,7 +238,7 @@ export default {
           { headers: { 'Content-Type': 'multipart/form-data' }}
         ).then(response => {
           // Update user in store
-          this.$store.commit('changeAvatar', response.data.url)
+          this.$store.commit('changeAvatar', response.data.imageSetForUI)
         })
     },
     removeAvatar() {

@@ -38,9 +38,20 @@
         <v-layout v-if="$vuetify.breakpoint.smAndUp" col>
           <v-flex style="cursor: pointer" @click="$router.push({name: 'Profile', params: {username: match.players[0].username}})">
             <div class="text-xs-center">
-              <v-avatar class="mb-2" size="60px" :color="!match.players[0].profilePicture ? 'red' : 'transparent'">
-                <img v-if="match.players[0].profilePicture" :src="match.players[0].profilePicture">
-                <v-icon v-else style="font-size: 30px;" dark>person</v-icon>
+              <v-avatar
+                class="mb-2"
+                size="60px"
+                :color="!match.players[0].profilePicture ? 'red' : 'transparent'"
+              >
+                <img
+                  v-if="match.players[0].profilePicture && typeof match.players[0].profilePicture === 'object' && match.players[0].profilePicture.thumb"
+                  :src="match.players[0].profilePicture.thumb"
+                >
+                <img
+                  v-if="match.players[0].profilePicture && typeof match.players[0].profilePicture === 'string'"
+                  :src="match.players[0].profilePicture"
+                >
+                <v-icon v-if="!match.players[0].profilePicture" style="font-size: 30px;" dark>person</v-icon>
               </v-avatar>
               <div class="headline">
                 {{ match.players[0].firstName }} {{ match.players[0].lastName }}
@@ -63,9 +74,20 @@
           </v-flex>
           <v-flex style="cursor: pointer" @click="$router.push({name: 'Profile', params: {username: match.players[1].username}})">
             <div class="text-xs-center">
-              <v-avatar class="mb-2" size="60px" :color="!match.players[1].profilePicture ? 'red' : 'transparent'">
-                <img v-if="match.players[1].profilePicture" :src="match.players[1].profilePicture">
-                <v-icon v-else style="font-size: 30px;" color="white">person</v-icon>
+              <v-avatar
+                class="mb-2"
+                size="60px"
+                :color="!match.players[1].profilePicture ? 'red' : 'transparent'"
+              >
+                <img
+                  v-if="match.players[1].profilePicture && typeof match.players[1].profilePicture === 'object' && match.players[1].profilePicture.thumb"
+                  :src="match.players[1].profilePicture.thumb"
+                >
+                <img
+                  v-if="match.players[1].profilePicture && typeof match.players[1].profilePicture === 'string'"
+                  :src="match.players[1].profilePicture"
+                >
+                <v-icon v-if="!match.players[1].profilePicture" style="font-size: 30px;" dark>person</v-icon>
               </v-avatar>
               <div class="headline">
                 {{ match.players[1].firstName }} {{ match.players[1].lastName }}
@@ -77,9 +99,20 @@
           <v-layout row>
             <v-flex style="cursor: pointer" @click="$router.push({name: 'Profile', params: {username: match.players[0].username}})" xs6>
               <div class="text-xs-center">
-                <v-avatar class="mb-2" size="60px" :color="!match.players[0].profilePicture ? 'red' : 'transparent'">
-                  <img v-if="match.players[0].profilePicture" :src="match.players[0].profilePicture">
-                  <v-icon v-else style="font-size: 30px;" dark>person</v-icon>
+                <v-avatar
+                  class="mb-2"
+                  size="60px"
+                  :color="!match.players[0].profilePicture ? 'red' : 'transparent'"
+                >
+                  <img
+                    v-if="match.players[0].profilePicture && typeof match.players[0].profilePicture === 'object' && match.players[0].profilePicture.thumb"
+                    :src="match.players[0].profilePicture.thumb"
+                  >
+                  <img
+                    v-if="match.players[0].profilePicture && typeof match.players[0].profilePicture === 'string'"
+                    :src="match.players[0].profilePicture"
+                  >
+                  <v-icon v-if="!match.players[0].profilePicture" style="font-size: 30px;" dark>person</v-icon>
                 </v-avatar>
                 <div class="headline">
                   {{ match.players[0].firstName }} {{ match.players[0].lastName }}
@@ -88,9 +121,20 @@
             </v-flex>
             <v-flex style="cursor: pointer" @click="$router.push({name: 'Profile', params: {username: match.players[1].username}})" xs6>
               <div class="text-xs-center">
-                <v-avatar class="mb-2" size="60px" :color="!match.players[1].profilePicture ? 'red' : 'transparent'">
-                  <img v-if="match.players[1].profilePicture" :src="match.players[1].profilePicture">
-                  <v-icon v-else style="font-size: 30px;" color="white">person</v-icon>
+                <v-avatar
+                  class="mb-2"
+                  size="60px"
+                  :color="!match.players[1].profilePicture ? 'red' : 'transparent'"
+                >
+                  <img
+                    v-if="match.players[1].profilePicture && typeof match.players[1].profilePicture === 'object' && match.players[1].profilePicture.thumb"
+                    :src="match.players[1].profilePicture.thumb"
+                  >
+                  <img
+                    v-if="match.players[1].profilePicture && typeof match.players[1].profilePicture === 'string'"
+                    :src="match.players[1].profilePicture"
+                  >
+                  <v-icon v-if="!match.players[1].profilePicture" style="font-size: 30px;" dark>person</v-icon>
                 </v-avatar>
                 <div class="headline">
                   {{ match.players[1].firstName }} {{ match.players[1].lastName }}
@@ -195,10 +239,22 @@ export default {
       this.$axios
         .get(process.env.VUE_APP_API + '/Matches/' + this.$route.params.id + '/detail')
         .then(response => {
-          this.match = response.data;
+          this.match = response.data
         })
         .catch(error => {
-          this.$logger.error(error);
+          this.$logger.error(error)
+
+          // Custom info message when the match isn't found by ID or is deleted
+          if (error.message === 'Match not found') {
+            this.$store.commit('message', {
+              type: 'info',
+              value: `Match with ID: ${this.$route.params.id} could not be found or might be deleted.`,
+              keepOnNav: 1 // time(s) or -1 for until manually hidden by user
+            })
+          }
+
+          // Always return to the matches overview page
+          this.$router.push({ name: 'Matches' })
         });
     }
   },
@@ -206,7 +262,7 @@ export default {
     $route(value) {
       // Reload match when id changes in URL
       if (this.match.id !== value.params.id) {
-        this.getMatch();
+        this.getMatch()
       }
     },
     selectedTab(id) {

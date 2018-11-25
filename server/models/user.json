@@ -42,10 +42,10 @@
       }
     },
     "profilePicture": {
-      "type": "string"
+      "type": "object"
     },
     "profileBanner": {
-      "type": "string"
+      "type": "object"
     }
   },
   "validations": [],

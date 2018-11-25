@@ -174,8 +174,17 @@ function uploadable(model, instance, property, ctx, versionsByProperty, next) {
         return next(e);
       }
 
-      // Update the model's property to the URL from AWS
-      instance[property] = results.url;
+      // Update the model's property to the image set (URL's) hosted on AWS
+      instance[property] = {};
+      instance[property].thumb = results.imageSet['-thumb'].url;
+      instance[property].small = results.imageSet['-small'].url;
+      instance[property].medium = results.imageSet['-medium'].url;
+      instance[property].large = results.imageSet['-large'].url;
+      instance[property].original = results.url;
+
+      // Set this image set in results to use as update in UI
+      results.imageSetForUI = instance[property];
+
       instance.save().then(function(res) {
         // Success - back to caller
         next(null, results);

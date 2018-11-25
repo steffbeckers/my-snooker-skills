@@ -52,6 +52,8 @@
         indeterminate
         color="red"
         v-if="!$store.state.drawer"
+        @click="$router.push({ name: 'Root' })"
+        style="cursor: pointer"
       >
         <img
           v-if="!$store.state.loading"
@@ -181,8 +183,15 @@
         <v-list class="pa-0">
           <v-list-tile @click="$router.push({name: 'Profile', params: {username: $store.state.user.username}})" class="white--text" avatar>
             <v-list-tile-avatar color="white">
-              <img v-if="$store.state.user && $store.state.user.profilePicture" :src="$store.state.user.profilePicture">
-              <v-icon class="primary--text" v-else>person</v-icon>
+              <img
+                v-if="$store.state.user.profilePicture && typeof $store.state.user.profilePicture === 'object' && $store.state.user.profilePicture.thumb"
+                :src="$store.state.user.profilePicture.thumb"
+              >
+              <img
+                v-if="$store.state.user.profilePicture && typeof $store.state.user.profilePicture === 'string'"
+                :src="$store.state.user.profilePicture"
+              >
+              <v-icon v-if="!$store.state.user.profilePicture" class="primary--text">person</v-icon>
             </v-list-tile-avatar>
             <v-list-tile-content>
               <v-list-tile-title class="white--text">{{ $store.state.user.firstName }} {{ $store.state.user.lastName }}</v-list-tile-title>

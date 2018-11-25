@@ -4,9 +4,19 @@
     <div v-if="user">
       <v-container grid-list-lg fluid>
         <v-layout class="pt-2" align-center justify-space-around wrap>
-          <v-avatar size="90px" :color="!user.profilePicture ? 'red' : 'transparent'">
-            <img v-if="user.profilePicture" :src="profilePicture(user.profilePicture, 90)">
-            <v-icon style="font-size: 42px;" dark v-else>person</v-icon>
+          <v-avatar
+            size="90px"
+            :color="!user.profilePicture ? 'red' : 'transparent'"
+          >
+            <img
+              v-if="user.profilePicture && typeof user.profilePicture === 'object' && user.profilePicture.small"
+              :src="user.profilePicture.small"
+            >
+            <img
+              v-if="user.profilePicture && typeof user.profilePicture === 'string'"
+              :src="user.profilePicture"
+            >
+            <v-icon v-if="!user.profilePicture" style="font-size: 42px;" dark>person</v-icon>
           </v-avatar>
           <div v-if="$store.state.authenticated && $store.state.user.id === user.id" id="banner-buttons">
             <v-btn :to="{ name: 'ProfileSettings' }" outline color="grey">
@@ -127,9 +137,21 @@
             <v-container grid-list-lg fluid class="pt-0">
               <v-layout v-if="user.friends && user.friends.length > 0" wrap>
                 <v-flex v-for="friend in user.friends" :key="friend.id" xs12 sm6 md4 class="ma-3 friend">
-                  <v-avatar @click="$router.push({name: 'Profile', params: {username: friend.username}})" class="friend__avatar" size="60px" :color="!friend.profilePicture ? 'red' : 'transparent'">
-                    <img v-if="friend.profilePicture" :src="profilePicture(friend.profilePicture, 60)">
-                    <v-icon style="font-size: 30px;" dark v-else>person</v-icon>
+                  <v-avatar
+                    @click="$router.push({name: 'Profile', params: {username: friend.username}})"
+                    class="friend__avatar"
+                    size="60px"
+                    :color="!friend.profilePicture ? 'red' : 'transparent'"
+                  >
+                    <img
+                      v-if="friend.profilePicture && typeof friend.profilePicture === 'object' && friend.profilePicture.thumb"
+                      :src="friend.profilePicture.thumb"
+                    >
+                    <img
+                      v-if="friend.profilePicture && typeof friend.profilePicture === 'string'"
+                      :src="friend.profilePicture"
+                    >
+                    <v-icon v-if="!friend.profilePicture" style="font-size: 30px;" dark>person</v-icon>
                   </v-avatar>
                   <div @click="$router.push({name: 'Profile', params: {username: friend.username}})" class="friend__details ml-3 mr-3 pa-2">
                     <div class="friend__name subheading">
@@ -237,7 +259,7 @@ export default {
     },
     profilePicture(url, size) {
       // Google standard
-      if (url.includes('google') && url.includes('?sz=50')) {
+      if (typeof url === 'string' && url.includes('google') && url.includes('?sz=50')) {
         url = url.replace('sz=50', 'sz=' + size)
       }
       return url

@@ -64,6 +64,12 @@
       "permission": "DENY"
     },
     {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "Administrator",
+      "permission": "ALLOW"
+    },
+    {
       "accessType": "READ",
       "principalType": "ROLE",
       "principalId": "$everyone",
