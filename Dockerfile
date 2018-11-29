@@ -15,8 +15,8 @@ RUN npm install
 
 COPY . /app
 
-# node_module im-resize fix
-COPY server/lib/im-resize/index.js /app/node_modules/im-resize
+# node_module im-resize fix?
+# COPY server/lib/im-resize/index.js /app/node_modules/im-resize
 
 # Start nodemon server
 CMD NODE_ENV=production nodemon server/server.js
