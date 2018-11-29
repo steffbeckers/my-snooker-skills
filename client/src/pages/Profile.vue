@@ -5,7 +5,7 @@
       <v-container grid-list-lg fluid>
         <v-layout class="pt-2" align-center justify-space-around wrap>
           <v-avatar
-            size="90px"
+            size="140px"
             :color="!user.profilePicture ? 'red' : 'transparent'"
           >
             <img
@@ -16,7 +16,7 @@
               v-if="user.profilePicture && typeof user.profilePicture === 'string'"
               :src="user.profilePicture"
             >
-            <v-icon v-if="!user.profilePicture" style="font-size: 42px;" dark>person</v-icon>
+            <v-icon v-if="!user.profilePicture" style="font-size: 60px;" dark>person</v-icon>
           </v-avatar>
           <div v-if="$store.state.authenticated && $store.state.user.id === user.id" id="banner-buttons">
             <v-btn :to="{ name: 'ProfileSettings' }" outline color="grey">
