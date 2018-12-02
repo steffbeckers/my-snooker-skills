@@ -63,6 +63,10 @@
       "type": "belongsTo",
       "model": "Match"
     },
+    "tournament": {
+      "type": "belongsTo",
+      "model": "Tournament"
+    },
     "players": {
       "type": "hasAndBelongsToMany",
       "model": "user",

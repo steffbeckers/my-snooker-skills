@@ -233,4 +233,91 @@ module.exports = function(Frame) {
       });
     });
   });
+
+  // Detail
+  Frame.detail = function(id, cb) {
+    var filter = {
+      where: {
+        id: id,
+      },
+      include: [
+        {
+          relation: 'user',
+          scope: {
+            fields: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              username: true,
+              profilePicture: true,
+            },
+          },
+        },
+        'match',
+        'tournament',
+        {
+          relation: 'players',
+          scope: {
+            fields: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              username: true,
+              profilePicture: true,
+            },
+          },
+        },
+        'breaks',
+        {
+          relation: 'referee',
+          scope: {
+            fields: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              username: true,
+              profilePicture: true,
+            },
+          },
+        },
+        {
+          relation: 'createdByUser',
+          scope: {
+            fields: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              username: true,
+              profilePicture: true,
+            },
+          },
+        },
+        {
+          relation: 'updatedByUser',
+          scope: {
+            fields: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              username: true,
+              profilePicture: true,
+            },
+          },
+        },
+      ],
+    };
+    Frame.findOne(filter, function(err, frame) {
+      // On error
+      if (err) {
+        cb(err);
+      }
+
+      cb(null, frame);
+    });
+  };
+  Frame.remoteMethod('detail', {
+    http: {path: '/:id/detail', verb: 'get'},
+    accepts: {arg: 'id', type: 'string'},
+    returns: {type: 'object', root: true},
+  });
 };

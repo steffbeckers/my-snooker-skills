@@ -36,7 +36,7 @@
       </v-container>
       <v-container class="pt-2 pb-2" grid-list-lg fluid>
         <v-layout v-if="$vuetify.breakpoint.smAndUp" col>
-          <v-flex style="cursor: pointer" @click="$router.push({name: 'Profile', params: {username: match.players[0].username}})">
+          <v-flex xs4 style="cursor: pointer" @click="$router.push({name: 'Profile', params: {username: match.players[0].username}})">
             <div class="text-xs-center">
               <v-avatar
                 class="mb-2"
@@ -65,14 +65,14 @@
           </v-flex>
           <v-flex class="text-xs-center mt-4">
             <div>Frames</div>
-            <div>(Best of {{ match.bestOf }})</div>
+            <div style="white-space: nowrap">(Best of {{ match.bestOf }})</div>
           </v-flex>
           <v-flex>
             <div class="text-xs-center display-2 mt-4">
               {{ match.scores[match.players[1].id] || 0 }}
             </div>
           </v-flex>
-          <v-flex style="cursor: pointer" @click="$router.push({name: 'Profile', params: {username: match.players[1].username}})">
+          <v-flex xs4 style="cursor: pointer" @click="$router.push({name: 'Profile', params: {username: match.players[1].username}})">
             <div class="text-xs-center">
               <v-avatar
                 class="mb-2"
@@ -150,7 +150,7 @@
             </v-flex>
             <v-flex xs4 class="text-xs-center">
               <div>Frames</div>
-              <div>(Best of {{ match.bestOf }})</div>
+              <div style="white-space: nowrap">(Best of {{ match.bestOf }})</div>
             </v-flex>
             <v-flex xs4>
               <div class="display-2">
@@ -190,7 +190,7 @@
                   Score
                 </v-flex>
               </v-layout>
-              <v-layout v-for="frame in match.frames" :key="frame.id" style="cursor: pointer" row wrap>
+              <v-layout v-for="frame in match.frames" :key="frame.id" @click="$router.push({name: 'Frame', params: {id: frame.id}})" style="cursor: pointer" row wrap>
                 <v-flex class="text-xs-right display-1" xs4>
                   {{ frame.scores[frame.players[0].id] }}
                 </v-flex>
