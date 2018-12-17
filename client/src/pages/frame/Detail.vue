@@ -18,7 +18,7 @@
           exact
           flat
         >To tournament</v-btn>
-        <v-btn v-if="canEdit && !$vuetify.breakpoint.xs" @click="showScoreboard = true" flat>
+        <v-btn v-if="canEdit && !$vuetify.breakpoint.xs" @click="location.hash = 'scoreboard'" flat>
           <v-icon class="mr-2">drag_indicator</v-icon>Scoreboard
         </v-btn>
         <v-spacer></v-spacer>
@@ -36,7 +36,7 @@
             {{ frame.reds }}
           </div>
         </div>
-        <v-btn v-if="canEdit && $vuetify.breakpoint.xs" @click="showScoreboard = true" icon>
+        <v-btn v-if="canEdit && $vuetify.breakpoint.xs" @click="location.hash = 'scoreboard'" icon>
           <v-icon color="rgba(0,0,0,.54)">drag_indicator</v-icon>
         </v-btn>
         <v-btn v-if="$store.state.authenticated" icon>
@@ -222,7 +222,7 @@
             <v-layout col>
               <v-flex xs12 sm8 offset-sm2 xl6 offset-xl3>
                 <v-timeline>
-                  <v-timeline-item v-for="n in 4" :key="n" color="red lighten-2" small>
+                  <v-timeline-item v-for="n in 4" :key="n" color="white lighten-2" small>
                     <span slot="opposite">Tus eu perfecto</span>
                     <v-card class="elevation-2">
                       <v-card-text>Lorem ipsum dolor sit amet</v-card-text>
@@ -240,15 +240,14 @@
     </div>
     <v-dialog v-if="canEdit" v-model="showScoreboard" fullscreen hide-overlay scrollable>
       <v-card tile>
-        <v-toolbar card dark color="primary">
+        <v-toolbar card dark color="primary elevation-2">
           <v-toolbar-title>Scoreboard</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn icon dark @click="showScoreboard = false">
+          <v-btn icon dark @click="$router.go(-1)">
             <v-icon>close</v-icon>
           </v-btn>
         </v-toolbar>
         <v-card-text></v-card-text>
-        <div style="flex: 1 1 auto;"></div>
       </v-card>
     </v-dialog>
   </div>
@@ -269,7 +268,8 @@ export default {
     return {
       frame: null,
       selectedTab: localStorage.getItem("frame:selectedTab") || "breaks",
-      showScoreboard: false
+      showScoreboard: false,
+      location: window.location
     };
   },
   computed: {
@@ -299,6 +299,11 @@ export default {
   },
   mounted() {
     this.getFrame();
+
+    // Scoreboard
+    if (this.$route.hash === '#scoreboard') {
+      this.showScoreboard = true
+    }
   },
   methods: {
     getFrame() {
@@ -310,10 +315,10 @@ export default {
             "/detail"
         )
         .then(response => {
-          this.frame = response.data;
+          this.frame = response.data
         })
         .catch(error => {
-          this.$logger.error(error);
+          this.$logger.error(error)
 
           // Custom info message when the match isn't found by ID or is deleted
           if (error.message === "Frame not found") {
@@ -323,24 +328,34 @@ export default {
                 this.$route.params.id
               } could not be found or might be deleted.`,
               keepOnNav: 1 // time(s) or -1 for until manually hidden by user
-            });
+            })
           }
 
           // Always return to previous page
-          this.$router.pop();
+          this.$router.pop()
         });
     }
   },
   watch: {
-    $route(value) {
+    $route(to, from) {
       // Reload frame when id changes in URL
-      if (this.frame.id !== value.params.id) {
-        this.getFrame();
+      if (this.frame.id !== to.params.id) {
+        this.getFrame()
       }
+
+      // Scoreboard
+      if (to.hash === '#scoreboard' && from.hash === '') {
+        this.showScoreboard = true
+      }
+      if (from.hash === '#scoreboard' && to.hash === '') {
+        this.showScoreboard = false
+      }
+
+      console.log(to)
     },
     selectedTab(id) {
       // Save to local storage
-      localStorage.setItem("frame:selectedTab", id);
+      localStorage.setItem("frame:selectedTab", id)
     }
   },
   components: {

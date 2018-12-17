@@ -1,6 +1,6 @@
 {
   "name": "my-snooker-skills-loopback",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Track your snooker skills, compare with friends and use a real-time scoreboard.",
   "author": "Steff Beckers <steff@steffbeckers.eu>",
   "private": true,
@@ -38,7 +38,7 @@
     "loopback-ds-timestamp-mixin": "^3.4.1",
     "loopback-softdelete-mixin3": "0.0.12",
     "loopback-softdelete-mixin4": "^1.0.8",
-    "moment": "^2.22.2",
+    "moment": "^2.23.0",
     "multiparty": "^4.2.1",
     "options": "0.0.6",
     "passport-facebook": "^2.1.1",
@@ -53,7 +53,7 @@
     "xmlcreate": "^1.0.2"
   },
   "devDependencies": {
-    "eslint": "^5.9.0",
+    "eslint": "^5.10.0",
     "eslint-config-loopback": "^11.0.0",
     "nsp": "^3.2.1"
   },
