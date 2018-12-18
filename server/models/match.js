@@ -65,6 +65,8 @@ module.exports = function(Match) {
     firstFrame.number = 1;
 
     // Scores
+    firstFrame.scoreboard = {};
+    firstFrame.scoreboard.type = matchInstance.scoreboardType || 'simple';
     firstFrame.scores = {};
     ctx.req.body.players.forEach(function(player) {
       firstFrame.scores[player.id] = 0;

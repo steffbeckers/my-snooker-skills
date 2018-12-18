@@ -5,10 +5,6 @@ var boot = require('loopback-boot');
 
 var app = module.exports = loopback();
 
-// TEST TODO Delete
-// https://stackoverflow.com/a/33421044/5609891
-// app.use(loopback.token());
-
 // Social auth
 var loopbackPassport = require('loopback-component-passport');
 var PassportConfigurator = loopbackPassport.PassportConfigurator;

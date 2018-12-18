@@ -238,16 +238,28 @@
         </v-tab-item>
       </v-tabs-items>
     </div>
-    <v-dialog v-if="canEdit" v-model="showScoreboard" fullscreen hide-overlay scrollable>
+    <v-dialog v-if="frame && canEdit" v-model="showScoreboard" fullscreen hide-overlay scrollable>
       <v-card tile>
-        <v-toolbar card dark color="primary elevation-2">
-          <v-toolbar-title>Scoreboard</v-toolbar-title>
+        <v-toolbar card dark :color="frame.turnOfId === frame.players[0].id ? 'primary' : 'red'" class="elevation-3">
+          <v-toolbar-title>{{ playersById[frame.turnOfId].firstName }} {{ playersById[frame.turnOfId].lastName }}</v-toolbar-title>
           <v-spacer></v-spacer>
+          <v-select
+            :items="[{name: 'Simple', value: 'simple'}, {name: 'Advanced', value: 'advanced'}, {name: 'Full', value: 'full'}]"
+            item-text="name"
+            item-value="value"
+            v-model="frame.scoreboard.type"
+            style="max-width: 100px;"
+            class="mr-3"
+          ></v-select>
           <v-btn icon dark @click="$router.go(-1)">
             <v-icon>close</v-icon>
           </v-btn>
         </v-toolbar>
-        <v-card-text></v-card-text>
+        <v-card-text class="pa-0">
+          <SimpleScoreboard v-if="frame.scoreboard.type === 'simple'" :frame="frame" />
+          <AdvancedScoreboard v-if="frame.scoreboard.type === 'advanced'" :frame="frame" />
+          <FullScoreboard v-if="frame.scoreboard.type === 'full'" :frame="frame" />
+        </v-card-text>
       </v-card>
     </v-dialog>
   </div>
@@ -262,6 +274,9 @@
 
 <script>
 import Loader from "../../components/Loader.vue";
+import SimpleScoreboard from "../../components/scoreboards/Simple.vue";
+import AdvancedScoreboard from "../../components/scoreboards/Advanced.vue";
+import FullScoreboard from "../../components/scoreboards/Full.vue";
 
 export default {
   data() {
@@ -273,6 +288,15 @@ export default {
     };
   },
   computed: {
+    playersById() {
+      if (this.frame && this.frame.players.length) {
+        return this.frame.players.reduce((obj, item) => {
+          obj[item.id] = item
+          return obj
+        }, {})
+      }
+      return {}
+    },
     canEdit() {
       // Frame
       if (!this.frame) {
@@ -350,8 +374,6 @@ export default {
       if (from.hash === '#scoreboard' && to.hash === '') {
         this.showScoreboard = false
       }
-
-      console.log(to)
     },
     selectedTab(id) {
       // Save to local storage
@@ -359,7 +381,10 @@ export default {
     }
   },
   components: {
-    Loader
+    Loader,
+    SimpleScoreboard,
+    AdvancedScoreboard,
+    FullScoreboard
   },
   name: "FrameDetail"
 };

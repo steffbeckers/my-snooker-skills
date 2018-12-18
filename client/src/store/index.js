@@ -5,60 +5,6 @@ import VueCookie from 'vue-cookie'
 Vue.use(Vuex)
 Vue.use(VueCookie)
 
-// Scoreboards
-const simpleScoreboard = {
-  namespaced: true,
-  state: {
-    players: [],
-    scores: {},
-    currentPlayer: {},
-    currentScore: ''
-  },
-  mutations: {
-    setPlayers(state, players) {
-      state.players = players
-
-      // Initialize scores for player
-      state.players.forEach(player => {
-        state.scores[player.id] = []
-      })
-
-      // Set first player as current
-      state.currentPlayer = state.players[0]
-    },
-    addPlayer(state, player) {
-      state.players.push(player)
-
-      // Initialize scores for player
-      state.scores[player.id] = []
-
-      // Set player as current
-      state.currentPlayer = player
-    },
-    removePlayer(state, playerId) {
-      state.players = state.players.filter(p => p.id !== playerId)
-
-      // Delete score of player
-      if (state.scores.playerId) delete state.scores.playerId
-    },
-    inputScore(state, textValue) {
-      if (state.currentScore.length >= 3) { return }
-      state.currentScore += textValue
-    },
-    addScore(state) {
-      state.scores[state.currentPlayer.id].unshift({datetime: new Date().toISOString(), value: parseInt(state.currentScore)})
-      state.currentScore = ''
-    },
-    resetScore(state) {
-      state.currentScore = ''
-    },
-    resetScoreboard(state) {
-      state.scores = {}
-      state.currentScore = ''
-    }
-  }
-}
-
 // Default
 export default new Vuex.Store({
   state: {
@@ -305,8 +251,8 @@ export default new Vuex.Store({
           Vue.prototype.$logger.error(error)
         })
     }
-  },
-  modules: {
-    ssb: simpleScoreboard
+  // },
+  // modules: {
+  //   ssb: simpleScoreboard
   }
 })
