@@ -24,7 +24,7 @@
       </v-flex>
     </v-layout>
     <v-layout class="score-overview" row>
-      <v-btn block flat @click="switchPlayer()">Switch player</v-btn>
+      <v-btn block color="primary" flat @click="switchPlayer()">Switch player</v-btn>
     </v-layout>
   </v-container>
 </template>
