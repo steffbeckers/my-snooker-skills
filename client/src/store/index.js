@@ -17,6 +17,8 @@ export default new Vuex.Store({
     successes: [],
     warnings: [],
     errors: [],
+    // Snackbars
+    snackbars: [],
     // Loading
     loading: false,
     loadingCounter: 0,
@@ -65,6 +67,16 @@ export default new Vuex.Store({
       state.warnings.forEach(i => { if (i.keepOnNav > 0) i.keepOnNav-- })
       state.errors = state.errors.filter(i => i.keepOnNav && i.keepOnNav > 0 || i.keepOnNav === -1)
       state.errors.forEach(i => { if (i.keepOnNav > 0) i.keepOnNav-- })
+    },
+    snackbar(state, bar) {
+      state.snackbars.push(bar)
+    },
+    closeSnackbarByIndex(state, index) {
+      state.snackbars.splice(index, 1)
+    },
+    resetSnackbars(state) {
+      state.snackbars = state.snackbars.filter(i => i.keepOnNav && i.keepOnNav > 0 || i.keepOnNav === -1)
+      state.snackbars.forEach(i => { if (i.keepOnNav > 0) i.keepOnNav-- })
     },
     loader(state, bool) {
       if (bool) {
@@ -229,6 +241,24 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    checkVersion({ commit }) {
+      let version = process.env.VUE_APP_VERSION
+
+      Vue.prototype.$axios
+        .get(process.env.VUE_APP_API)
+        .then(response => {
+          if (version !== response.data.version) {
+            // Show snackbar on update available
+            commit('snackbar', {
+              bottom: true,
+              timeout: 0,
+              text: `App is updated to v${version}!`,
+              buttonText: 'Reload',
+              reload: true
+            })
+          }
+        })
+    },
     addPlayerAsFriend({ commit, state }, player) {
       Vue.prototype.$axios
         .put(process.env.VUE_APP_API + '/Users/' + state.user.id + '/friends/rel/' + player.id)

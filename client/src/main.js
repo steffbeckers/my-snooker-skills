@@ -45,8 +45,15 @@ Vue.prototype.$authentication = new Authentication()
 router.beforeEach((to, from, next) => {
   // Last page
   localStorage.setItem('previous-page', from.path)
+
+  // Check front-end and API versions
+  store.dispatch('checkVersion')
   // Reset global messages on navigate
   store.commit('resetMessages')
+  // Reset global snackbars on navigate
+  store.commit('resetSnackbars')
+
+  // Reset status code 0 counter
   window.statusCode0Count = 0
 
   if (to.matched.some(record => record.meta.requiresAdmin)) {

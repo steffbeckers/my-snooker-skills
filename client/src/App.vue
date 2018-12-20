@@ -324,6 +324,43 @@
         <v-icon class="mr-1">copyright</v-icon><a href="https://steffbeckers.eu/" target="_blank">Steff</a>
       </div>
     </v-footer>
+    <template v-for="(snackbar, index) in $store.state.snackbars">
+      <v-snackbar
+        :key="index"
+        :absolute="snackbar.absolute || false"
+        :auto-height="snackbar['auto-height'] || false"
+        :bottom="snackbar.bottom || false"
+        :color="snackbar.color"
+        :dark="snackbar.dark || true"
+        :left="snackbar.left || false"
+        :multi-line="snackbar.mode === 'multi-line'"
+        :right="snackbar.right || false"
+        :timeout="snackbar.timeout"
+        :top="snackbar.top || false"
+        :vertical="snackbar.mode === 'vertical'"
+        value="true"
+      >
+        {{ snackbar.text }}
+        <v-btn
+          v-if="snackbar.reload"
+          :dark="snackbar.dark || true"
+          :color="snackbar.color"
+          flat
+          @click="typeof snackbar.buttonCallback === 'function' ? snackbar.buttonCallback() : () => {}; reload()"
+        >
+          {{ snackbar.buttonText || 'Reload' }}
+        </v-btn>
+        <v-btn
+          v-else
+          :dark="snackbar.dark || true"
+          :color="snackbar.color"
+          flat
+          @click="typeof snackbar.buttonCallback === 'function' ? snackbar.buttonCallback() : () => {}; $store.commit('closeSnackbarByIndex', index)"
+        >
+          {{ snackbar.buttonText || 'Close' }}
+        </v-btn>
+      </v-snackbar>
+    </template>
   </v-app>
 </template>
 
@@ -417,6 +454,9 @@ export default {
     }
   },
   methods: {
+    reload(force = true) {
+      window.location.reload(force)
+    },
     logout() {
       this.$axios
         .post(process.env.VUE_APP_API + '/Users/logout')

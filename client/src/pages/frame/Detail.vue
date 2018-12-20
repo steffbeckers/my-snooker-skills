@@ -248,6 +248,7 @@
             item-text="name"
             item-value="value"
             v-model="frame.scoreboard.type"
+            @change="switchScoreboardType()"
             style="max-width: 100px;"
             class="mr-3"
           ></v-select>
@@ -342,8 +343,6 @@ export default {
           this.frame = response.data
         })
         .catch(error => {
-          this.$logger.error(error)
-
           // Custom info message when the match isn't found by ID or is deleted
           if (error.message === "Frame not found") {
             this.$store.commit("message", {
@@ -358,6 +357,19 @@ export default {
           // Always return to previous page
           this.$router.pop()
         });
+    },
+    switchScoreboardType() {
+      if (!this.frame) {
+        return
+      }
+
+      this.$axios
+        .patch(
+          process.env.VUE_APP_API +
+            "/Frames/" +
+            this.frame.id,
+          { scoreboard: { type: this.frame.scoreboard.type }}
+        )
     }
   },
   watch: {
