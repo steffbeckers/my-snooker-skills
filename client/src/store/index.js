@@ -252,7 +252,7 @@ export default new Vuex.Store({
             commit('snackbar', {
               bottom: true,
               timeout: 0,
-              text: `App is updated to v${version}!`,
+              text: `App is updated to v${response.data.version}!`,
               buttonText: 'Reload',
               reload: true
             })
