@@ -40,18 +40,18 @@
             <div class="text-xs-center">
               <v-avatar
                 class="mb-2"
-                size="60px"
+                size="90px"
                 :color="!match.players[0].profilePicture ? 'red' : 'transparent'"
               >
                 <img
-                  v-if="match.players[0].profilePicture && typeof match.players[0].profilePicture === 'object' && match.players[0].profilePicture.thumb"
-                  :src="match.players[0].profilePicture.thumb"
+                  v-if="match.players[0].profilePicture && typeof match.players[0].profilePicture === 'object' && match.players[0].profilePicture.small"
+                  :src="match.players[0].profilePicture.small"
                 >
                 <img
                   v-if="match.players[0].profilePicture && typeof match.players[0].profilePicture === 'string'"
                   :src="match.players[0].profilePicture"
                 >
-                <v-icon v-if="!match.players[0].profilePicture" style="font-size: 30px;" dark>person</v-icon>
+                <v-icon v-if="!match.players[0].profilePicture" style="font-size: 45px;" dark>person</v-icon>
               </v-avatar>
               <div class="headline">
                 {{ match.players[0].firstName }} {{ match.players[0].lastName }}
@@ -76,18 +76,18 @@
             <div class="text-xs-center">
               <v-avatar
                 class="mb-2"
-                size="60px"
+                size="90px"
                 :color="!match.players[1].profilePicture ? 'red' : 'transparent'"
               >
                 <img
-                  v-if="match.players[1].profilePicture && typeof match.players[1].profilePicture === 'object' && match.players[1].profilePicture.thumb"
-                  :src="match.players[1].profilePicture.thumb"
+                  v-if="match.players[1].profilePicture && typeof match.players[1].profilePicture === 'object' && match.players[1].profilePicture.small"
+                  :src="match.players[1].profilePicture.small"
                 >
                 <img
                   v-if="match.players[1].profilePicture && typeof match.players[1].profilePicture === 'string'"
                   :src="match.players[1].profilePicture"
                 >
-                <v-icon v-if="!match.players[1].profilePicture" style="font-size: 30px;" dark>person</v-icon>
+                <v-icon v-if="!match.players[1].profilePicture" style="font-size: 45px;" dark>person</v-icon>
               </v-avatar>
               <div class="headline">
                 {{ match.players[1].firstName }} {{ match.players[1].lastName }}
@@ -101,18 +101,18 @@
               <div class="text-xs-center">
                 <v-avatar
                   class="mb-2"
-                  size="60px"
+                  size="90px"
                   :color="!match.players[0].profilePicture ? 'red' : 'transparent'"
                 >
                   <img
-                    v-if="match.players[0].profilePicture && typeof match.players[0].profilePicture === 'object' && match.players[0].profilePicture.thumb"
-                    :src="match.players[0].profilePicture.thumb"
+                    v-if="match.players[0].profilePicture && typeof match.players[0].profilePicture === 'object' && match.players[0].profilePicture.small"
+                    :src="match.players[0].profilePicture.small"
                   >
                   <img
                     v-if="match.players[0].profilePicture && typeof match.players[0].profilePicture === 'string'"
                     :src="match.players[0].profilePicture"
                   >
-                  <v-icon v-if="!match.players[0].profilePicture" style="font-size: 30px;" dark>person</v-icon>
+                  <v-icon v-if="!match.players[0].profilePicture" style="font-size: 45px;" dark>person</v-icon>
                 </v-avatar>
                 <div class="headline">
                   {{ match.players[0].firstName }} {{ match.players[0].lastName }}
@@ -123,18 +123,18 @@
               <div class="text-xs-center">
                 <v-avatar
                   class="mb-2"
-                  size="60px"
+                  size="90px"
                   :color="!match.players[1].profilePicture ? 'red' : 'transparent'"
                 >
                   <img
-                    v-if="match.players[1].profilePicture && typeof match.players[1].profilePicture === 'object' && match.players[1].profilePicture.thumb"
-                    :src="match.players[1].profilePicture.thumb"
+                    v-if="match.players[1].profilePicture && typeof match.players[1].profilePicture === 'object' && match.players[1].profilePicture.small"
+                    :src="match.players[1].profilePicture.small"
                   >
                   <img
                     v-if="match.players[1].profilePicture && typeof match.players[1].profilePicture === 'string'"
                     :src="match.players[1].profilePicture"
                   >
-                  <v-icon v-if="!match.players[1].profilePicture" style="font-size: 30px;" dark>person</v-icon>
+                  <v-icon v-if="!match.players[1].profilePicture" style="font-size: 45px;" dark>person</v-icon>
                 </v-avatar>
                 <div class="headline">
                   {{ match.players[1].firstName }} {{ match.players[1].lastName }}

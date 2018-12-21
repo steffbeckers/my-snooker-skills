@@ -74,18 +74,18 @@
             <div class="text-xs-center">
               <v-avatar
                 class="mb-2"
-                size="60px"
+                size="90px"
                 :color="!frame.players[0].profilePicture ? 'red' : 'transparent'"
               >
                 <img
-                  v-if="frame.players[0].profilePicture && typeof frame.players[0].profilePicture === 'object' && frame.players[0].profilePicture.thumb"
-                  :src="frame.players[0].profilePicture.thumb"
+                  v-if="frame.players[0].profilePicture && typeof frame.players[0].profilePicture === 'object' && frame.players[0].profilePicture.small"
+                  :src="frame.players[0].profilePicture.small"
                 >
                 <img
                   v-if="frame.players[0].profilePicture && typeof frame.players[0].profilePicture === 'string'"
                   :src="frame.players[0].profilePicture"
                 >
-                <v-icon v-if="!frame.players[0].profilePicture" style="font-size: 30px;" dark>person</v-icon>
+                <v-icon v-if="!frame.players[0].profilePicture" style="font-size: 45px;" dark>person</v-icon>
               </v-avatar>
               <div class="headline">{{ frame.players[0].firstName }} {{ frame.players[0].lastName }}</div>
             </div>
@@ -110,18 +110,18 @@
             <div class="text-xs-center">
               <v-avatar
                 class="mb-2"
-                size="60px"
+                size="90px"
                 :color="!frame.players[1].profilePicture ? 'red' : 'transparent'"
               >
                 <img
-                  v-if="frame.players[1].profilePicture && typeof frame.players[1].profilePicture === 'object' && frame.players[1].profilePicture.thumb"
-                  :src="frame.players[1].profilePicture.thumb"
+                  v-if="frame.players[1].profilePicture && typeof frame.players[1].profilePicture === 'object' && frame.players[1].profilePicture.small"
+                  :src="frame.players[1].profilePicture.small"
                 >
                 <img
                   v-if="frame.players[1].profilePicture && typeof frame.players[1].profilePicture === 'string'"
                   :src="frame.players[1].profilePicture"
                 >
-                <v-icon v-if="!frame.players[1].profilePicture" style="font-size: 30px;" dark>person</v-icon>
+                <v-icon v-if="!frame.players[1].profilePicture" style="font-size: 45px;" dark>person</v-icon>
               </v-avatar>
               <div class="headline">{{ frame.players[1].firstName }} {{ frame.players[1].lastName }}</div>
             </div>
@@ -137,12 +137,12 @@
               <div class="text-xs-center">
                 <v-avatar
                   class="mb-2"
-                  size="60px"
+                  size="90px"
                   :color="!frame.players[0].profilePicture ? 'red' : 'transparent'"
                 >
                   <img
-                    v-if="frame.players[0].profilePicture && typeof frame.players[0].profilePicture === 'object' && frame.players[0].profilePicture.thumb"
-                    :src="frame.players[0].profilePicture.thumb"
+                    v-if="frame.players[0].profilePicture && typeof frame.players[0].profilePicture === 'object' && frame.players[0].profilePicture.small"
+                    :src="frame.players[0].profilePicture.small"
                   >
                   <img
                     v-if="frame.players[0].profilePicture && typeof frame.players[0].profilePicture === 'string'"
@@ -150,7 +150,7 @@
                   >
                   <v-icon
                     v-if="!frame.players[0].profilePicture"
-                    style="font-size: 30px;"
+                    style="font-size: 45px;"
                     dark
                   >person</v-icon>
                 </v-avatar>
@@ -167,12 +167,12 @@
               <div class="text-xs-center">
                 <v-avatar
                   class="mb-2"
-                  size="60px"
+                  size="90px"
                   :color="!frame.players[1].profilePicture ? 'red' : 'transparent'"
                 >
                   <img
-                    v-if="frame.players[1].profilePicture && typeof frame.players[1].profilePicture === 'object' && frame.players[1].profilePicture.thumb"
-                    :src="frame.players[1].profilePicture.thumb"
+                    v-if="frame.players[1].profilePicture && typeof frame.players[1].profilePicture === 'object' && frame.players[1].profilePicture.small"
+                    :src="frame.players[1].profilePicture.small"
                   >
                   <img
                     v-if="frame.players[1].profilePicture && typeof frame.players[1].profilePicture === 'string'"
@@ -180,7 +180,7 @@
                   >
                   <v-icon
                     v-if="!frame.players[1].profilePicture"
-                    style="font-size: 30px;"
+                    style="font-size: 45px;"
                     dark
                   >person</v-icon>
                 </v-avatar>
