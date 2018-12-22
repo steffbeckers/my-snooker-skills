@@ -93,7 +93,7 @@ export default {
       breaks: JSON.parse(localStorage.getItem('training:scoreboard:breaks')) || [],
       lastInputAutoOK: null,
       lastInputAutoOKCounter: 0,
-      lastInputAutoOKInterval: null,
+      lastInputAutoOKInterval: null
     }
   },
   methods: {

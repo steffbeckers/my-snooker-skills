@@ -370,6 +370,9 @@ export default {
             this.frame.id,
           { scoreboard: { type: this.frame.scoreboard.type }}
         )
+        .then(response => {
+          this.frame = Object.assign(this.frame, response.data);
+        })
     }
   },
   watch: {
