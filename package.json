@@ -53,7 +53,7 @@
     "xmlcreate": "^1.0.2"
   },
   "devDependencies": {
-    "eslint": "^5.10.0",
+    "eslint": "^5.11.1",
     "eslint-config-loopback": "^11.0.0",
     "nsp": "^3.2.1"
   },

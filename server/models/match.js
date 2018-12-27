@@ -10,9 +10,13 @@ module.exports = function(Match) {
     if (context.instance) {
       if (context.isNewInstance) {
         context.instance.createdBy = context.options.accessToken.userId;
-        context.instance.ownerId = context.options.accessToken.userId;
+        if (!context.instance.ownerId) {
+          context.instance.ownerId = context.options.accessToken.userId;
+        }
         // Update state to started
-        context.instance.state = 'started';
+        if (!context.instance.state) {
+          context.instance.state = 'started';
+        }
         // Start date time
         if (!context.instance.startDateTime) {
           context.instance.startDateTime = new Date().toISOString();

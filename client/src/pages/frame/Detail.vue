@@ -279,6 +279,9 @@ import SimpleScoreboard from "../../components/scoreboards/Simple.vue";
 import AdvancedScoreboard from "../../components/scoreboards/Advanced.vue";
 import FullScoreboard from "../../components/scoreboards/Full.vue";
 
+// Real-time updates
+let realtimeServer;
+
 export default {
   data() {
     return {
@@ -325,10 +328,36 @@ export default {
   mounted() {
     this.getFrame();
 
+    // Real-time updates
+    (async () => {
+      try {
+        realtimeServer = await this.$sse(process.env.VUE_APP_API + '/Frames/change-stream', { format: 'json' }); // omit for no format pre-processing
+
+        realtimeServer.subscribe('data', response => {
+          if (response.target === this.frame.id && response.type === 'update') {
+            this.frame = Object.assign(this.frame, response.data)
+          }
+        })
+
+        // Catch any errors (ie. lost connections, etc.)
+        realtimeServer.onError(err => {
+          this.$logger.error('RT: Lost connection!', err)
+        })
+      } catch (err) {
+        // When this error is caught, it means the initial connection to the
+        // events server failed.  No automatic attempts to reconnect will be made.
+        this.$logger.error('RT: Failed to connect to server', err)
+      }
+    })();
+
     // Scoreboard
     if (this.$route.hash === '#scoreboard') {
       this.showScoreboard = true
     }
+  },
+  beforeDestroy() {
+    // Real-time updates
+    if (realtimeServer) realtimeServer.close()
   },
   methods: {
     getFrame() {

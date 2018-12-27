@@ -3,6 +3,7 @@ import '@babel/polyfill'
 import Vue from 'vue'
 import VueAnalytics from 'vue-analytics'
 import VuetifyGoogleAutocomplete from 'vuetify-google-autocomplete'
+import VueSSE from 'vue-sse'
 import Authentication from './services/authentication'
 import store from './store'
 import router from './router'
@@ -22,6 +23,9 @@ import PlayersCardList from './components/players/CardList.vue'
 Vue.component('MatchesCardList', MatchesCardList)
 Vue.component('TournamentsCardList', TournamentsCardList)
 Vue.component('PlayersCardList', PlayersCardList)
+
+// Server Sent Events
+Vue.use(VueSSE);
 
 // Google
 if (process.env.NODE_ENV === 'production') {
