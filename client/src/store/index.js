@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VueCookie from 'vue-cookie'
+import moment from 'moment'
 
 Vue.use(Vuex)
 Vue.use(VueCookie)
@@ -242,11 +243,24 @@ export default new Vuex.Store({
   },
   actions: {
     checkVersion({ commit }) {
+      // Last checked
+      let versionLastChecked = localStorage.getItem('version-last-checked')
+      if (versionLastChecked) {
+        versionLastChecked = moment(versionLastChecked)
+        let diffInMinutes = moment().diff(versionLastChecked, 'minutes')
+        if (diffInMinutes < 5) {
+          return
+        }
+      }
+
       let version = process.env.VUE_APP_VERSION
 
       Vue.prototype.$axios
         .get(process.env.VUE_APP_API)
         .then(response => {
+          // Last checked
+          localStorage.setItem('version-last-checked', new Date().toISOString())
+
           if (version !== response.data.version) {
             // Show snackbar on update available
             commit('snackbar', {

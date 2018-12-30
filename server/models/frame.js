@@ -184,8 +184,12 @@ module.exports = function(Frame) {
       var frameJSON = frame.toJSON();
 
       frame.turnOfId = null;
+
       // Set end date time
       frame.endDateTime = new Date();
+
+      // Update state
+      frame.state = 'finished';
 
       // Calculate winner (highest score)
       var highestScore = 0;
@@ -263,7 +267,12 @@ module.exports = function(Frame) {
             },
           },
         },
-        'breaks',
+        {
+          relation: 'breaks',
+          scope: {
+            order: 'dateTime DESC',
+          },
+        },
         {
           relation: 'referee',
           scope: {

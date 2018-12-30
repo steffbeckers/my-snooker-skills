@@ -7,7 +7,7 @@ module.exports = function(Break) {
       if (context.isNewInstance) {
         context.instance.createdBy = context.options.accessToken.userId;
         if (!context.instance.ownerId) {
-          context.instance.own42erId = context.options.accessToken.userId;
+          context.instance.ownerId = context.options.accessToken.userId;
         }
         // Date & time
         if (!context.instance.dateTime) {

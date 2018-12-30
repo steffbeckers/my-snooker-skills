@@ -131,6 +131,9 @@ module.exports = function(Match) {
       // Set end date time
       match.endDateTime = matchJSON.frames[0].endDateTime;
 
+      // Update state
+      match.state = 'finished';
+
       // Calculate winner (highest score)
       var highestScore = 0;
       matchJSON.players.forEach(player => {

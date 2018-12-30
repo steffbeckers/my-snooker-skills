@@ -55,10 +55,10 @@
           <v-btn @click="inputNumber(0)" :disabled="currentBreak === '' || currentBreak === '-'" color="secondary" class="number-button elevation-0" large>0</v-btn>
           <v-btn @click="currentBreak = ''; resetTimers()" :disabled="currentBreak === ''" color="secondary" class="number-button elevation-0" large>C</v-btn>
           <div v-if="currentBreak !== ''" style="grid-area: ok; width: 100%;">
-            <v-progress-linear class="auto-ok-progress mb-0 mt-4" :color="currentBreak === '' || currentBreak === '-' ? 'secondary' : 'primary'" v-model="lastInputAutoOKCounter" height="5"></v-progress-linear>
-            <v-btn @click="ok()" :disabled="currentBreak === '' || currentBreak === '-'" class="elevation-0 mt-0 ok-button" color="primary" block large>OK</v-btn>
+            <v-progress-linear class="auto-ok-progress mb-0 mt-0" :color="frame.turnOfId === frame.players[0].id ? 'primary' : 'red'" v-model="lastInputAutoOKCounter" height="5"></v-progress-linear>
+            <v-btn :color="frame.turnOfId === frame.players[0].id ? 'primary' : 'red'" @click="ok()" :disabled="currentBreak === '' || currentBreak === '-'" class="elevation-0 mt-0 ok-button" block large>OK</v-btn>
           </div>
-          <v-btn v-else style="grid-area: ok; width: 100%;" @click="switchPlayer()" class="elevation-0 mt-0" color="primary" block large>Switch player</v-btn>
+          <v-btn :color="frame.turnOfId === frame.players[0].id ? 'primary' : 'red'" v-else style="grid-area: ok; width: 100%;" @click="switchPlayer()" class="elevation-0 mt-0 switch-button" block large>Switch player</v-btn>
         </div>
       </v-flex>
     </v-layout>
@@ -77,7 +77,7 @@ div.layout.score-overview div.flex {
   width: fit-content;
   display: grid;
   grid-template-columns: 80px 80px 80px;
-  grid-template-rows: 75px 75px 75px 75px 100px;
+  grid-template-rows: 75px 75px 75px 75px 75px;
   grid-template-areas: "num num num"
                        "num num num"
                        "num num num"
@@ -103,6 +103,13 @@ div.layout.score-overview div.flex {
   padding-bottom: 5px;
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
+  color: white;
+}
+.switch-button {
+  height: 80px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color: white;
 }
 </style>
 
@@ -163,16 +170,27 @@ export default {
     ok() {
       this.resetTimers()
 
-      this.frame.scores[this.frame.turnOfId] += parseInt(this.currentBreak)
-
+      // TODO: Method on API?
       this.$axios
-        .patch(process.env.VUE_APP_API + "/Frames/" + this.frame.id, {
-          scores: this.frame.scores
+        .post(process.env.VUE_APP_API + "/Frames/" + this.frame.id + "/Breaks", {
+          score: parseInt(this.currentBreak),
+          playerId: this.frame.turnOfId
         })
         .then(response => {
-          this.frame = Object.assign(this.frame, response.data)
-          this.currentBreak = ''
-          this.switchPlayer()
+          // Add break
+          this.frame.breaks.unshift(response.data)
+
+          // Add score from break
+          this.frame.scores[this.frame.turnOfId] += response.data.score
+          this.$axios
+            .patch(process.env.VUE_APP_API + "/Frames/" + this.frame.id, {
+              scores: this.frame.scores
+            })
+            .then(response => {
+              this.frame = Object.assign(this.frame, response.data)
+              this.currentBreak = ''
+              this.switchPlayer()
+            })
         })
     },
     undo() {
