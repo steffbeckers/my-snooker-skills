@@ -19,6 +19,9 @@
           flat
         >To tournament</v-btn>
         <v-spacer></v-spacer>
+        <v-btn @click="concede()" v-if="canEdit && frame.state === 'started' && !$vuetify.breakpoint.xs && (frame.scores[frame.players[0].id] || 0) !== (frame.scores[frame.players[1].id] || 0)" class="mr-3" flat>
+          <v-icon class="mr-2">close</v-icon>Concede
+        </v-btn>
         <div v-if="!$vuetify.breakpoint.xs" class="mr-3">
           <v-icon class="mr-1">access_time</v-icon>
           <div class="d-inline-block div-next-to-icon">
@@ -36,9 +39,28 @@
         <v-btn v-if="$store.state.authenticated" icon>
           <v-icon color="rgba(0,0,0,.54)">favorite</v-icon>
         </v-btn>
-        <v-btn v-if="$store.state.authenticated" icon>
-          <v-icon color="rgba(0,0,0,.54)">more_vert</v-icon>
-        </v-btn>
+        <v-menu v-if="$store.state.authenticated" bottom left>
+          <v-btn
+            slot="activator"
+            icon
+          >
+            <v-icon color="rgba(0,0,0,.54)">more_vert</v-icon>
+          </v-btn>
+          <v-list>
+            <v-list-tile v-if="canEdit && frame.state === 'started' && $vuetify.breakpoint.xs && (frame.scores[frame.players[0].id] || 0) !== (frame.scores[frame.players[1].id] || 0)" @click="concede()">
+              <v-list-tile-title>Concede</v-list-tile-title>
+            </v-list-tile>
+            <v-list-tile v-if="canEdit && frame.state === 'started'" @click="rerack()">
+              <v-list-tile-title>Rerack</v-list-tile-title>
+            </v-list-tile>
+            <v-list-tile v-if="canEdit && frame.state === 'finished'">
+              <v-list-tile-title>Edit</v-list-tile-title>
+            </v-list-tile>
+            <v-list-tile v-if="canEdit" @click="deleteFrame()">
+              <v-list-tile-title>Delete</v-list-tile-title>
+            </v-list-tile>
+          </v-list>
+        </v-menu>
       </v-toolbar>
       <v-container v-if="$vuetify.breakpoint.xs" grid-list-sm fluid class="pt-0">
         <v-layout row>
@@ -220,7 +242,7 @@
       <v-tabs-items v-model="selectedTab">
         <v-tab-item value="breaks">
           <v-card class="elevation-0">
-            <v-container grid-list-md class="pt-2" fluid>
+            <v-container grid-list-md class="pt-2 pb-2" fluid>
               <v-layout col>
                 <v-flex xs12 sm8 offset-sm2 xl6 offset-xl3>
                   <table v-if="frame.breaks.length" class="breaks-table">
@@ -228,7 +250,7 @@
                       <tr>
                         <th v-if="frame.scoreboard.type !== 'simple'">Balls</th>
                         <th>Score</th>
-                        <th>Time</th>
+                        <th style="width: 50px;">Time</th>
                         <th>Score</th>
                         <th v-if="frame.scoreboard.type !== 'simple'">Balls</th>
                       </tr>
@@ -263,7 +285,7 @@
         <v-toolbar card dark :color="frame.turnOfId === frame.players[0].id ? 'primary' : 'red'" class="elevation-3">
           <v-toolbar-title>{{ playersById[frame.turnOfId].firstName }} {{ playersById[frame.turnOfId].lastName }}</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn v-if="(frame.scores[frame.players[0].id] || 0) !== (frame.scores[frame.players[1].id] || 0)" class="mr-3" flat>
+          <v-btn @click="concede()" v-if="(frame.scores[frame.players[0].id] || 0) !== (frame.scores[frame.players[1].id] || 0)" class="mr-3" flat>
             <v-icon class="mr-2">close</v-icon>Concede
           </v-btn>
           <v-select
@@ -432,6 +454,32 @@ export default {
         .then(response => {
           this.frame = Object.assign(this.frame, response.data);
         })
+    },
+    concede() {
+      if (confirm('Concede the frame?')) {
+        this.$axios
+          .post(process.env.VUE_APP_API + '/Frames/' + this.frame.id + '/concede')
+          .then(response => {
+            this.frame = Object.assign(this.frame, response.data);
+          })
+      }
+    },
+    rerack() {
+      this.$logger.log('TODO')
+    },
+    deleteFrame() {
+      if (confirm('Delete this frame?')) {
+        this.$axios
+          .delete(process.env.VUE_APP_API + '/Frames/' + this.frame.id)
+          .then(response => {
+            if (this.frame.matchId) {
+              this.$router.push({ name: 'Match', params: {id: this.frame.matchId}})
+            }
+            if (this.frame.tournamentId) {
+              this.$router.push({ name: 'Tournament', params: {id: this.frame.tournamentId}})
+            }
+          })
+      }
     }
   },
   watch: {
