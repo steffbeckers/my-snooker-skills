@@ -452,7 +452,7 @@ export default {
           { scoreboard: { type: this.frame.scoreboard.type }}
         )
         .then(response => {
-          this.frame = Object.assign(this.frame, response.data);
+          this.frame = Object.assign(this.frame, response.data)
         })
     },
     concede() {
@@ -460,7 +460,7 @@ export default {
         this.$axios
           .post(process.env.VUE_APP_API + '/Frames/' + this.frame.id + '/concede')
           .then(response => {
-            this.frame = Object.assign(this.frame, response.data);
+            this.frame = Object.assign(this.frame, response.data)
           })
       }
     },
@@ -471,7 +471,7 @@ export default {
       if (confirm('Delete this frame?')) {
         this.$axios
           .delete(process.env.VUE_APP_API + '/Frames/' + this.frame.id)
-          .then(response => {
+          .then(() => {
             if (this.frame.matchId) {
               this.$router.push({ name: 'Match', params: {id: this.frame.matchId}})
             }

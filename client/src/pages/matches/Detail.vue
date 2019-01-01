@@ -7,6 +7,9 @@
           <v-icon class="mr-2">people_outline</v-icon> Match
         </v-toolbar-title>
         <v-spacer></v-spacer>
+        <v-btn @click="concede()" v-if="canEdit && match.state === 'started' && !$vuetify.breakpoint.xs" class="mr-3" flat>
+          <v-icon class="mr-2">close</v-icon>End match
+        </v-btn>
         <div v-if="!$vuetify.breakpoint.xs" class="mr-3">
           <v-icon class="mr-1">access_time</v-icon>
           <div class="d-inline-block div-next-to-icon"><strong>Started on:</strong> {{ match.startDateTime | formatDateTime }}</div>
@@ -18,9 +21,25 @@
         <v-btn v-if="$store.state.authenticated" icon>
           <v-icon color="rgba(0,0,0,.54)">favorite</v-icon>
         </v-btn>
-        <v-btn v-if="$store.state.authenticated" icon>
-          <v-icon color="rgba(0,0,0,.54)">more_vert</v-icon>
-        </v-btn>
+        <v-menu v-if="$store.state.authenticated" bottom left>
+          <v-btn
+            slot="activator"
+            icon
+          >
+            <v-icon color="rgba(0,0,0,.54)">more_vert</v-icon>
+          </v-btn>
+          <v-list>
+            <v-list-tile v-if="canEdit && match.state === 'started' && $vuetify.breakpoint.xs" @click="concede()">
+              <v-list-tile-title>End match</v-list-tile-title>
+            </v-list-tile>
+            <v-list-tile v-if="canEdit && match.state === 'finished'">
+              <v-list-tile-title>Edit</v-list-tile-title>
+            </v-list-tile>
+            <v-list-tile v-if="canEdit" @click="deleteMatch()">
+              <v-list-tile-title>Delete</v-list-tile-title>
+            </v-list-tile>
+          </v-list>
+        </v-menu>
       </v-toolbar>
       <v-container v-if="$vuetify.breakpoint.xs" grid-list-sm fluid class="pt-0">
         <v-layout row>
@@ -159,6 +178,13 @@
             </v-flex>
           </v-layout>
         </template>
+        <v-layout v-if="canEdit && match.frames[0].state === 'finished'" row>
+          <v-flex xs12>
+            <v-btn @click="startNextFrame()" block color="primary">
+              <v-icon class="mr-2">play</v-icon>Next frame
+            </v-btn>
+          </v-flex>
+        </v-layout>
       </v-container>
       <v-tabs
         centered
@@ -180,7 +206,7 @@
       <v-tabs-items v-model="selectedTab">
         <v-tab-item value="frames">
           <v-card class="elevation-0">
-            <v-container v-if="match.frames && match.frames.length > 0" grid-list-md class="pt-2" fluid>
+            <v-container v-if="match.frames && match.frames.length > 0" grid-list-md class="pt-2 pb-2" fluid>
               <v-layout col>
                 <v-flex class="text-xs-right" xs4>
                   Score
@@ -196,7 +222,7 @@
                 </v-flex>
                 <v-flex class="text-xs-center" xs4>
                   <div><strong># {{ frame.number }}</strong></div>
-                  <div class="caption">{{ frame.startDateTime | formatTime }}<span v-if="frame.endDateTime"> {{ frame.endDateTime | formatTime }}</span></div>
+                  <div class="caption">{{ frame.startDateTime | formatTime }}<span v-if="frame.endDateTime"> - {{ frame.endDateTime | formatTime }}</span></div>
                 </v-flex>
                 <v-flex class="display-1" xs4>
                   {{ frame.scores[frame.players[1].id] }}
@@ -231,6 +257,31 @@ export default {
       selectedTab: localStorage.getItem('match:selectedTab') || 'frames'
     };
   },
+  computed: {
+    canEdit() {
+      // Match
+      if (!this.match) {
+        return false
+      }
+      // Authenticated
+      if (!this.$store.state.authenticated) {
+        return false
+      }
+      // Owner
+      if (this.match.ownerId === this.$store.state.user.id) {
+        return true
+      }
+      // Referee
+      if (this.match.refereeId === this.$store.state.user.id) {
+        return true
+      }
+      // Players
+      let playerIds = this.match.players.map(p => p.id)
+      if (playerIds.includes(this.$store.state.user.id)) {
+        return true
+      }
+    }
+  },
   mounted() {
     this.getMatch();
   },
@@ -256,6 +307,47 @@ export default {
           // Always return to the matches overview page
           this.$router.push({ name: 'Matches' })
         });
+    },
+    startNextFrame() {
+      let nextFrame = {
+        players: this.match.players,
+        refereeId: this.match.refereeId,
+        scoreboard: {
+          type: this.match.scoreboardType || 'simple'
+        },
+        reds: this.match.reds,
+        handicaps: this.match.handicaps,
+        number: this.match.frames.length + 1, // TODO: Fix numbering of frames in backend
+        turnOfId: this.match.frames[0].breakOffById === this.match.players[0].id ? this.match.players[1].id : this.match.players[0].id // TODO: Fix if matches can be played with multiple players
+      }
+      nextFrame.scores = {};
+      this.match.players.forEach(function(player) {
+        nextFrame.scores[player.id] = 0;
+      });
+
+      this.$axios
+        .post(process.env.VUE_APP_API + '/Matches/' + this.match.id + '/Frames', nextFrame)
+        .then(response => {
+          this.$router.push({ name: 'Frame', params: { id: response.data.id }})
+        })
+    },
+    concede() {
+      if (confirm('End the match?')) {
+        this.$axios
+          .post(process.env.VUE_APP_API + '/Matches/' + this.match.id + '/concede')
+          .then(response => {
+            this.match = Object.assign(this.match, response.data)
+          })
+      }
+    },
+    deleteMatch() {
+      if (confirm('Delete this match?')) {
+        this.$axios
+          .delete(process.env.VUE_APP_API + '/Matches/' + this.match.id)
+          .then(() => {
+            this.$router.push({ name: 'Matches' })
+          })
+      }
     }
   },
   watch: {

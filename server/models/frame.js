@@ -12,7 +12,9 @@ module.exports = function(Frame) {
   Frame.observe('before save', function setAutoData(context, next) {
     if (context.instance) {
       if (context.isNewInstance) {
-        context.instance.createdBy = context.options.accessToken.userId;
+        if (context.options.accessToken && context.options.accessToken.userId) {
+          context.instance.createdBy = context.options.accessToken.userId;
+        }
         if (!context.instance.ownerId) {
           context.instance.ownerId = context.options.accessToken.userId;
         }
@@ -25,7 +27,9 @@ module.exports = function(Frame) {
           context.instance.startDateTime = new Date().toISOString();
         }
       }
-      context.instance.updatedBy = context.options.accessToken.userId;
+      if (context.options.accessToken && context.options.accessToken.userId) {
+        context.instance.updatedBy = context.options.accessToken.userId;
+      }
     }
 
     next();

@@ -100,13 +100,17 @@ module.exports = function(Match) {
       if (matchInstance.firstFrame.tossWonById) {
         firstFrame.tossWonById = matchInstance.firstFrame.tossWonById;
       }
+
       if (matchInstance.firstFrame.breakOffById) {
         firstFrame.breakOffById = matchInstance.firstFrame.breakOffById;
       }
+
       firstFrame.turnOfId =
         firstFrame.breakOffById ||
         firstFrame.tossWonById ||
         firstFrame.players[0].id;
+
+      firstFrame.breakOffById = firstFrame.turnOfId;
     }
 
     var Frame = Match.app.models.Frame;
@@ -299,6 +303,7 @@ module.exports = function(Match) {
                 },
               },
             },
+            order: 'startDateTime DESC',
           },
         },
       ],

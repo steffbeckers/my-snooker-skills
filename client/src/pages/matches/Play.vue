@@ -19,9 +19,10 @@
         <v-layout class="pb-3" row wrap>
           <v-flex xs12 sm4>
             <p class="title">Players</p>
-            <p :class="$vuetify.breakpoint.xs ? 'mb-0' : ''">Add your friends or search for players by name or username. At least 2 players need to be added.</p>
-            <v-btn v-if="!currentUserAddedToMatch" @click="match.players.push(meAsPlayer)" color="primary" block flat>Add yourself</v-btn>
+            <p :class="$vuetify.breakpoint.xs ? 'mb-0' : ''">Add your friends by name or username. At this moment only 2 players can be added.</p>
+            <v-btn v-if="!currentUserAddedToMatch && match.players.length < 2" @click="match.players.push(meAsPlayer)" color="primary" block flat>Add yourself</v-btn>
             <v-autocomplete
+              v-if="match.players.length < 2"
               :items="friendsThatCanBeAddedToMatch"
               v-model="friendSelector"
               label="Add friend"
@@ -56,7 +57,6 @@
                 </template>
               </template>
             </v-autocomplete>
-            <!-- Player selector -->
           </v-flex>
           <v-flex xs12 sm8>
             <v-layout row wrap>
@@ -294,7 +294,7 @@ export default {
   data() {
     return {
       match: {
-        state: 'new',
+        state: 'started',
         bestOf: 3, // TODO: Application setting
         reds: 15, // TODO: Application setting (15, 10, 6)
         players: [],
