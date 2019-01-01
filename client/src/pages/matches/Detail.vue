@@ -12,7 +12,7 @@
         </v-btn>
         <div v-if="!$vuetify.breakpoint.xs" class="mr-3">
           <v-icon class="mr-1">access_time</v-icon>
-          <div class="d-inline-block div-next-to-icon"><strong>Started on:</strong> {{ match.startDateTime | formatDateTime }}</div>
+          <div class="d-inline-block div-next-to-icon"><strong v-if="!match.endDateTime">Started on:</strong> {{ match.startDateTime | formatDateTime }}<span v-if="match.endDateTime"> - {{ match.endDateTime | formatTime }}</span></div>
         </div>
         <div v-if="!$vuetify.breakpoint.xs" class="mr-2">
           <v-icon class="mr-1" color="red">fiber_manual_record</v-icon>
@@ -178,7 +178,7 @@
             </v-flex>
           </v-layout>
         </template>
-        <v-layout v-if="canEdit && match.frames[0].state === 'finished'" row>
+        <v-layout v-if="canEdit && match.frames[0].state === 'finished' && match.state !== 'finished'" row>
           <v-flex xs12>
             <v-btn @click="startNextFrame()" block color="primary">
               <v-icon class="mr-2">play</v-icon>Next frame

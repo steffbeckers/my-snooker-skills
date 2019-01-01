@@ -25,8 +25,8 @@
         <div v-if="!$vuetify.breakpoint.xs" class="mr-3">
           <v-icon class="mr-1">access_time</v-icon>
           <div class="d-inline-block div-next-to-icon">
-            <strong>Started on:</strong>
-            {{ frame.startDateTime | formatDateTime }}
+            <strong v-if="!frame.endDateTime">Started on:</strong>
+            {{ frame.startDateTime | formatDateTime }}<span v-if="frame.endDateTime"> - {{ frame.endDateTime | formatTime }}</span>
           </div>
         </div>
         <div v-if="!$vuetify.breakpoint.xs" class="mr-2">
@@ -460,7 +460,13 @@ export default {
         this.$axios
           .post(process.env.VUE_APP_API + '/Frames/' + this.frame.id + '/concede')
           .then(response => {
-            this.frame = Object.assign(this.frame, response.data)
+            // Redirect to parent
+            if (this.frame.matchId) {
+              this.$router.push({ name: 'Match', params: {id: this.frame.matchId}})
+            }
+            if (this.frame.tournamentId) {
+              this.$router.push({ name: 'Tournament', params: {id: this.frame.tournamentId}})
+            }
           })
       }
     },
@@ -472,6 +478,7 @@ export default {
         this.$axios
           .delete(process.env.VUE_APP_API + '/Frames/' + this.frame.id)
           .then(() => {
+            // Redirect to parent
             if (this.frame.matchId) {
               this.$router.push({ name: 'Match', params: {id: this.frame.matchId}})
             }
