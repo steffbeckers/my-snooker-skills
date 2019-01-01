@@ -320,6 +320,8 @@ export default {
         number: this.match.frames.length + 1, // TODO: Fix numbering of frames in backend
         turnOfId: this.match.frames[0].breakOffById === this.match.players[0].id ? this.match.players[1].id : this.match.players[0].id // TODO: Fix if matches can be played with multiple players
       }
+
+      // TODO: Move this to backend
       nextFrame.scores = {};
       this.match.players.forEach(function(player) {
         nextFrame.scores[player.id] = 0;
