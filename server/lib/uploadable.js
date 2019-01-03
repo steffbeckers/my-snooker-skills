@@ -14,11 +14,20 @@ var WError = require('verror').WError;
 var im = require('imagemagick');
 var s3 = require('s3');
 
-// where uploads get saved
-var bucket = process.env.NODE_ENV === 'production' ?
-  'mysnookerskills' : 'mysnookerskills-dev';
+// Where uploads get saved
+var bucket = 'mysnookerskills-dev';
+switch (process.env.NODE_ENV) {
+  case 'production':
+    bucket = 'mysnookerskills';
+    break;
+  case 'testing':
+    bucket = 'mysnookerskills-test';
+    break;
+}
+// Overwrite
 bucket = process.env.AWS_S3_BUCKET ? process.env.AWS_S3_BUCKET : bucket;
 
+// AWS Region
 var region = process.env.AWS_S3_REGION ?
   process.env.AWS_S3_REGION : 'eu-central-1';
 
