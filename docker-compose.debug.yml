@@ -24,7 +24,7 @@ services:
       - EMAIL_PASSWORD_SUPPORT=7CLjzm9qC4U7tBxN7Sxn
       - EMAIL_PASSWORD_REGISTRATION=x0UJINMxzyTkgbMChJuq
       - EMAIL_PASSWORD_ACCOUNT=ZQRPWTLYZMCC0sIK9IxP
-    image: mysnookerskills
+    image: registry.gitlab.com/mysnookerskills/app
     command: node --inspect=0.0.0.0 server/server.js
     networks:
       - dbnet

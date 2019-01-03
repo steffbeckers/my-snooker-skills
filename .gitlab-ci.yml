@@ -26,15 +26,30 @@ build:
   except:
     - master
 
+# deploy:
+#   stage: deploy
+#   before_script:
+#     - eval "$(ssh-agent -s)""
+#     - ssh-add < (echo "$SSH_PRIVATE_KEY)
+#     - mkdir -p ~/.ssh
+#     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+#     - apk add socat
+#   script:
+#     - ./deploy.sh
+#   only:
+#     - master
+
 deploy:
   stage: deploy
   before_script:
-    - eval $(ssh-agent -s)
-    - ssh-add <(echo "$SSH_PRIVATE_KEY")
     - mkdir -p ~/.ssh
-    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    - apk add socat
+    - echo "$DEPLOY_SERVER_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - eval "$(ssh-agent -s)"
+    - ssh-add ~/.ssh/id_rsa
+    - ssh-keyscan -H dev.steffbeckers.eu >> ~/.ssh/known_hosts
   script:
-    - ./deploy.sh
+    - scp -r ./docker-compose.yml root@dev.steffbeckers.eu:~/compositions/mysnookerskills
+    - ssh root@dev.steffbeckers.eu "docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}; cd ~/compositions/mysnookerskills/; docker-compose up -d"
   only:
     - master
