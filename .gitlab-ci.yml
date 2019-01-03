@@ -1,9 +1,11 @@
 image: docker:latest
 
+# TODO: This doesn't work. Try searching for other caching strategies.
 cache:
   paths:
   - node_modules/
 
+# TODO: Try to remove this.
 services:
   - docker:dind
 
