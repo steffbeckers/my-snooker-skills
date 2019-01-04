@@ -6,11 +6,19 @@ networks:
       name: dbnet
 
 services:
-  mysnookerskills:
-    container_name: mysnookerskills-dev
+  web:
+    container_name: mysnookerskills-web-dev
     restart: unless-stopped
     ports:
-      - 3006:3000
+      - 3008:80
+    environment:
+      - VUE_APP_API=https://dev.mysnookerskills.com/api
+    image: registry.gitlab.com/mysnookerskills/app/web:develop
+  api:
+    container_name: mysnookerskills-api-dev
+    restart: unless-stopped
+    ports:
+      - 3007:3000
     environment:
       - NODE_ENV=development
       - MYSNOOKERSKILLS_MONGODB_DEV_PASSWORD=57MvLdTU8Sr16QttYVoA
@@ -23,7 +31,6 @@ services:
       - EMAIL_PASSWORD_SUPPORT=7CLjzm9qC4U7tBxN7Sxn
       - EMAIL_PASSWORD_REGISTRATION=x0UJINMxzyTkgbMChJuq
       - EMAIL_PASSWORD_ACCOUNT=ZQRPWTLYZMCC0sIK9IxP
-    image: registry.gitlab.com/mysnookerskills/app:develop
-    command: nodemon server/server.js
+    image: registry.gitlab.com/mysnookerskills/app/api:develop
     networks:
       - dbnet

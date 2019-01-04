@@ -16,6 +16,6 @@ RUN npm install
 COPY . /app
 
 # Start nodemon server
-CMD NODE_ENV=production nodemon server/server.js
+CMD nodemon server/server.js
 
 EXPOSE 3000
