@@ -459,7 +459,7 @@ export default {
       if (confirm('Concede the frame?')) {
         this.$axios
           .post(process.env.VUE_APP_API + '/Frames/' + this.frame.id + '/concede')
-          .then(response => {
+          .then(() => {
             // Redirect to parent
             if (this.frame.matchId) {
               this.$router.push({ name: 'Match', params: {id: this.frame.matchId}})
