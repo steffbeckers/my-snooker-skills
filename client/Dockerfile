@@ -1,3 +1,5 @@
+ARG vue_build_mode
+
 # build stage
 FROM node:alpine as build-stage
 WORKDIR /app
