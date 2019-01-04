@@ -5,7 +5,7 @@ module.exports = {
     connector: 'mongodb',
     name: 'mongodb',
     host: 'mongodb-dev',
-    port: 29019,
+    port: 27017,
     user: 'MySnookerSkills',
     password: process.env.MYSNOOKERSKILLS_MONGODB_DEV_PASSWORD,
     database: 'MySnookerSkills',
