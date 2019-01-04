@@ -19,7 +19,7 @@ before_script:
 build-master:
   stage: build
   script:
-    - docker build --pull --build-arg vue_build_mode=$CI_COMMIT_REF_SLUG -t "$CI_REGISTRY_IMAGE/web" ./client
+    - docker build --pull --build-arg vue_build_mode=master -t "$CI_REGISTRY_IMAGE/web" ./client
     - docker push "$CI_REGISTRY_IMAGE/web"
     - docker build --pull -t "$CI_REGISTRY_IMAGE/api" .
     - docker push "$CI_REGISTRY_IMAGE/api"
