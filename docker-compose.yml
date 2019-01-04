@@ -11,8 +11,6 @@ services:
     restart: unless-stopped
     ports:
       - 3006:80
-    environment:
-      - NODE_ENV=production
     image: registry.gitlab.com/mysnookerskills/app/web
   api:
     container_name: mysnookerskills-api
