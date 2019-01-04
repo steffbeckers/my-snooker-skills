@@ -12,7 +12,7 @@ services:
     ports:
       - 3008:80
     environment:
-      - VUE_APP_API=https://dev.mysnookerskills.com/api
+      - NODE_ENV=dev
     image: registry.gitlab.com/mysnookerskills/app/web:develop
   api:
     container_name: mysnookerskills-api-dev
