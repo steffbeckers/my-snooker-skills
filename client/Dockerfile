@@ -4,7 +4,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN npm run build
+RUN npm run build --mode $vue_build_mode
 
 # production stage
 FROM nginx:alpine as production-stage
