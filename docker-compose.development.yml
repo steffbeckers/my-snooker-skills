@@ -11,6 +11,9 @@ services:
     restart: unless-stopped
     ports:
       - 3008:80
+    volumes:
+      - /root/mysnookerskills-web-dev/www:/usr/share/nginx/html
+      - /root/mysnookerskills-web-dev/nginx:/etc/nginx
     image: registry.gitlab.com/mysnookerskills/app/web:develop
   api:
     container_name: mysnookerskills-api-dev
