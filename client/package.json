@@ -7,6 +7,9 @@
   "scripts": {
     "start": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build.master": "vue-cli-service build --mode master",
+    "build.test": "vue-cli-service build --mode test",
+    "build.develop": "vue-cli-service build --mode develop",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
