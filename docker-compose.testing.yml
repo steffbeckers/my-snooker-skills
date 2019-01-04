@@ -1,0 +1,34 @@
+version: "3"
+
+networks:
+  dbnet:
+    external:
+      name: dbnet
+
+services:
+  web:
+    container_name: mysnookerskills-web-test
+    restart: unless-stopped
+    ports:
+      - 3010:80
+    image: registry.gitlab.com/mysnookerskills/app/web:test
+  api:
+    container_name: mysnookerskills-api-test
+    restart: unless-stopped
+    ports:
+      - 3009:3000
+    environment:
+      - NODE_ENV=testing
+      - MYSNOOKERSKILLS_MONGODB_TEST_PASSWORD=Lxj3ekjHNKYQOw94KVmQ
+      - AWS_S3_KEY=N2bsOKciYTZU7jq7ud8aTEnkL+OZcRGLFUtzuUIz
+      - AWS_S3_KEY_ID=AKIAIFGEYZTPCV6ZYSAA
+      - EMAIL_PASSWORD_STEFF=INHn7RgNynZ5j1h2hmab
+      - EMAIL_PASSWORD_INFO=Qom6YsE9XrZX8ruI0bUe
+      - EMAIL_PASSWORD_PRIVACY=pyD5PKttFHqHfQ5Fixd5
+      - EMAIL_PASSWORD_ADMIN=S6lnKqlZEkkDGUSbBeRx
+      - EMAIL_PASSWORD_SUPPORT=7CLjzm9qC4U7tBxN7Sxn
+      - EMAIL_PASSWORD_REGISTRATION=x0UJINMxzyTkgbMChJuq
+      - EMAIL_PASSWORD_ACCOUNT=ZQRPWTLYZMCC0sIK9IxP
+    image: registry.gitlab.com/mysnookerskills/app/api:test
+    networks:
+      - dbnet
