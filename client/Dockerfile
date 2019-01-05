@@ -22,6 +22,7 @@ COPY --from=build-stage /app/dist /usr/share/nginx/html
 
 RUN echo $(ls -1 /etc/nginx)
 RUN echo $(cat /etc/nginx/nginx.conf)
+RUN echo $(cat /etc/nginx/nginx.conf.default)
 
 EXPOSE 80
 
