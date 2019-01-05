@@ -18,11 +18,9 @@ FROM nginx:alpine as production-stage
 
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 
-# COPY --from=build-stage /app/nginx.conf /etc/nginx/nginx.conf
+RUN echo $(cat /etc/nginx/conf.d/default.conf)
 
-RUN echo $(ls -1 /etc/nginx)
-RUN echo $(cat /etc/nginx/nginx.conf)
-RUN echo $(cat /etc/nginx/nginx.conf.default)
+COPY --from=build-stage /app/nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 
