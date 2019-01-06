@@ -11,7 +11,7 @@ export default new Vuex.Store({
   state: {
     // Env
     env: process.env.NODE_ENV,
-    debug: localStorage.getItem('debug') || process.env.NODE_ENV === 'development',
+    debug: localStorage.getItem('debug') || process.env.NODE_ENV === 'local' || process.env.NODE_ENV === 'development',
     forceOffline: false,
     // Messages
     infos: [],

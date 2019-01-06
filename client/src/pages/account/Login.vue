@@ -134,7 +134,7 @@
                         clearable
                       ></v-text-field>
                     </v-flex>
-                    <div v-if="$store.state.env === 'development'">
+                    <div v-if="$store.state.env === 'local' || $store.state.env === 'development'">
                       <v-btn
                         small
                         flat

@@ -6,11 +6,20 @@ Vue.prototype.$axios = axios
 
 // Global request interceptor
 Vue.prototype.$axios.interceptors.request.use(
-  function(config) {
+  function(request) {
     // Loader
     store.commit('loader', true)
 
-    return config
+    // Logging
+    if (process.env.NODE_ENV === 'local' || process.env.NODE_ENV === 'development') {
+      // When data is defined in request, show it in console
+      if (request.data) {
+        Vue.prototype.$logger.log(request.method.toUpperCase(), request.url)
+        Vue.prototype.$logger.log(request.data)
+      }
+    }
+
+    return request
   },
   function(error) {
     // Loader
@@ -28,9 +37,12 @@ Vue.prototype.$axios.interceptors.response.use(
     store.commit('loader', false)
 
     // Logging
-    if (process.env.NODE_ENV === 'development') {
-      Vue.prototype.$logger.log(response.config.method.toUpperCase(), response.request.responseURL)
-      Vue.prototype.$logger.log(response.status, response.data)
+    if (process.env.NODE_ENV === 'local' || process.env.NODE_ENV === 'development') {
+      // Log responses
+      if (!response.config.data) {
+        Vue.prototype.$logger.log(response.config.method.toUpperCase(), response.request.responseURL)
+      }
+      Vue.prototype.$logger.log('RES', response.status, response.data)
     }
 
     return response
