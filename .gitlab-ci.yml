@@ -5,10 +5,10 @@ image: docker:latest
 #   paths:
 #   - node_modules/
 
-
 services:
   - docker:dind # TODO: Try to remove this ':dind'
-#  - node:alpine # TODO
+  - node:alpine
+  - nginx:latest
 
 stages:
   - build
