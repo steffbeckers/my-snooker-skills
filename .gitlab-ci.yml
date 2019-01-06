@@ -7,8 +7,6 @@ image: docker:latest
 
 services:
   - docker:dind # TODO: Try to remove this ':dind'
-  - node:alpine
-  - nginx:latest
 
 stages:
   - build
