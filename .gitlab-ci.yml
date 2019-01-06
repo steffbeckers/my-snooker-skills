@@ -5,9 +5,10 @@ image: docker:latest
 #   paths:
 #   - node_modules/
 
-# TODO: Try to remove this.
+
 services:
-  - docker:dind
+  - docker:dind # TODO: Try to remove this ':dind'
+#  - node:alpine # TODO
 
 stages:
   - build
