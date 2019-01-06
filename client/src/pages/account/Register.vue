@@ -228,7 +228,7 @@ export default {
     // Development
     if (process.env.NODE_ENV === 'development') {
       // Settings
-      let fillData = true
+      let fillData = false
 
       if (fillData) {
         let fillDataNumber = 1
