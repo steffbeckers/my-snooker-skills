@@ -22,7 +22,7 @@
             <p :class="$vuetify.breakpoint.xs ? 'mb-0' : ''">Add your friends by name or username. At this moment only 2 players can be added.</p>
             <v-btn v-if="!currentUserAddedToMatch && match.players.length < 2" @click="match.players.push(meAsPlayer)" color="primary" block flat>Add yourself</v-btn>
             <v-autocomplete
-              v-if="match.players.length < 2"
+              v-if="match.players.length < 2 && friendsThatCanBeAddedToMatch.length > 0"
               :items="friendsThatCanBeAddedToMatch"
               v-model="friendSelector"
               label="Add friend"
@@ -57,6 +57,7 @@
                 </template>
               </template>
             </v-autocomplete>
+            <v-btn v-if="$store.state.user.friends.length === 0" @click="$router.push({ name: 'Players' })" color="primary" block flat>Add friends</v-btn>
           </v-flex>
           <v-flex xs12 sm8>
             <v-layout row wrap>

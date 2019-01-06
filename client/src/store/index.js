@@ -137,8 +137,9 @@ export default new Vuex.Store({
       // Remove token cookie
       Vue.cookie.delete('token')
 
-      // Remove user
+      // Remove from local storage
       localStorage.removeItem('user')
+      localStorage.removeItem('match:play')
 
       // Remove Authorization token on header
       delete Vue.prototype.$axios.defaults.headers.common['Authorization']

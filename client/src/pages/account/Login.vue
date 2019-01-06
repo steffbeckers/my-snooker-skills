@@ -134,6 +134,29 @@
                         clearable
                       ></v-text-field>
                     </v-flex>
+                    <div v-if="$store.state.env === 'development'">
+                      <v-btn
+                        small
+                        flat
+                        @click="usernameOrEmail = 'steff'; password = 'SteffBeckers123'"
+                      >
+                        Steff
+                      </v-btn>
+                      <v-btn
+                        small
+                        flat
+                        @click="usernameOrEmail = 'marco'; password = 'MarcoVitali123'"
+                      >
+                        Marco
+                      </v-btn>
+                      <v-btn
+                        small
+                        flat
+                        @click="usernameOrEmail = 'ben'; password = 'BenVandenEynde123'"
+                      >
+                        Ben
+                      </v-btn>
+                    </div>
                   </v-layout>
                   <v-btn
                     color="primary"
@@ -185,6 +208,12 @@ export default {
     }
   },
   mounted() {
+    // If already logged in, redirect
+    if (this.$store.state.authenticated) {
+      // Redirect from login page
+      this.redirect()
+    }
+
     // Alerts
     // verified
     if (localStorage.getItem('login:verified')) {
@@ -234,16 +263,19 @@ export default {
           this.$store.commit('authenticate', response.data)
 
           // Redirect from login page
-          let redirectTo = this.$route.query.redirect || localStorage.getItem('previous-page') || '/account'
-          if (redirectTo === '/login') {
-            redirectTo = '/'
-          }
-          this.$router.push(redirectTo)
+          this.redirect()
         }).catch(error => {
           this.failed = error.code === 'LOGIN_FAILED' && error.statusCode === 401
           this.failedNotVerifiedYet = error.code === 'LOGIN_FAILED_EMAIL_NOT_VERIFIED'
           this.failedWrongRegistration = error.code === 'LOGIN_FAILED' && error.statusCode > 401
         })
+    },
+    redirect() {
+      let to = this.$route.query.redirect || localStorage.getItem('previous-page') || '/account'
+      if (to === '/login') {
+        to = '/'
+      }
+      this.$router.push(to)
     },
     resendVerificationEmail() {
       // TODO Refactor same code on login and profile settings page
