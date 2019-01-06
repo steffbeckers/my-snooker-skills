@@ -424,7 +424,7 @@ export default {
           }
         })
         .catch(error => {
-          // Custom info message when the match isn't found by ID or is deleted
+          // Custom info message when the frame isn't found by ID or is deleted
           if (error.message === "Frame not found") {
             this.$store.commit("message", {
               type: "info",

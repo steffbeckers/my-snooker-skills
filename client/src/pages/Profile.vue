@@ -30,8 +30,8 @@
         <v-layout class="mt-2" align-center justify-space-around wrap>
           @{{ user.username }} &nbsp;&centerdot;&nbsp; Member since {{ user.createdOn | formatDateLongerEN }}
         </v-layout>
-        <v-layout class="mt-2" align-center justify-space-around wrap>
-          <span style="cursor: pointer" v-if="user.club && user.club.name"><v-icon small>place</v-icon> {{ user.club.name }}</span>
+        <v-layout v-if="user.club && user.club.name" @click="$router.push({ name: 'Club', params: { slug: user.club.slug }})" class="mt-2" align-center justify-space-around wrap>
+          <span style="cursor: pointer"><v-icon small>place</v-icon> {{ user.club.name }}</span>
         </v-layout>
         <v-layout v-if="user.bio" class="mt-2" align-center justify-space-around wrap>
           {{ user.bio }}

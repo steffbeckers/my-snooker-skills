@@ -11,6 +11,7 @@ const Tournaments = () => import('@/pages/Tournaments')
 const FrameDetail = () => import('@/pages/frame/Detail')
 const Players = () => import('@/pages/Players')
 const Clubs = () => import('@/pages/Clubs')
+const ClubDetail = () => import('@/pages/clubs/Detail')
 
 // Settings
 const AccountSettings = () => import('@/pages/settings/AccountSettings')
@@ -57,6 +58,11 @@ export default new Router({
       component: TrainingOverview
     },
     // Clubs
+    {
+      path: '/clubs/:slug',
+      name: 'Club',
+      component: ClubDetail
+    },
     {
       path: '/clubs',
       name: 'Clubs',

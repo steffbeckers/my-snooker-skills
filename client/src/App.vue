@@ -205,6 +205,12 @@
       </v-toolbar>
       <v-list class="pt-0">
         <v-divider></v-divider>
+        <v-list-tile v-if="$store.state.user.club" :to="{ name: 'Club', params: { slug: $store.state.user.club.slug }}" exact>
+          <v-list-tile-action>
+            <v-icon light>place</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title>{{ $store.state.user.club.name }}</v-list-tile-title>
+        </v-list-tile>
         <v-list-tile :to="{ name: 'ProfileMatches', params: { username: $store.state.user.username }}" exact>
           <v-list-tile-action>
             <v-icon light>people_outline</v-icon>
@@ -285,17 +291,17 @@
           <v-list-tile slot="activator">
             <v-list-tile-title>Settings</v-list-tile-title>
           </v-list-tile>
-          <v-list-tile :to="{ name: 'AccountSettings' }" exact>
-            <v-list-tile-action>
-              <v-icon light>account_circle</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-title>Account</v-list-tile-title>
-          </v-list-tile>
           <v-list-tile :to="{ name: 'ProfileSettings' }" exact>
             <v-list-tile-action>
               <v-icon light>account_box</v-icon>
             </v-list-tile-action>
             <v-list-tile-title>Profile</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile :to="{ name: 'AccountSettings' }" exact>
+            <v-list-tile-action>
+              <v-icon light>account_circle</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-title>Account</v-list-tile-title>
           </v-list-tile>
           <v-list-tile>
             <v-list-tile-action>

@@ -193,6 +193,7 @@ module.exports = function(Match) {
               id: true,
               firstName: true,
               lastName: true,
+              username: true,
               profilePicture: true,
             },
           },
@@ -207,8 +208,11 @@ module.exports = function(Match) {
           relation: 'referee',
           scope: {
             fields: {
+              id: true,
               firstName: true,
               lastName: true,
+              username: true,
+              profilePicture: true,
             },
           },
         },

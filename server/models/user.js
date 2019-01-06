@@ -486,6 +486,7 @@ module.exports = function(user) {
             fields: {
               id: true,
               name: true,
+              slug: true,
             },
           },
         },
