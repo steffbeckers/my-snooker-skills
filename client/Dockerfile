@@ -14,7 +14,7 @@ COPY . .
 RUN npm run build.${vue_build_mode}
 
 # production stage
-FROM nginx:alpine as production-stage
+FROM nginx as production-stage
 
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 
