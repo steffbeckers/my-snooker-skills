@@ -383,8 +383,8 @@ main.content {
   display: flex;
   justify-content: space-between;
 
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 10px!important;
+  padding-right: 10px!important;
 }
 
 .v-footer a {
