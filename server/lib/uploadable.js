@@ -417,7 +417,7 @@ function uploadable(model, instance, property, ctx, versionsByProperty, next) {
 
     // Add image with mime type for animated gif
     if (meta.isAnimatedGif) {
-      var extension = mime.extension(meta.type);
+      // var extension = mime.extension(meta.type);
       // var key = uuid.v4() + '-animated.' + extension;
 
       var images = [];

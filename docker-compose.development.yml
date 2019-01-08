@@ -17,6 +17,7 @@ services:
     restart: unless-stopped
     ports:
       - 3007:3000
+      - 9229:9229
     environment:
       - NODE_ENV=development
       - MYSNOOKERSKILLS_MONGODB_DEV_PASSWORD=57MvLdTU8Sr16QttYVoA
@@ -30,5 +31,6 @@ services:
       - EMAIL_PASSWORD_REGISTRATION=x0UJINMxzyTkgbMChJuq
       - EMAIL_PASSWORD_ACCOUNT=ZQRPWTLYZMCC0sIK9IxP
     image: registry.gitlab.com/mysnookerskills/app/api:develop
+    command: node --inspect=0.0.0.0 server/server.js
     networks:
       - dbnet
