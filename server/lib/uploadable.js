@@ -415,8 +415,21 @@ function uploadable(model, instance, property, ctx, versionsByProperty, next) {
       returnExif: true,
     };
 
-    // Create versions when not animated
-    if (!meta.isAnimatedGif) {
+    // Add image with mime type for animated gif
+    if (meta.isAnimatedGif) {
+      var extension = mime.extension(meta.type);
+      // var key = uuid.v4() + '-animated.' + extension;
+
+      var images = [];
+      images.push({
+        original: true,
+        width: meta.width,
+        height: meta.height,
+        // key: key,
+        url: localCopy,
+      });
+    } else {
+      // Create versions when not animated
       options.versions = versions;
     }
 
