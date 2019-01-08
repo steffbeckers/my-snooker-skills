@@ -346,91 +346,96 @@ function uploadable(model, instance, property, ctx, versionsByProperty, next) {
     });
   }
 
-  // upload the original file to s3
+  // Upload the original file to s3
   // and based on the spec in versions upload as many resized versions as needed
   function uploadFile(localCopy, meta, cb) {
-    // if this is an animated gif don't resize - takes too long, just upload it
-    if (meta.isAnimatedGif) {
-      // console.log('animated');
+    // If this is an animated gif don't resize - takes too long, just upload it
+    // if (meta.isAnimatedGif) {
+    //   // console.log('animated');
 
-      var extension = mime.extension(meta.type);
-      var key = 'OgTag-image/' + uuid.v4() + '-animated.' + extension;
+    //   var extension = mime.extension(meta.type);
+    //   var key = 'OgTag-image/' + uuid.v4() + '-animated.' + extension;
 
-      var images = [];
-      images.push({
+    //   var images = [];
+    //   images.push({
+    //     original: true,
+    //     width: meta.width,
+    //     height: meta.height,
+    //     key: key,
+    //     url: 'https://s3.amazonaws.com/dl-og/' + key,
+    //   });
+
+    //   var client = s3.createClient({
+    //     s3Options: {
+    //       accessKeyId: process.env.AWS_S3_KEY_ID ||
+    //         'AKIAIFGEYZTPCV6ZYSAA',
+    //       secretAccessKey: process.env.AWS_S3_KEY ||
+    //         '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',
+    //     },
+    //   });
+
+    //   var params = {
+    //     localFile: localCopy,
+    //     ContentType: meta.type,
+    //     s3Params: {
+    //       Bucket: 'dl-og',
+    //       Key: key,
+    //       ACL: 'public-read',
+    //     },
+    //   };
+
+    //   var uploader = client.uploadFile(params);
+    //   uploader.on('error', function(err) {
+    //     console.error('unable to upload:', err.stack);
+    //     cb(new VError(err, 's3 (animated) upload failed'));
+    //   });
+    //   uploader.on('end', function() {
+    //     cb(null, instance, meta, images);
+    //   });
+    // } else {
+
+    // Uploader options
+    var options = {
+      aws: {
+        region: region,
+        path: folder,
+        acl: 'public-read',
+        accessKeyId: process.env.AWS_S3_KEY_ID ||
+          'AKIAIFGEYZTPCV6ZYSAA',
+        secretAccessKey: process.env.AWS_S3_KEY ||
+          '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',
+      },
+      cleanup: {
         original: true,
-        width: meta.width,
-        height: meta.height,
-        key: key,
-        url: 'https://s3.amazonaws.com/dl-og/' + key,
-      });
+        versions: !meta.isAnimatedGif,
+      },
+      original: {
+        acl: 'public-read',
+      },
+      returnExif: true,
+    };
 
-      var client = s3.createClient({
-        s3Options: {
-          accessKeyId: process.env.AWS_S3_KEY_ID ||
-            'AKIAIFGEYZTPCV6ZYSAA',
-          secretAccessKey: process.env.AWS_S3_KEY ||
-            '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',
-        },
-      });
-
-      var params = {
-        localFile: localCopy,
-        ContentType: meta.type,
-        s3Params: {
-          Bucket: 'dl-og',
-          Key: key,
-          ACL: 'public-read',
-        },
-      };
-
-      var uploader = client.uploadFile(params);
-      uploader.on('error', function(err) {
-        console.error('unable to upload:', err.stack);
-        cb(new VError(err, 's3 (animated) upload failed'));
-      });
-      uploader.on('end', function() {
-        cb(null, instance, meta, images);
-      });
-    } else {
-      var options = {
-        aws: {
-          region: region,
-          path: folder,
-          acl: 'public-read',
-          accessKeyId: process.env.AWS_S3_KEY_ID ||
-            'AKIAIFGEYZTPCV6ZYSAA',
-          secretAccessKey: process.env.AWS_S3_KEY ||
-            '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',
-        },
-        cleanup: {
-          original: true,
-          versions: true,
-        },
-        original: {
-          acl: 'public-read',
-        },
-        versions: versions,
-        returnExif: true,
-      };
-
-      // console.log(options);
-      client = new Uploader(bucket, options);
-
-      try {
-        client.upload(localCopy, {}, function(err, images, uploadmeta) {
-          if (err) {
-            console.log(err);
-            cb(new VError(err, 's3 uploader failed'));
-          } else {
-            // success - continue processing waterfall
-            cb(null, instance, meta, images);
-          }
-        });
-      } catch (err) {
-        cb(new VError(err, 's3 uploader failed'));
-      }
+    // Create versions when not animated
+    if (!meta.isAnimatedGif) {
+      options.versions = versions;
     }
+
+    var client = new Uploader(bucket, options);
+
+    try {
+      client.upload(localCopy, {}, function(err, images, uploadmeta) {
+        if (err) {
+          console.log(err);
+          cb(new VError(err, 's3 uploader failed'));
+        } else {
+          // success - continue processing waterfall
+          cb(null, instance, meta, images);
+        }
+      });
+    } catch (err) {
+      cb(new VError(err, 's3 uploader failed'));
+    }
+    // }
   }
 
   // cleanup old Upload instance before saving new one
