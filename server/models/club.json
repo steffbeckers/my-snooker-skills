@@ -22,6 +22,9 @@
     },
     "info": {
       "type": "object"
+    },
+    "banner": {
+      "type": "object"
     }
   },
   "validations": [],

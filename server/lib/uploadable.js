@@ -185,10 +185,23 @@ function uploadable(model, instance, property, ctx, versionsByProperty, next) {
 
       // Update the model's property to the image set (URL's) hosted on AWS
       instance[property] = {};
-      instance[property].thumb = results.imageSet['-thumb'].url;
-      instance[property].small = results.imageSet['-small'].url;
-      instance[property].medium = results.imageSet['-medium'].url;
-      instance[property].large = results.imageSet['-large'].url;
+      if (results.imageSet) {
+        if (results.imageSet['-thumb'] && results.imageSet['-thumb'].url) {
+          instance[property].thumb = results.imageSet['-thumb'].url;
+        }
+        if (results.imageSet['-small'] && results.imageSet['-small'].url) {
+          instance[property].small = results.imageSet['-small'].url;
+        }
+        if (results.imageSet['-medium'] && results.imageSet['-medium'].url) {
+          instance[property].medium = results.imageSet['-medium'].url;
+        }
+        if (results.imageSet['-large'] && results.imageSet['-large'].url) {
+          instance[property].large = results.imageSet['-large'].url;
+        }
+        if (results.imageSet['-card'] && results.imageSet['-card'].url) {
+          instance[property].card = results.imageSet['-card'].url;
+        }
+      }
       instance[property].original = results.url;
 
       // Set this image set in results to use as update in UI

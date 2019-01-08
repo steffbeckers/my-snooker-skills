@@ -20,9 +20,11 @@ import App from './App.vue'
 import MatchesCardList from './components/matches/CardList.vue'
 import TournamentsCardList from './components/tournaments/CardList.vue'
 import PlayersCardList from './components/players/CardList.vue'
+import ClubsCardList from './components/clubs/CardList.vue'
 Vue.component('MatchesCardList', MatchesCardList)
 Vue.component('TournamentsCardList', TournamentsCardList)
 Vue.component('PlayersCardList', PlayersCardList)
+Vue.component('ClubsCardList', ClubsCardList)
 
 // Server Sent Events
 Vue.use(VueSSE);
@@ -33,15 +35,10 @@ if (process.env.NODE_ENV === 'production') {
     id: 'UA-101766005-4',
     router
   })
-  Vue.use(VuetifyGoogleAutocomplete, {
-    apiKey: ''//, // Can also be an object. E.g, for Google Maps Premium API, pass `{ client: <YOUR-CLIENT-ID> }`
-    // version: '...', // Optional
-  })
-} else {
-  Vue.use(VuetifyGoogleAutocomplete, {
-    apiKey: ''
-  })
 }
+Vue.use(VuetifyGoogleAutocomplete, {
+  apiKey: 'AIzaSyB4NmsqPnw-5iMpnhVZWu2g9CBfTRke9Ks'
+})
 
 // Authentication
 Vue.prototype.$authentication = new Authentication()
