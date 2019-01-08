@@ -8,7 +8,7 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn v-if="$store.state.authenticated" :to="{ name: 'MatchesPlay' }" exact color="primary">
-          Play
+          <v-icon small class="mr-2">play_arrow</v-icon>Play
         </v-btn>
         <v-btn icon>
           <v-icon color="rgba(0,0,0,.54)">search</v-icon>

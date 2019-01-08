@@ -2,7 +2,7 @@
   <div>
     <v-toolbar color='transparent' class='elevation-0'>
       <v-toolbar-title color='grey'>
-        <v-icon class='mr-2'>add</v-icon> Start a new match
+        <v-icon class='mr-2'>play_arrow</v-icon> Play a new match
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn @click="reset()" icon><v-icon color="rgba(0,0,0,.54)">refresh</v-icon></v-btn>

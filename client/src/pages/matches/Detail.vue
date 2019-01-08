@@ -181,7 +181,7 @@
         <v-layout v-if="canEdit && match.frames[0].state === 'finished' && match.state !== 'finished'" row>
           <v-flex xs12>
             <v-btn @click="startNextFrame()" block color="primary">
-              <v-icon class="mr-2">play</v-icon>Next frame
+              <v-icon class="mr-2">play_arrow</v-icon>Next frame
             </v-btn>
           </v-flex>
         </v-layout>
