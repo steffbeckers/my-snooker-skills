@@ -51,6 +51,7 @@
             title="Choose new avatar"
             :fileChangedCallback="uploadNewAvatar"
             class="pl-0 pr-0"
+            :loading="uploadingImage"
             :block="$vuetify.breakpoint.xs"
           ></upload-btn>
         </v-flex>
@@ -150,12 +151,12 @@
             <v-btn
               color="primary"
               :disabled="
-                !changeProfileFormValid ||
-                $store.state.loading ||
-                $store.state.user.firstName === this.firstName &&
+                ($store.state.user.firstName === this.firstName &&
                 $store.state.user.lastName === this.lastName &&
                 $store.state.user.email === this.email &&
-                $store.state.user.bio === this.bio
+                $store.state.user.bio === this.bio) ||
+                $store.state.loading ||
+                !changeProfileFormValid
               "
               type="submit"
               :block="$vuetify.breakpoint.xs"
@@ -177,13 +178,12 @@ div.upload-btn > label {
 
 <script>
 import UploadButton from 'vuetify-upload-button'
-import ImageUploader from 'vue-image-upload-resize'
 
 export default {
   data() {
     return {
       newAvatarTooLarge: false,
-      hasImage: false,
+      uploadingImage: false,
       changeProfileFormValid: false,
       firstName: this.$store.state.user.firstName,
       firstNameRules: [
@@ -204,9 +204,9 @@ export default {
           'Email has to be valid'
       ],
       emailErrors: [],
-      bio: this.$store.state.user.bio,
+      bio: this.$store.state.user.bio || '',
       bioRules: [
-        v => (v && v.length <= 255) || 'Bio must be less than 255 characters'
+        v => (v.length <= 255) || 'Bio must be less than 255 characters'
       ],
       profileChanged: false,
       resentVerificationEmail: false
@@ -218,16 +218,25 @@ export default {
   },
   methods: {
     uploadNewAvatar(file) {
+      // Do nothing when file is undefined
+      if (!file) {
+        this.$logger.log('UPLOAD New profile picture -> No image selected')
+        return
+      }
+
+      // Visible uploading
+      this.uploadingImage = true
+
+      // Logging
+      this.$logger.log('UPLOAD New profile picture')
       /*eslint no-console: ["error", { allow: ["log"] }] */
       if (this.$store.state.debug) console.log(file)
 
-      // Do nothing when file is undefined
-      if (!file) { return }
-
       // Check image size
-      this.newAvatarTooLarge = file.size > 51200000
+      this.newAvatarTooLarge = file.size > 51200000 // TODO: Add config setting
       if (this.newAvatarTooLarge) return
 
+      // Create form data
       let bodyFormData = new FormData()
       bodyFormData.append('uploadedFile', file)
 
@@ -239,6 +248,8 @@ export default {
         ).then(response => {
           // Update user in store
           this.$store.commit('changeAvatar', response.data.imageSetForUI)
+        }).finally(() => {
+          this.uploadingImage = false
         })
     },
     removeAvatar() {
@@ -248,14 +259,6 @@ export default {
           // Update user in store
           this.$store.commit('removeAvatar')
         })
-    },
-    getBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-      });
     },
     changeProfile(e) {
       e.preventDefault() // Submit
@@ -315,7 +318,6 @@ export default {
   },
   components: {
     'upload-btn': UploadButton,
-    'image-uploader': ImageUploader,
   },
   name: 'ProfileSettings'
 }

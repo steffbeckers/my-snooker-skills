@@ -162,6 +162,9 @@ export default new Vuex.Store({
     removeAvatar(state) {
       delete state.user.profilePicture
 
+      // Trigger update
+      state.user = {...state.user}
+
       // Save user
       localStorage.setItem('user', JSON.stringify(state.user))
     },

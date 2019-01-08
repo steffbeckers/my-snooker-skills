@@ -175,7 +175,7 @@ module.exports = function(Match) {
   // Match list to query
   Match.list = function(orderBy, orderDirection, skip, take, cb) {
     // Default query
-    if (orderBy !== 'startDateTime' && orderBy !== 'startDateTime') {
+    if (orderBy !== 'startDateTime' && orderBy !== 'endDateTime') {
       orderBy = 'startDateTime';
     }
     if (orderDirection !== 'ASC' && orderDirection !== 'DESC') {
