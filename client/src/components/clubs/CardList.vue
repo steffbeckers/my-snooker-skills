@@ -9,6 +9,7 @@
     >
       <v-card>
         <v-img
+          v-if="club.banner && club.banner.card"
           style="cursor: pointer"
           @click="$router.push({ name: 'Club', params: { slug: club.slug }})"
           :src="club.banner.card"
