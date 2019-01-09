@@ -127,5 +127,9 @@
   "Setting": {
     "dataSource": "mongodb",
     "public": true
+  },
+  "Bug": {
+    "dataSource": "mongodb",
+    "public": true
   }
 }

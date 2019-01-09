@@ -1,0 +1,65 @@
+{
+  "name": "Bug",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "mixins": {
+    "TimeStamp": {
+      "createdAt": "createdOn",
+      "updatedAt": "updatedOn",
+      "validateUpsert": true,
+      "required": false
+    },
+    "SoftDelete": {
+      "deletedAt": "deletedOn"
+    }
+  },
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "os": {
+      "type": "string"
+    },
+    "browser": {
+      "type": "string"
+    },
+    "mobile": {
+      "type": "boolean"
+    },
+    "userAgent": {
+      "type": "string"
+    },
+    "error": {
+      "type": "object"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "user": {
+      "type": "belongsTo",
+      "model": "User",
+      "foreignKey": "ownerId"
+    },
+    "createdByUser": {
+      "type": "belongsTo",
+      "model": "User",
+      "foreignKey": "createdBy"
+    },
+    "updatedByUser": {
+      "type": "belongsTo",
+      "model": "User",
+      "foreignKey": "updatedBy"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

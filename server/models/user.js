@@ -33,8 +33,7 @@ module.exports = function(user) {
   user.observe('after save', function(ctx, next) {
     console.log('> user.observe.after save triggered');
 
-    // TODO
-    // Send email verification after changing email address
+    // TODO: Send email verification after changing email address
     // if (ctx.instance.email && !ctx.instance.emailVerified) {
     //   user.resendVerificationEmail(ctx.instance.email, function(err, response) {
     //     console.log(err, response);

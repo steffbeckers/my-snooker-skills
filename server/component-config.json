@@ -1,7 +1,9 @@
 {
   "loopback-component-explorer": {
     "mountPath": "/api/explorer",
-    "uiDirs": ["client/public/explorer"],
+    "uiDirs": [
+      "client/public/explorer"
+    ],
     "apiInfo": {
       "title": "My Snooker Skills API ",
       "description": "Powered by Steff!",

@@ -83,14 +83,27 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
+
 // Set Authorization header, if token exists
 var token = Vue.prototype.$cookie.get('token')
 if (token) {
   Vue.prototype.$axios.defaults.headers.common['Authorization'] = token
 }
 
+// Error tracking
+let url = process.env.VUE_APP_API + '/Bugs/trackAppError';
+if (token) {
+  url += '?access_token=' + token
+}
+window.FancyTrack.init({
+  url: url,
+  method: 'POST'
+})
+
+// Vue's production tip
 Vue.config.productionTip = false
 
+// Lauch the Vue rocket
 new Vue({
   render: h => h(App),
   router,

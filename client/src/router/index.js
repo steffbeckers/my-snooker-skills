@@ -30,6 +30,7 @@ const TrainingOverview = () => import('@/pages/training/Overview')
 const TrainingScoreboard = () => import('@/pages/training/Scoreboard')
 
 // Generic components
+const Test = () => import('@/components/Test')
 const Loader = () => import('@/components/Loader')
 
 // Errors
@@ -42,9 +43,16 @@ export default new Router({
   routes: [
     // Tools
     {
+      path: '/components/test',
+      name: 'TestComponent',
+      component: Test,
+      meta: { requiresAdmin: true }
+    },
+    {
       path: '/components/loader',
       name: 'LoaderComponent',
-      component: Loader
+      component: Loader,
+      meta: { requiresAdmin: true }
     },
     // Training
     {
