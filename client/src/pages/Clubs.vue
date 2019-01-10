@@ -19,9 +19,18 @@
           single-line
           class="pa-0"
           placeholder="Search"
-          v-on:placechanged="getAddressData"
         >
         </vuetify-google-autocomplete>
+        <!-- <vuetify-google-autocomplete
+          id="map"
+          hide-details
+          prepend-icon="search"
+          single-line
+          class="pa-0"
+          placeholder="Search"
+          v-on:placechanged="getAddressData"
+        >
+        </vuetify-google-autocomplete> -->
         <v-btn class="mr-0" icon>
           <v-icon>my_location</v-icon>
         </v-btn>
