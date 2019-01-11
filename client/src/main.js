@@ -96,11 +96,18 @@ window.FancyTrack.init({
   url: url
 })
 Vue.config.errorHandler = (error, vm, info) => {
-  Vue.prototype.$logger.error('Vue error')
-  // Vue.prototype.$logger.log(error)
-  // Vue.prototype.$logger.log(vm)
-  // Vue.prototype.$logger.log(info)
-  // Vue.prototype.$logger.log(window.FancyTrack)
+  /* eslint no-console: ["error", { allow: ["error"] }] */
+  console.error('Oops, an error occured:')
+  console.error(error)
+  console.error(vm)
+  console.error(info)
+
+  // Global state
+  let state = vm.$store.state
+  // If authenticated, don't log the access token of user for security
+  if (state.token) {
+    delete state.token
+  }
 
   let bug = {
     errorName: error + '',
@@ -115,6 +122,7 @@ Vue.config.errorHandler = (error, vm, info) => {
       name: vm.$route.name,
       meta: vm.$route.meta
     },
+    state: state,
     browser: window.FancyTrack.browser,
     mobile: window.FancyTrack.mobile,
     os: window.FancyTrack.os,

@@ -26,12 +26,17 @@ module.exports = function(Bug) {
   Bug.trackAppError = function(data, cb) {
     var newBug = {error: {}};
 
-    // Location
-    if (data.url) {
-      newBug.url = data.url;
+    // Vue
+    if (data.state) {
+      newBug.state = data.state;
     }
     if (data.route) {
       newBug.route = data.route;
+    }
+
+    // Location
+    if (data.url) {
+      newBug.url = data.url;
     }
 
     // Device/browser

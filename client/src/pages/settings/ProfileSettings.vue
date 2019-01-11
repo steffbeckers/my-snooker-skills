@@ -229,7 +229,7 @@ export default {
 
       // Logging
       this.$logger.log('UPLOAD New profile picture')
-      /*eslint no-console: ["error", { allow: ["log"] }] */
+      /* eslint no-console: ["error", { allow: ["log"] }] */
       if (this.$store.state.debug) console.log(file)
 
       // Check image size

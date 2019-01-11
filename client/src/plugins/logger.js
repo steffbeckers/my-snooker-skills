@@ -1,6 +1,6 @@
 import Vue from 'vue'
 
-/*eslint no-console: ["error", { allow: ["log", "info", "error", "count", "groupEnd", "profileEnd", "time", "timeEnd"] }] */
+/* eslint no-console: ["error", { allow: ["log", "info", "error", "count", "groupEnd", "profileEnd", "time", "timeEnd"] }] */
 export default class Logger {
   debug = localStorage.getItem('debug') || process.env.NODE_ENV === 'local' || process.env.NODE_ENV === 'development'
 
