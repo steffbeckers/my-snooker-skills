@@ -30,6 +30,9 @@ module.exports = function(Bug) {
     if (data.url) {
       newBug.url = data.url;
     }
+    if (data.route) {
+      newBug.route = data.route;
+    }
 
     // Device/browser
     if (data.browser) {

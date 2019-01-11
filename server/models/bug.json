@@ -26,6 +26,9 @@
     "url": {
       "type": "string"
     },
+    "route": {
+      "type": "object"
+    },
     "os": {
       "type": "string"
     },

@@ -91,14 +91,37 @@ if (token) {
 }
 
 // Error tracking
-let url = process.env.VUE_APP_API + '/Bugs/trackAppError';
-if (token) {
-  url += '?access_token=' + token
-}
+let url = process.env.VUE_APP_API + '/Bugs/trackAppError'
 window.FancyTrack.init({
-  url: url,
-  method: 'POST'
+  url: url
 })
+Vue.config.errorHandler = (error, vm, info) => {
+  Vue.prototype.$logger.error('Vue error')
+  // Vue.prototype.$logger.log(error)
+  // Vue.prototype.$logger.log(vm)
+  // Vue.prototype.$logger.log(info)
+  // Vue.prototype.$logger.log(window.FancyTrack)
+
+  let bug = {
+    errorName: error + '',
+    errorText: info,
+    errorStack: error.stack,
+    url: vm.$route.fullPath,
+    route: {
+      path: vm.$route.path,
+      query: vm.$route.query,
+      params: vm.$route.params,
+      fullPath: vm.$route.fullPath,
+      name: vm.$route.name,
+      meta: vm.$route.meta
+    },
+    browser: window.FancyTrack.browser,
+    mobile: window.FancyTrack.mobile,
+    os: window.FancyTrack.os,
+    userAgent: window.FancyTrack.userAgent
+  }
+  Vue.prototype.$axios.post(window.FancyTrack.url, bug);
+};
 
 // Vue's production tip
 Vue.config.productionTip = false
