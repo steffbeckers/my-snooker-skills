@@ -22,7 +22,7 @@
           @click="$router.push({name: 'TrainingScoreboard'})"
         >
           <v-card>
-            <v-card-title primary-title>
+            <v-card-title class="pt-3" primary-title>
               <div class="headline">Scoreboard</div>
             </v-card-title>
           </v-card>
