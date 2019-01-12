@@ -26,7 +26,7 @@
           </v-avatar>
           <div>
             <div class="headline">{{ player.firstName }} {{ player.lastName }}</div>
-            <div>@{{ player.username }}</div>
+            <div>@{{ player.username }}<span v-if="player.club"> - <v-icon>place</v-icon> {{ player.club.name }}</span></div>
           </div>
         </v-card-title>
         <v-card-actions v-if="$store.state.authenticated">

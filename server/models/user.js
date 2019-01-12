@@ -337,7 +337,16 @@ module.exports = function(user) {
         profilePicture: true,
         createdOn: true,
       },
-      include: 'club',
+      include: {
+        relation: 'club',
+        scope: {
+          fields: {
+            id: true,
+            name: true,
+            slug: true,
+          },
+        },
+      },
       where: {id: {neq: userId}}, // Exclude the logged in player
       order: orderBy + ' ' + orderDirection,
       skip: skip,
