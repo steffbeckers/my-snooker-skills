@@ -344,14 +344,20 @@ module.exports = function(user) {
             id: true,
             name: true,
             slug: true,
+            info: false,
+            vsf: false,
           },
         },
       },
-      where: {id: {neq: userId}}, // Exclude the logged in player
       order: orderBy + ' ' + orderDirection,
       skip: skip,
       limit: take,
     };
+
+    // Exclude the logged in player
+    if (userId) {
+      filter.where = {id: {neq: userId}};
+    }
 
     user.find(filter, function(err, users) {
       cb(null, users);
