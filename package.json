@@ -1,6 +1,6 @@
 {
   "name": "my-snooker-skills-loopback",
-  "version": "2.2.5",
+  "version": "2.2.4",
   "description": "Track your snooker skills, compare with friends and use a real-time scoreboard.",
   "author": "Steff Beckers <steff@steffbeckers.eu>",
   "private": true,
