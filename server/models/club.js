@@ -32,7 +32,7 @@ module.exports = function(Club) {
       orderBy = 'name';
     }
     if (orderDirection !== 'ASC' && orderDirection !== 'DESC') {
-      orderDirection = 'DESC';
+      orderDirection = 'ASC';
     }
     if (skip === undefined) { skip = 0; }
     if (take === undefined) { take = 200; }
@@ -155,3 +155,92 @@ module.exports = function(Club) {
     uploadable(Club, 'Club', versions);
   });
 };
+
+// Club players list to query
+// Club.players = function(id, orderBy, orderDirection, skip, take, cb) {
+//   // Default query
+//   if (!orderBy) {
+//     orderBy = 'firstName';
+//   }
+//   if (orderDirection !== 'ASC' && orderDirection !== 'DESC') {
+//     orderDirection = 'ASC';
+//   }
+//   if (skip === undefined) { skip = 0; }
+//   if (take === undefined) { take = 200; }
+
+//   var filter = {
+//     include: {
+//       relation: 'players',
+//       scope: {
+//         fields: {
+//           id: true,
+//           firstName: true,
+//           lastName: true,
+//           username: true,
+//           profilePicture: true,
+//         },
+//         order: orderBy + ' ' + orderDirection,
+//         skip: skip,
+//         take: take,
+//       },
+//     },
+//   };
+
+//   Club.findById(id, filter, function(err, club) {
+//     // On error
+//     if (err) {
+//       cb(err);
+//       return;
+//     }
+
+//     if (club && club.players) {
+//       cb(null, club.players.toJSON());
+//     } else {
+//       cb(null);
+//     }
+//   });
+// };
+// Club.remoteMethod('players', {
+//   http: {
+//     path: '/:id/players',
+//     verb: 'get',
+//   },
+//   accepts: [
+//     {
+//       arg: 'id',
+//       type: 'string',
+//     },
+//     {
+//       arg: 'orderBy',
+//       type: 'string',
+//       http: {
+//         source: 'query',
+//       },
+//     },
+//     {
+//       arg: 'orderDirection',
+//       type: 'string',
+//       http: {
+//         source: 'query',
+//       },
+//     },
+//     {
+//       arg: 'skip',
+//       type: 'number',
+//       http: {
+//         source: 'query',
+//       },
+//     },
+//     {
+//       arg: 'take',
+//       type: 'number',
+//       http: {
+//         source: 'query',
+//       },
+//     },
+//   ],
+//   returns: {
+//     type: 'array',
+//     root: true,
+//   },
+// });

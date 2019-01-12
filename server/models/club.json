@@ -23,6 +23,9 @@
     "info": {
       "type": "object"
     },
+    "vsf": {
+      "type": "object"
+    },
     "banner": {
       "type": "object"
     }
