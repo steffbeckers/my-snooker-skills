@@ -1,9 +1,9 @@
 <template>
   <v-layout row wrap>
     <v-flex
-      xl3
-      lg4
-      sm6
+      xl4
+      :lg6="!$store.state.drawer && !$store.state.drawer.right"
+      :sm12="!$store.state.drawer && !$store.state.drawer.right"
       xs12
       v-for="match in matches" :key="match.id"
     >

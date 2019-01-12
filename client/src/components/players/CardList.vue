@@ -1,9 +1,9 @@
 <template>
   <v-layout row wrap>
     <v-flex
-      xl3
-      md4
-      sm6
+      xl4
+      lg6
+      :md6="!$store.state.drawer && !$store.state.drawer.right"
       xs12
       v-for="player in players" :key="player.id"
     >
