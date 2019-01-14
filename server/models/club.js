@@ -101,22 +101,43 @@ module.exports = function(Club) {
       where: {
         slug: slug,
       },
-      include: {
-        relation: 'players',
-        scope: {
-          fields: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            username: true,
-            profilePicture: true,
+      include: [
+        {
+          relation: 'players',
+          scope: {
+            fields: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              username: true,
+              profilePicture: true,
+            },
           },
         },
-      },
-    }, function(
-      err,
-      club
-    ) {
+        {
+          relation: 'leagues',
+          scope: {
+            include: {
+              relation: 'tournaments',
+              scope: {
+                include: {
+                  relation: 'players',
+                  scope: {
+                    fields: {
+                      id: true,
+                      firstName: true,
+                      lastName: true,
+                      username: true,
+                      profilePicture: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      ],
+    }, function(err, club) {
       if (err) {
         return cb(err);
       }
