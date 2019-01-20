@@ -8,7 +8,7 @@
       v-for="tournament in tournaments" :key="tournament.id"
     >
       <v-card>
-        <v-card-title primary-title>
+        <v-card-title primary-title style="cursor: pointer" @click="$router.push({ name: 'Tournament', params: { id: tournament.id }})">
           <h3 class="headline">{{ tournament.startDateTime | formatDateTime }}<span v-if="tournament.endDateTime"> - {{ tournament.endDateTime | formatDateTime }}</span></h3>
         </v-card-title>
       </v-card>

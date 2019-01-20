@@ -102,6 +102,11 @@ Vue.config.errorHandler = (error, vm, info) => {
   console.error(vm)
   console.error(info)
 
+  // Don't log to database in local dev
+  if (process.env.NODE_ENV === 'local') {
+    return;
+  }
+
   // Global state
   let state = vm.$store.state
   // If authenticated, don't log the access token of user for security

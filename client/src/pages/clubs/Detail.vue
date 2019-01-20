@@ -22,7 +22,45 @@
         </v-menu>
       </v-toolbar>
       <v-container grid-list-lg class="pt-0" fluid>
-        <v-layout row>
+        <v-layout column>
+          <v-flex md6 xs12>
+            <v-card>
+              <v-toolbar color="white" class="elevation-0">
+                <v-toolbar-title color="rgba(0,0,0,.54)">
+                  <v-icon color="rgba(0,0,0,.54)" class="mr-2">list</v-icon> Leagues
+                </v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-btn icon>
+                  <v-icon color="rgba(0,0,0,.54)">more_vert</v-icon>
+                </v-btn>
+              </v-toolbar>
+              <v-data-table
+                :headers="[
+                  { text: 'Name', value: 'name', align: 'left' },
+                  { text: 'Season', value: 'season', align: 'left' },
+                  { text: 'Start Date', value: 'startDate', align: 'left' },
+                  { text: 'End Date', value: 'endDate', align: 'left' },
+                  { text: '# Tournaments', value: 'tournaments.length', align: 'left' },
+                  { text: '', sortable: false }
+                ]"
+                :pagination.sync="leaguesDataTablePagination"
+                :items="club.leagues"
+                class="elevation-0"
+                rows-per-page-text="Leagues per page:"
+                :no-data-text="'There are no leagues added to ' + club.name + ' yet.'"
+                :search="leaguesSearch"
+              >
+                <template slot="items" slot-scope="props">
+                  <td style="cursor: pointer" @click="$router.push({ name: 'ClubLeague', params: { clubSlug: club.slug, id: props.item.id }})">{{ props.item.name }}</td>
+                  <td style="cursor: pointer" @click="$router.push({ name: 'ClubLeague', params: { clubSlug: club.slug, id: props.item.id }})">{{ props.item.season }}</td>
+                  <td style="cursor: pointer" @click="$router.push({ name: 'ClubLeague', params: { clubSlug: club.slug, id: props.item.id }})">{{ props.item.startDate | formatDate }}</td>
+                  <td style="cursor: pointer" @click="$router.push({ name: 'ClubLeague', params: { clubSlug: club.slug, id: props.item.id }})">{{ props.item.endDate | formatDate }}</td>
+                  <td style="cursor: pointer" @click="$router.push({ name: 'ClubLeague', params: { clubSlug: club.slug, id: props.item.id }})">{{ props.item.tournaments.length }}</td>
+                  <td></td>
+                </template>
+              </v-data-table>
+            </v-card>
+          </v-flex>
           <v-flex md6 xs12>
             <v-card>
               <v-toolbar color="white" class="elevation-0">
@@ -107,12 +145,17 @@ export default {
   data() {
     return {
       club: null,
+      // Leagues card
+      leaguesSearch: '',
+      leaguesDataTablePagination: {
+        rowsPerPage: 5
+      },
       // Players card
       playersSearch: '',
       playersDataTablePagination: {
         rowsPerPage: 25
       }
-    };
+    }
   },
   computed: {
     canEdit() {

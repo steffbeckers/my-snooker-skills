@@ -31,32 +31,8 @@ export default {
   },
   methods: {
     listTournaments() {
-      let filter = {
-        order: 'startDateTime DESC',
-        limit: 200,
-        include: [
-          {
-            relation: 'players',
-            scope: {
-              fields: {
-                id: true,
-                firstName: true,
-                lastName: true,
-                profilePicture: true
-              }
-            }
-          },
-          {
-            relation: 'frames',
-            scope: {
-              order: 'startDateTime DESC'
-            }
-          }
-        ]
-      }
-
       this.$axios
-        .get(process.env.VUE_APP_API + '/Tournaments?filter=' + encodeURI(JSON.stringify(filter)))
+        .get(process.env.VUE_APP_API + '/Tournaments/list')
         .then(response => {
           this.tournaments = response.data
         })

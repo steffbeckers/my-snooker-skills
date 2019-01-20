@@ -11,7 +11,14 @@ module.exports = function(Club) {
 
   // Before save
   Club.observe('before save', function(ctx, next) {
-    console.log('> Club.observe.before save triggered');
+    // Set createdBy, updatedBy before saving the model
+    if (context.instance) {
+      if (context.isNewInstance) {
+        context.instance.createdBy = context.options.accessToken.userId;
+        context.instance.ownerId = context.options.accessToken.userId;
+      }
+      context.instance.updatedBy = context.options.accessToken.userId;
+    }
 
     // Clean input
     if (ctx.instance) {

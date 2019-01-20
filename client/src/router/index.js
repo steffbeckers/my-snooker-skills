@@ -6,12 +6,14 @@ const Dashboard = () => import('@/pages/Dashboard')
 const Profile = () => import('@/pages/Profile')
 const Matches = () => import('@/pages/Matches')
 const MatchesPlay = () => import('@/pages/matches/Play')
-const MatchDetail = () => import('@/pages/matches/Detail')
+const Match = () => import('@/pages/matches/Detail')
 const Tournaments = () => import('@/pages/Tournaments')
-const FrameDetail = () => import('@/pages/frame/Detail')
+const Tournament = () => import('@/pages/tournaments/Detail')
+const Frame = () => import('@/pages/frame/Detail')
 const Players = () => import('@/pages/Players')
 const Clubs = () => import('@/pages/Clubs')
-const ClubDetail = () => import('@/pages/clubs/Detail')
+const Club = () => import('@/pages/clubs/Detail')
+const ClubLeague = () => import('@/pages/clubs/leagues/Detail')
 
 // Settings
 const AccountSettings = () => import('@/pages/settings/AccountSettings')
@@ -65,11 +67,17 @@ export default new Router({
       name: 'TrainingOverview',
       component: TrainingOverview
     },
+    // Leagues
+    {
+      path: '/clubs/:slug/leagues/:id',
+      name: 'ClubLeague',
+      component: ClubLeague
+    },
     // Clubs
     {
       path: '/clubs/:slug',
       name: 'Club',
-      component: ClubDetail
+      component: Club
     },
     {
       path: '/clubs',
@@ -83,6 +91,11 @@ export default new Router({
       component: Players
     },
     // Tournaments
+    {
+      path: '/tournaments/:id',
+      name: 'Tournament',
+      component: Tournament
+    },
     {
       path: '/tournaments',
       name: 'Tournaments',
@@ -104,7 +117,7 @@ export default new Router({
     {
       path: '/matches/:id',
       name: 'Match',
-      component: MatchDetail
+      component: Match
     },
     {
       path: '/matches',
@@ -115,7 +128,7 @@ export default new Router({
     {
       path: '/frame/:id',
       name: 'Frame',
-      component: FrameDetail
+      component: Frame
     },
     // Social auth
     {
