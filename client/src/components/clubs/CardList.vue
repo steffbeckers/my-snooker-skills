@@ -22,15 +22,20 @@
         >
           <div>
             <h3 class="headline mb-0">{{ club.name }}</h3>
-            <div v-if="club.address">
+            <div class="mt-2" v-if="club.address">
               <div>{{ club.address.street }} {{ club.address.number }}<span v-if="club.address.extension">{{ club.address.extension }}</span></div>
               <div>{{ club.address.zipcode }} {{ club.address.city }}</div>
+              <div v-if="club.address.country">{{ club.address.country }}</div>
+            </div>
+            <div class="mt-2" v-if="club.telephone">
+              {{ club.telephone }}
             </div>
           </div>
         </v-card-title>
         <v-card-actions>
-          <v-btn flat>Call</v-btn>
-          <v-btn flat>Navigate</v-btn>
+          <v-btn v-if="club.telephone" :href="'tel:' + club.telephone" flat>Call</v-btn>
+          <v-btn v-if="club.address && club.address.googleMapsLink" :href="club.address.googleMapsLink" target="_blank" flat>Navigate</v-btn>
+          <v-btn v-else-if="club.address && club.address.street && club.address.number && (club.address.zipcode || club.address.city)" :href="'https://www.google.com/maps/dir/?api=1&destination=' + club.address.street + '+' + club.address.number + (club.address.zipcode ? '+' + club.address.zipcode : '') + (club.address.city ? '+' + club.address.city : '')" target="_blank" flat>Navigate</v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>

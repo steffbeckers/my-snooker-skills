@@ -5,6 +5,17 @@
   "options": {
     "validateUpsert": true
   },
+  "mixins": {
+    "TimeStamp": {
+      "createdAt": "createdOn",
+      "updatedAt": "updatedOn",
+      "validateUpsert": true,
+      "required": false
+    },
+    "SoftDelete": {
+      "deletedAt": "deletedOn"
+    }
+  },
   "properties": {
     "accepted": {
       "type": "boolean"

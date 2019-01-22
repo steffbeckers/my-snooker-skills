@@ -11,8 +11,6 @@ module.exports = function(user) {
 
   // Before save
   user.observe('before save', function(ctx, next) {
-    console.log('> user.observe.before save triggered');
-
     // Clean input
     if (ctx.instance) {
       if (ctx.instance.username) ctx.instance.username = ctx.instance.username.trim();
@@ -31,8 +29,6 @@ module.exports = function(user) {
 
   // After save
   user.observe('after save', function(ctx, next) {
-    console.log('> user.observe.after save triggered');
-
     // TODO: Send email verification after changing email address
     // if (ctx.instance.email && !ctx.instance.emailVerified) {
     //   user.resendVerificationEmail(ctx.instance.email, function(err, response) {
@@ -48,8 +44,6 @@ module.exports = function(user) {
 
   // Login logic
   user.beforeRemote('login', function(ctx, userInstance, next) {
-    console.log('> user.beforeRemote.login triggered');
-
     // Lower case email address and trim
     if (ctx &&
         ctx.req &&
@@ -63,8 +57,6 @@ module.exports = function(user) {
 
   // Send verification email after registration
   user.afterRemote('create', function(ctx, userInstance, next) {
-    console.log('> user.afterRemote.create triggered');
-
     var options = {
       host: app.get('host') || '0.0.0.0',
       port: app.get('port') || 3000,
@@ -104,8 +96,6 @@ module.exports = function(user) {
 
   // Resend verification email
   user.resendVerificationEmail = function(usernameOrEmail, cb) {
-    console.log('> user.resendVerificationEmail triggered');
-
     var isEmailAddress = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(usernameOrEmail);
 
     var filter = {};
@@ -180,10 +170,6 @@ module.exports = function(user) {
 
   // Send password reset email
   user.on('resetPasswordRequest', function(info) {
-    console.log('> user.on.resetPasswordRequest triggered');
-    // console.log('> info');
-    // console.log(info);
-
     var html = '';
     html += '<h1>My Snooker Skills </h1>';
     html += '<p>Please follow the link below to reset your password.</p>';
@@ -209,8 +195,6 @@ module.exports = function(user) {
 
   // Include roles, remove fields on login
   user.afterRemote('login', function(ctx, userInstance, next) {
-    console.log('> user.afterRemote.login triggered');
-
     var resultJSON = ctx.result.toJSON();
 
     // Overwrite user with roles
@@ -411,8 +395,6 @@ module.exports = function(user) {
 
   // Me
   user.me = function(options, cb) {
-    console.log('> user.me triggered');
-
     var filter = {
       include: ['roles', 'friends', 'subscriptions', 'identities', 'club', 'address'],
     };

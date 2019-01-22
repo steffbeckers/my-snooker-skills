@@ -40,7 +40,8 @@
   "relations": {
     "players": {
       "type": "hasAndBelongsToMany",
-      "model": "user"
+      "model": "user",
+      "throughTable": "TournamentPlayer"
     },
     "teams": {
       "type": "hasAndBelongsToMany",

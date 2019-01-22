@@ -4,7 +4,7 @@
     <div v-if="tournament">
       <v-toolbar color="transparent" class="elevation-0">
         <v-toolbar-title class="mr-1" color="grey">
-          <v-icon class="mr-2">line_style</v-icon> Tournament
+          <v-icon class="mr-2">line_style</v-icon>{{ tournament.league.club.name }} - {{ tournament.league.name }} - {{ tournament.startDateTime | formatDate }}
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-menu v-if="$store.state.authenticated" bottom left>
@@ -24,7 +24,7 @@
       <v-container grid-list-lg class="pt-0" fluid>
         <v-layout row>
           <v-flex xs12>
-            {{ tournament }}
+            {{ tournament.startDateTime | formatDate }}<span v-if="tournament.endDateTime && tournament.startDateTime !== tournament.startDateTime"> - {{ tournament.endDateTime | formatDate }}</span>
           </v-flex>
         </v-layout>
       </v-container>

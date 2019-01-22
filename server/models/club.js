@@ -12,18 +12,18 @@ module.exports = function(Club) {
   // Before save
   Club.observe('before save', function(ctx, next) {
     // Set createdBy, updatedBy before saving the model
-    if (context.instance) {
-      if (context.isNewInstance) {
-        context.instance.createdBy = context.options.accessToken.userId;
-        context.instance.ownerId = context.options.accessToken.userId;
+    if (ctx.instance) {
+      if (ctx.isNewInstance) {
+        ctx.instance.createdBy = ctx.options.accessToken.userId;
+        ctx.instance.ownerId = ctx.options.accessToken.userId;
       }
-      context.instance.updatedBy = context.options.accessToken.userId;
+      ctx.instance.updatedBy = ctx.options.accessToken.userId;
     }
 
     // Clean input
     if (ctx.instance) {
-      if (ctx.instance.name) ctx.instance.username = ctx.instance.username.trim();
-      if (ctx.instance.slug) ctx.instance.firstName = ctx.instance.firstName.trim();
+      if (ctx.instance.name) ctx.instance.name = ctx.instance.name.trim();
+      if (ctx.instance.slug) ctx.instance.slug = ctx.instance.slug.trim();
     } else {
       if (ctx.data.name) ctx.data.name = ctx.data.name.trim();
       if (ctx.data.slug) ctx.data.slug = ctx.data.slug.trim();

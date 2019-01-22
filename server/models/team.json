@@ -6,11 +6,20 @@
   "options": {
     "validateUpsert": true
   },
+  "mixins": {
+    "TimeStamp": {
+      "createdAt": "createdOn",
+      "updatedAt": "updatedOn",
+      "validateUpsert": true,
+      "required": false
+    },
+    "SoftDelete": {
+      "deletedAt": "deletedOn"
+    }
+  },
   "properties": {
     "clubId": {
-      "type": {
-        "required": true
-      }
+      "required": true
     },
     "season": {
       "type": "string"
