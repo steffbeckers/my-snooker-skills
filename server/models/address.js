@@ -9,9 +9,12 @@ module.exports = function(Address) {
     if (ctx.instance) {
       if (ctx.instance.street) ctx.instance.street = ctx.instance.street.trim();
       if (ctx.instance.number) ctx.instance.number = ctx.instance.number.trim();
-      if (ctx.instance.extension) ctx.instance.extension = ctx.instance.extension.trim();
-      if (ctx.instance.zipcode) ctx.instance.zipcode = ctx.instance.zipcode.trim();
-      if (ctx.instance.city) ctx.instance.city = ctx.instance.city.toUpperCase().trim(); // Also to upper
+      if (ctx.instance.extension)
+        ctx.instance.extension = ctx.instance.extension.trim();
+      if (ctx.instance.zipcode)
+        ctx.instance.zipcode = ctx.instance.zipcode.trim();
+      if (ctx.instance.city)
+        ctx.instance.city = ctx.instance.city.toUpperCase().trim(); // Also to upper
     } else {
       if (ctx.data.street) ctx.data.street = ctx.data.street.trim();
       if (ctx.data.number) ctx.data.number = ctx.data.number.trim();
