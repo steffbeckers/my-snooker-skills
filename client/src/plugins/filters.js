@@ -7,6 +7,12 @@ Vue.filter('formatDate', function(value) {
   }
 })
 
+Vue.filter('formatDateDDMM', function(value) {
+  if (value) {
+    return moment(String(value)).format('DD/MM')
+  }
+})
+
 Vue.filter('formatDateLongerEN', function(value) {
   if (value) {
     return moment(String(value)).format('MMMM Do, YYYY')

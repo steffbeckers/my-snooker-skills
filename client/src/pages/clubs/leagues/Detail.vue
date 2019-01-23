@@ -48,6 +48,7 @@
               <v-data-table
                 :headers="[
                   { text: 'Date', value: 'startDateTime', align: 'left' },
+                  { text: '# Players', value: 'players.length', align: 'left' },
                   { text: 'Winner', value: 'winner.firstName', align: 'left' },
                   { text: 'Runner-up', value: 'runnerUp.firstName', align: 'left' },
                   { text: '', sortable: false }
@@ -61,6 +62,7 @@
               >
                 <template slot="items" slot-scope="props">
                   <td style="cursor: pointer" @click="$router.push({ name: 'Tournament', params: { id: props.item.id }})">{{ props.item.startDateTime | formatDate }}</td>
+                  <td style="cursor: pointer" @click="$router.push({ name: 'Tournament', params: { id: props.item.id }})">{{ props.item.players.length }}</td>
                   <td style="cursor: pointer" @click="$router.push({ name: 'Tournament', params: { id: props.item.id }})"><span v-if="props.item.winner">{{ props.item.winner.firstName }} {{ props.item.winner.lastName }}</span></td>
                   <td style="cursor: pointer" @click="$router.push({ name: 'Tournament', params: { id: props.item.id }})"><span v-if="props.item.runnerUp">{{ props.item.runnerUp.firstName }} {{ props.item.runnerUp.lastName }}</span></td>
                   <td></td>

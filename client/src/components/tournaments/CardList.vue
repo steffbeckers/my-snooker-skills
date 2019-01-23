@@ -9,8 +9,17 @@
     >
       <v-card>
         <v-card-title primary-title style="cursor: pointer" @click="$router.push({ name: 'Tournament', params: { id: tournament.id }})">
-          <h3 class="headline">{{ tournament.startDateTime | formatDateTime }}<span v-if="tournament.endDateTime"> - {{ tournament.endDateTime | formatDateTime }}</span></h3>
+          <div>
+            <h3 class="headline">{{ tournament.league.name }} {{ tournament.startDateTime | formatDateDDMM }}</h3>
+            <div>
+              <v-icon small>place</v-icon> {{ tournament.league.club.name }}
+              <span> - {{ tournament.players.length || 0 }} players</span>
+            </div>
+          </div>
         </v-card-title>
+        <v-card-text>
+          <div>{{ tournament.startDateTime | formatDateTime }}<span v-if="tournament.endDateTime && tournament.endDateTime !== tournament.startDateTime"> - {{ tournament.endDateTime | formatTime }}</span></div>
+        </v-card-text>
       </v-card>
     </v-flex>
   </v-layout>
