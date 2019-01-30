@@ -38,9 +38,9 @@
                 :headers="[
                   { text: 'Name', value: 'name', align: 'left' },
                   { text: 'Season', value: 'season', align: 'left' },
+                  { text: '# Tournaments', value: 'tournaments.length', align: 'left' },
                   { text: 'Start Date', value: 'startDate', align: 'left' },
                   { text: 'End Date', value: 'endDate', align: 'left' },
-                  { text: '# Tournaments', value: 'tournaments.length', align: 'left' },
                   { text: '', sortable: false }
                 ]"
                 :pagination.sync="leaguesDataTablePagination"
@@ -53,9 +53,9 @@
                 <template slot="items" slot-scope="props">
                   <td style="cursor: pointer" @click="$router.push({ name: 'ClubLeague', params: { clubSlug: club.slug, id: props.item.id }})">{{ props.item.name }}</td>
                   <td style="cursor: pointer" @click="$router.push({ name: 'ClubLeague', params: { clubSlug: club.slug, id: props.item.id }})">{{ props.item.season }}</td>
+                  <td style="cursor: pointer" @click="$router.push({ name: 'ClubLeague', params: { clubSlug: club.slug, id: props.item.id }})">{{ props.item.tournaments.length }}</td>
                   <td style="cursor: pointer" @click="$router.push({ name: 'ClubLeague', params: { clubSlug: club.slug, id: props.item.id }})">{{ props.item.startDate | formatDate }}</td>
                   <td style="cursor: pointer" @click="$router.push({ name: 'ClubLeague', params: { clubSlug: club.slug, id: props.item.id }})">{{ props.item.endDate | formatDate }}</td>
-                  <td style="cursor: pointer" @click="$router.push({ name: 'ClubLeague', params: { clubSlug: club.slug, id: props.item.id }})">{{ props.item.tournaments.length }}</td>
                   <td></td>
                 </template>
               </v-data-table>
