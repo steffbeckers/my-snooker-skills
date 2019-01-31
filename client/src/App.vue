@@ -377,7 +377,10 @@ body {
 }
 
 /* Top navigation toolbar height fix */
-div.application--wrap nav.v-toolbar div.v-toolbar__content {
+div.application--wrap > nav.v-toolbar {
+  z-index: 3 !important;
+}
+div.application--wrap > nav.v-toolbar div.v-toolbar__content {
   height: 56px !important;
 }
 div.application--wrap > main.v-content {

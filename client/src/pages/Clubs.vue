@@ -1,34 +1,47 @@
 <template>
   <div>
     <v-card
-      class="pa-3"
       flat
       height="300px"
-      img="https://cdn.vuetifyjs.com/images/toolbar/map.jpg"
     >
       <v-toolbar
         id="search"
         dense
         floating
-        class="ma-0 pa-0"
+        class="pa-0 ma-0"
       >
         <vuetify-google-autocomplete
           id="map"
           hide-details
           prepend-icon="search"
+          clearable
           single-line
           class="pa-0"
           placeholder="Search"
           v-on:placechanged="getAddressData"
         >
         </vuetify-google-autocomplete>
-        <v-btn class="mr-0" icon>
+        <v-btn @click="retrieveMyLocation()" class="mr-0" icon>
           <v-icon>my_location</v-icon>
         </v-btn>
         <v-btn class="ml-1" icon>
           <v-icon>more_vert</v-icon>
         </v-btn>
       </v-toolbar>
+      <GmapMap
+        :center="location"
+        :zoom="zoom"
+        style="width: 100%; height: 300px"
+      >
+        <GmapMarker
+          :key="index"
+          v-for="(m, index) in markers"
+          :position="m.location"
+          :clickable="true"
+          :draggable="false"
+          @click="location=m.location"
+        />
+      </GmapMap>
     </v-card>
     <v-toolbar color="transparent" class="elevation-0">
       <v-toolbar-title color="grey">
@@ -49,8 +62,19 @@
 </template>
 
 <style>
+nav#search {
+  position: absolute;
+  z-index: 2;
+  top: 10px;
+  left: 10px;
+}
+
 nav#search > div.v-toolbar__content {
-  padding: 0px 12px!important;
+  padding: 0px 12px !important;
+}
+
+nav#search > div.v-toolbar__content > div.v-text-field {
+  min-width: 250px;
 }
 </style>
 
@@ -58,7 +82,18 @@ nav#search > div.v-toolbar__content {
 export default {
   data() {
     return {
-      clubs: []
+      clubs: [],
+      // Map
+      location: { // Street of snooker club Karteria
+        lat: 51.033564,
+        lng: 5.162402
+      },
+      zoom: 9
+    }
+  },
+  computed: {
+    markers() {
+      return this.clubs.map(c => { return c.address })
     }
   },
   mounted() {
@@ -76,10 +111,43 @@ export default {
         this.clubs = response.data
       })
     },
-    getAddressData: function (addressData, placeResultData, id) {
-      this.$logger.log('getAddressData() => addressData', addressData)
-      this.$logger.log('getAddressData() => placeResultData', placeResultData)
-      this.$logger.log('getAddressData() => id', id)
+    getAddressData(addressData, placeResultData, id) {
+      if (addressData) this.$logger.log('getAddressData() => addressData', addressData)
+      if (placeResultData) this.$logger.log('getAddressData() => placeResultData', placeResultData)
+      if (id) this.$logger.log('getAddressData() => id', id)
+
+      if (placeResultData) {
+        this.location = placeResultData.geometry.location
+        this.zoom = 15
+      }
+    },
+    retrieveMyLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          location => {
+            this.location = { lat: location.coords.latitude, lng: location.coords.longitude }
+            this.zoom = 11
+          },
+          error => {
+            switch(error.code) {
+              case error.PERMISSION_DENIED:
+                this.$logger.error('User denied the request for Geolocation.')
+                break;
+              case error.POSITION_UNAVAILABLE:
+                this.$logger.error('Location information is unavailable.')
+                break;
+              case error.TIMEOUT:
+                this.$logger.error('The request to get user location timed out.')
+                break;
+              case error.UNKNOWN_ERROR:
+                this.$logger.error('An unknown error occurred.')
+                break;
+            }
+          }
+        );
+      } else {
+        this.$logger.error('Geolocation is not supported by this browser.')
+      }
     }
   },
   name: 'Clubs'
