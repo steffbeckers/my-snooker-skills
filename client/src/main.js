@@ -2,7 +2,7 @@ import '@babel/polyfill'
 
 import Vue from 'vue'
 import VueAnalytics from 'vue-analytics'
-import VuetifyGoogleAutocomplete from 'vuetify-google-autocomplete'
+// import VuetifyGoogleAutocomplete from 'vuetify-google-autocomplete'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import VueSSE from 'vue-sse'
 import Authentication from './services/authentication'
@@ -37,9 +37,12 @@ if (process.env.NODE_ENV === 'production') {
     router
   })
 }
-Vue.use(VuetifyGoogleAutocomplete, {
-  apiKey: 'AIzaSyB4NmsqPnw-5iMpnhVZWu2g9CBfTRke9Ks'
-})
+
+// Disabled the Google Autocomplete search
+// Vue.use(VuetifyGoogleAutocomplete, {
+//   apiKey: 'AIzaSyB4NmsqPnw-5iMpnhVZWu2g9CBfTRke9Ks'
+// })
+
 Vue.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyB4NmsqPnw-5iMpnhVZWu2g9CBfTRke9Ks',

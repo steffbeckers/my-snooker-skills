@@ -5,7 +5,7 @@
   "author": "Steff Beckers <steff@steffbeckers.eu>",
   "private": true,
   "scripts": {
-    "start": "vue-cli-service serve",
+    "start": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
     "build.master": "vue-cli-service build --mode master",
     "build.test": "vue-cli-service build --mode test",

@@ -10,17 +10,15 @@
         floating
         class="pa-0 ma-0"
       >
-        <vuetify-google-autocomplete
-          id="map"
+        <v-text-field
           hide-details
           prepend-icon="search"
           clearable
           single-line
           class="pa-0"
-          placeholder="Search"
-          v-on:placechanged="getAddressData"
+          label="Search"
         >
-        </vuetify-google-autocomplete>
+        </v-text-field>
         <v-btn @click="retrieveMyLocation()" class="mr-0" icon>
           <v-icon>my_location</v-icon>
         </v-btn>
@@ -72,10 +70,6 @@ nav#search {
 nav#search > div.v-toolbar__content {
   padding: 0px 12px !important;
 }
-
-nav#search > div.v-toolbar__content > div.v-text-field {
-  min-width: 250px;
-}
 </style>
 
 <script>
@@ -93,7 +87,7 @@ export default {
   },
   computed: {
     markers() {
-      return this.clubs.map(c => { return c.address })
+      return this.clubs.filter(c => { return c.address }).map(c => { return c.address })
     }
   },
   mounted() {
