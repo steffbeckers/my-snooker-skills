@@ -1,7 +1,13 @@
 <template>
 <v-container grid-list-lg fluid>
     <v-layout class="mt-3" justify-center>
-      <v-flex xs12 sm8 md6 lg4>
+      <v-flex
+        xs12
+        sm8
+        md6
+        :lg4="!$store.state.drawer"
+        :lg6="$store.state.drawer"
+      >
         <v-card>
           <v-toolbar dark color="primary">
             <v-toolbar-title>Login</v-toolbar-title>

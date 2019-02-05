@@ -65,7 +65,7 @@
         />
       </v-progress-circular>
       <v-toolbar-title
-        v-if="!$store.state.drawer && $vuetify.breakpoint.smAndUp"
+        v-if="!$store.state.drawer"
         class="ml-3 mr-4"
       >
         <router-link style="text-decoration: none;" class="white--text" :to="{ name: 'Root' }">{{ title }}</router-link>
