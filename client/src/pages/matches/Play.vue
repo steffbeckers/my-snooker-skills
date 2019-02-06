@@ -24,10 +24,11 @@
             <v-autocomplete
               v-if="match.players.length < 2 && friendsThatCanBeAddedToMatch.length > 0"
               :items="friendsThatCanBeAddedToMatch"
-              v-model="friendSelector"
+              :value="friendSelector"
               label="Add friend"
               :filter="userFilter"
-              @change="() => { match.players.unshift(friendSelector); friendSelector = {} }"
+              @change="(friend) => { addPlayer(friend) }"
+              clearable
             >
               <template slot="selection" slot-scope="data">
                 {{ data.item.firstName }} {{ data.item.lastName }}
@@ -321,6 +322,15 @@ export default {
     };
   },
   created() {
+    // Retrieve match with state 'new' from local db
+    // this.$db.matches
+    //   .where('state')
+    //   .equals('new')
+    //   .first(function(match) {
+    //     if (match) this.match = match
+    //   });
+  },
+  mounted() {
     // Add me to match
     this.match.players.push(this.meAsPlayer)
 
@@ -351,31 +361,22 @@ export default {
       }
     }
 
-    // Retrieve match with state 'new' from local db
-    // this.$db.matches
-    //   .where('state')
-    //   .equals('new')
-    //   .first(function(match) {
-    //     if (match) this.match = match
-    //   });
+    // // Dexie test
+    // // Insert
+    // let id = await this.$db.matches.add({
+    //   startDateTime: new Date(),
+    //   endDateTime: new Date(),
+    //   reds: 15,
+    //   bestOf: 5,
+    //   scoreboardType: 'simple',
+    //   createdOn: new Date(),
+    //   updatedOn: new Date()
+    // })
+    // this.$logger.log(`Match with ID: ${id} saved in indexeddb!`)
+    // // Query
+    // var matches = await this.$db.matches.toArray()
+    // this.$logger.log(matches)
   },
-  // async mounted() {
-  //   // // Dexie test
-  //   // // Insert
-  //   // let id = await this.$db.matches.add({
-  //   //   startDateTime: new Date(),
-  //   //   endDateTime: new Date(),
-  //   //   reds: 15,
-  //   //   bestOf: 5,
-  //   //   scoreboardType: 'simple',
-  //   //   createdOn: new Date(),
-  //   //   updatedOn: new Date()
-  //   // })
-  //   // this.$logger.log(`Match with ID: ${id} saved in indexeddb!`)
-  //   // // Query
-  //   // var matches = await this.$db.matches.toArray()
-  //   // this.$logger.log(matches)
-  // },
   computed: {
     bestOf() {
       let max = 35 // TODO: Application setting
@@ -386,6 +387,8 @@ export default {
       return arrayOfNumbers
     },
     friendsThatCanBeAddedToMatch() {
+      if (!this.match || !this.match.players || !this.$store.state.authenticated) { return [] }
+
       let idsOfPlayersAddedToMatch = this.match.players.map(p => p.id)
       return this.$store.state.user.friends.filter(f => !idsOfPlayersAddedToMatch.includes(f.id))
     },
@@ -396,6 +399,8 @@ export default {
       return this.friendsThatCanBeAddedToMatch
     },
     currentUserAddedToMatch() {
+      if (!this.match || !this.match.players || !this.$store.state.authenticated) { return false }
+
       return this.match.players.find((p) => {
         return p.id === this.$store.state.user.id
       })
@@ -480,6 +485,12 @@ export default {
       return username.indexOf(searchText) > -1 ||
         firstName.indexOf(searchText) > -1 ||
         lastName.indexOf(searchText) > -1
+    },
+    addPlayer(player) {
+      if (!player) { return }
+
+      this.match.players.unshift(player)
+      this.friendSelector = {}
     },
     removePlayer(player) {
       const index = this.match.players.map(p => p.id).indexOf(player.id)

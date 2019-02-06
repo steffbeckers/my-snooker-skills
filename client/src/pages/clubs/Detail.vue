@@ -88,7 +88,7 @@
                   { text: '', sortable: false, width: '50px' },
                   { text: 'Name', value: 'firstName', align: 'left' },
                   { text: 'Username', value: 'username', align: 'left' },
-                  { text: '', sortable: false }
+                  { text: '', value: 'lastName', sortable: false }
                 ]"
                 :pagination.sync="playersDataTablePagination"
                 :items="club.players"
@@ -153,7 +153,7 @@ export default {
       // Players card
       playersSearch: '',
       playersDataTablePagination: {
-        rowsPerPage: 25
+        rowsPerPage: 10
       }
     }
   },
