@@ -31,8 +31,11 @@ const Logout = () => import('@/pages/account/Logout')
 const TrainingOverview = () => import('@/pages/training/Overview')
 const TrainingScoreboard = () => import('@/pages/training/Scoreboard')
 
+// Tools
+const Test = () => import('@/components/tools/Test')
+const ShootOutTimer = () => import('@/components/tools/ShootOutTimer')
+
 // Generic components
-const Test = () => import('@/components/Test')
 const Loader = () => import('@/components/Loader')
 
 // Errors
@@ -43,18 +46,24 @@ Vue.use(Router)
 export default new Router({
   mode: 'history',
   routes: [
-    // Tools
-    {
-      path: '/components/test',
-      name: 'TestComponent',
-      component: Test,
-      meta: { requiresAdmin: true }
-    },
+    // Generic components
     {
       path: '/components/loader',
       name: 'LoaderComponent',
       component: Loader,
       meta: { requiresAdmin: true }
+    },
+    // Tools
+    {
+      path: '/tools/test',
+      name: 'TestComponent',
+      component: Test,
+      meta: { requiresAdmin: true }
+    },
+    {
+      path: '/tools/shoot-out-timer',
+      name: 'ShootOutTimer',
+      component: ShootOutTimer
     },
     // Training
     {

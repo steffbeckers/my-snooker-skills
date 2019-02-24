@@ -324,7 +324,7 @@
         <v-icon class="mr-1">code</v-icon><span>{{ buildDateTime | formatDate }} - v{{ version }}</span>
       </div>
       <div id="report-bug" style="cursor: pointer">
-        <span v-if="$vuetify.breakpoint.smAndUp">Report a</span><v-icon class="ml-1">bug_report</v-icon>
+        <v-icon class="mr-1">bug_report</v-icon><span v-if="$vuetify.breakpoint.smAndUp">Report a bug</span>
       </div>
       <div id="copyright">
         <v-icon class="mr-1">copyright</v-icon><a href="https://steffbeckers.eu/" target="_blank">Steff</a>
@@ -378,6 +378,9 @@ body {
 
 /* Top navigation toolbar height fix */
 div.application--wrap > nav.v-toolbar div.v-toolbar__content {
+  height: 64px !important;
+}
+div.application--wrap > aside.v-navigation-drawer div.v-toolbar__content {
   height: 64px !important;
 }
 div.application--wrap > main.v-content {
@@ -489,14 +492,15 @@ export default {
   },
   watch: {
     $route: function () {
-      // Check if given route is true, if it is then hide Nav.
-      // if (this.$route.name === 'TrainingScoreboard') {
-      //   this.$store.commit('showTopNav', false)
-      //   this.$store.commit('showFooter', false)
-      // } else {
-      //   this.$store.commit('showTopNav', true)
-      //   this.$store.commit('showFooter', true)
-      // }
+      // Check if given route is true, if it is then hide top nav and footer.
+      // if (this.$route.name === 'TrainingScoreboard' || this.$route.name === 'ShootOutTimer) {
+      if (this.$route.name === 'ShootOutTimer') {
+        this.$store.commit('showTopNav', false)
+        this.$store.commit('showFooter', false)
+      } else {
+        this.$store.commit('showTopNav', true)
+        this.$store.commit('showFooter', true)
+      }
     },
     settingsDropdown(bool) {
       localStorage.setItem('login:settingsDropdown', bool)
