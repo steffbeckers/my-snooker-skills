@@ -1,10 +1,5 @@
 version: "3"
 
-networks:
-  dbnet:
-    external:
-      name: dbnet
-
 services:
   web:
     container_name: mysnookerskills-web-dev
@@ -14,7 +9,7 @@ services:
     image: registry.gitlab.com/mysnookerskills/app/web:develop
     deploy:
       mode: replicated
-      replicas: 5
+      replicas: 2
   api:
     container_name: mysnookerskills-api-dev
     restart: unless-stopped
@@ -35,5 +30,3 @@ services:
       - EMAIL_PASSWORD_ACCOUNT=ZQRPWTLYZMCC0sIK9IxP
     image: registry.gitlab.com/mysnookerskills/app/api:develop
     command: node --inspect=0.0.0.0 server/server.js
-    networks:
-      - dbnet
