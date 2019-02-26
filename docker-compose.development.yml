@@ -12,6 +12,9 @@ services:
     ports:
       - 3008:80
     image: registry.gitlab.com/mysnookerskills/app/web:develop
+    deploy:
+      mode: replicated
+      replicas: 5
   api:
     container_name: mysnookerskills-api-dev
     restart: unless-stopped
