@@ -2,8 +2,6 @@ version: "3"
 
 services:
   web:
-    container_name: mysnookerskills-web-dev
-    restart: unless-stopped
     ports:
       - 3008:80
     image: registry.gitlab.com/mysnookerskills/app/web:develop
@@ -11,8 +9,6 @@ services:
       mode: replicated
       replicas: 2
   api:
-    container_name: mysnookerskills-api-dev
-    restart: unless-stopped
     ports:
       - 3007:3000
       - 9229:9229
@@ -30,3 +26,18 @@ services:
       - EMAIL_PASSWORD_ACCOUNT=ZQRPWTLYZMCC0sIK9IxP
     image: registry.gitlab.com/mysnookerskills/app/api:develop
     command: node --inspect=0.0.0.0 server/server.js
+  mongodb:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=MySnookerSkills
+      - MONGO_INITDB_ROOT_PASSWORD=57MvLdTU8Sr16QttYVoA
+      - MONGO_INITDB_DATABASE=MySnookerSkills
+    volumes:
+      - /root/mysnookerskills-dev/mongodb:/data/db
+  mongodb-express:
+    image: mongo-express
+    ports:
+      - 3016:8081
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=MySnookerSkills
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=57MvLdTU8Sr16QttYVoA
