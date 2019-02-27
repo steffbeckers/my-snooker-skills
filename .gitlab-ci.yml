@@ -53,7 +53,7 @@ deploy-develop:
     - ssh-keyscan -H dev.steffbeckers.eu >> ~/.ssh/known_hosts
   script:
     - scp -r ./docker-compose.development.yml root@dev.steffbeckers.eu:~/compositions/$CI_PROJECT_PATH/$CI_COMMIT_REF_SLUG/docker-compose.yml
-    - ssh root@dev.steffbeckers.eu "docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}; cd ~/compositions/$CI_PROJECT_PATH/$CI_COMMIT_REF_SLUG/; docker pull "$CI_REGISTRY_IMAGE/api:$CI_COMMIT_REF_SLUG"; docker pull "$CI_REGISTRY_IMAGE/web:$CI_COMMIT_REF_SLUG"; docker stack deploy --compose-file docker-compose.yml $CI_REGISTRY_IMAGE-$CI_COMMIT_REF_SLUG"
+    - ssh root@dev.steffbeckers.eu "docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}; cd ~/compositions/$CI_PROJECT_PATH/$CI_COMMIT_REF_SLUG/; docker pull "$CI_REGISTRY_IMAGE/api:$CI_COMMIT_REF_SLUG"; docker pull "$CI_REGISTRY_IMAGE/web:$CI_COMMIT_REF_SLUG"; docker stack deploy --compose-file docker-compose.development.yml $CI_PROJECT_PATH-$CI_COMMIT_REF_SLUG"
   only:
     - develop
 
