@@ -8,6 +8,8 @@ services:
     deploy:
       mode: replicated
       replicas: 2
+    depends_on:
+      - api
   api:
     ports:
       - 3007:3000
@@ -26,6 +28,8 @@ services:
       - EMAIL_PASSWORD_ACCOUNT=ZQRPWTLYZMCC0sIK9IxP
     image: registry.gitlab.com/mysnookerskills/app/api:develop
     command: node --inspect=0.0.0.0 server/server.js
+    depends_on:
+      - mongodb
   mongodb:
     image: mongo
     environment:
