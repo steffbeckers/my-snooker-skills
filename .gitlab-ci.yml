@@ -53,7 +53,7 @@ deploy-develop:
     - ssh-keyscan -H dev.steffbeckers.eu >> ~/.ssh/known_hosts
   script:
     - scp -r ./docker-compose.development.yml root@dev.steffbeckers.eu:~/compositions/$CI_PROJECT_PATH/$CI_COMMIT_REF_SLUG/docker-compose.yml
-    - ssh root@dev.steffbeckers.eu "docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}; cd ~/compositions/$CI_PROJECT_PATH/$CI_COMMIT_REF_SLUG/; docker pull "$CI_REGISTRY_IMAGE/api:$CI_COMMIT_REF_SLUG"; docker pull "$CI_REGISTRY_IMAGE/web:$CI_COMMIT_REF_SLUG"; docker stack deploy --compose-file docker-compose.yml mysnookerskills$CI_COMMIT_REF_SLUG --with-registry-auth"
+    - ssh root@dev.steffbeckers.eu "docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}; cd ~/compositions/$CI_PROJECT_PATH/$CI_COMMIT_REF_SLUG/; docker pull "$CI_REGISTRY_IMAGE/api:$CI_COMMIT_REF_SLUG"; docker pull "$CI_REGISTRY_IMAGE/web:$CI_COMMIT_REF_SLUG"; docker stack deploy --compose-file docker-compose.yml mysnookerskills_$CI_COMMIT_REF_SLUG --with-registry-auth"
   only:
     - develop
 
@@ -69,7 +69,7 @@ deploy-test:
     - ssh-keyscan -H dev.steffbeckers.eu >> ~/.ssh/known_hosts
   script:
     - scp -r ./docker-compose.testing.yml root@dev.steffbeckers.eu:~/compositions/$CI_PROJECT_PATH/$CI_COMMIT_REF_SLUG/docker-compose.yml
-    - ssh root@dev.steffbeckers.eu "docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}; cd ~/compositions/$CI_PROJECT_PATH/$CI_COMMIT_REF_SLUG/; docker pull "$CI_REGISTRY_IMAGE/api:$CI_COMMIT_REF_SLUG"; docker pull "$CI_REGISTRY_IMAGE/web:$CI_COMMIT_REF_SLUG"; docker stack deploy --compose-file docker-compose.yml mysnookerskills$CI_COMMIT_REF_SLUG --with-registry-auth"
+    - ssh root@dev.steffbeckers.eu "docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}; cd ~/compositions/$CI_PROJECT_PATH/$CI_COMMIT_REF_SLUG/; docker pull "$CI_REGISTRY_IMAGE/api:$CI_COMMIT_REF_SLUG"; docker pull "$CI_REGISTRY_IMAGE/web:$CI_COMMIT_REF_SLUG"; docker stack deploy --compose-file docker-compose.yml mysnookerskills_$CI_COMMIT_REF_SLUG --with-registry-auth"
   only:
     - test
 
@@ -85,6 +85,6 @@ deploy:
     - ssh-keyscan -H dev.steffbeckers.eu >> ~/.ssh/known_hosts
   script:
     - scp -r ./docker-compose.yml root@dev.steffbeckers.eu:~/compositions/$CI_PROJECT_PATH/docker-compose.yml
-    - ssh root@dev.steffbeckers.eu "docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}; cd ~/compositions/$CI_PROJECT_PATH/; docker pull "$CI_REGISTRY_IMAGE/api"; docker pull "$CI_REGISTRY_IMAGE/web"; docker-compose up -d"
+    - ssh root@dev.steffbeckers.eu "docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}; cd ~/compositions/$CI_PROJECT_PATH/; docker pull "$CI_REGISTRY_IMAGE/api"; docker pull "$CI_REGISTRY_IMAGE/web"; docker stack deploy --compose-file docker-compose.yml mysnookerskills --with-registry-auth"
   only:
     - master

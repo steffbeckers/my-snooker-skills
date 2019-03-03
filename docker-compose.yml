@@ -1,22 +1,19 @@
-version: "3"
+version: "3.7"
 
 networks:
-  dbnet:
-    external:
-      name: dbnet
+  default:
+    driver: overlay
+    attachable: true
 
 services:
   web:
-    container_name: mysnookerskills-web
-    restart: unless-stopped
-    ports:
-      - 3006:80
     image: registry.gitlab.com/mysnookerskills/app/web
+    deploy:
+      mode: replicated
+      replicas: 2
+    depends_on:
+      - api
   api:
-    container_name: mysnookerskills-api
-    restart: unless-stopped
-    ports:
-      - 3000:3000
     environment:
       - NODE_ENV=production
       - MYSNOOKERSKILLS_MONGODB_PASSWORD=aV9yvlvHPuES4n50GOsA
@@ -30,5 +27,31 @@ services:
       - EMAIL_PASSWORD_REGISTRATION=x0UJINMxzyTkgbMChJuq
       - EMAIL_PASSWORD_ACCOUNT=ZQRPWTLYZMCC0sIK9IxP
     image: registry.gitlab.com/mysnookerskills/app/api
-    networks:
-      - dbnet
+    depends_on:
+      - mongodb
+  mongodb:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=4nmUirGoP39Qbckkilz6
+      - MONGO_INITDB_DATABASE=MySnookerSkills
+    volumes:
+      - /root/mysnookerskills/mongodb-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - /root/mysnookerskills/mongodb:/data/db
+  mongodb-express:
+    image: mongo-express
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+      - ME_CONFIG_MONGODB_ENABLE_ADMIN=false
+      - ME_CONFIG_MONGODB_AUTH_DATABASE=MySnookerSkills
+      - ME_CONFIG_MONGODB_AUTH_USERNAME=MySnookerSkills
+      - ME_CONFIG_MONGODB_AUTH_PASSWORD=aV9yvlvHPuES4n50GOsA
+    depends_on:
+      - mongodb
+  ssh:
+    image: corbinu/ssh-server
+    ports:
+      - "3018:22"
+    volumes:
+      - /root/.ssh/authenticated_keys:/root/.ssh/authenticated_keys:ro
+
