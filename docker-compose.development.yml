@@ -1,4 +1,9 @@
-version: "3"
+version: "3.7"
+
+networks:
+  default:
+    driver: overlay
+    attachable: true
 
 services:
   web:
@@ -49,3 +54,9 @@ services:
       - ME_CONFIG_MONGODB_AUTH_PASSWORD=57MvLdTU8Sr16QttYVoA
     depends_on:
       - mongodb
+  ssh:
+    image: corbinu/ssh-server
+    ports:
+      - "3016:22"
+    volumes:
+      - /root/.ssh/authenticated_keys:/root/.ssh/authenticated_keys:ro
