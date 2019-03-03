@@ -1,4 +1,4 @@
-version: "3.3"
+version: "3.7"
 
 networks:
   default:
@@ -29,7 +29,7 @@ services:
     image: registry.gitlab.com/mysnookerskills/app/api:test
     depends_on:
       - mongodb
-    mongodb:
+  mongodb:
     image: mongo
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
