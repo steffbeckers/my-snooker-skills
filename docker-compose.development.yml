@@ -59,7 +59,7 @@ services:
     networks:
       - default
     volumes:
-      - /root/.ssh/authenticated_keys:/root/.ssh/authenticated_keys:ro
+      - /root/.ssh/authorized_keys:/root/.ssh/authorized_keys:ro
 
 networks:
   reverse-proxy_default:
