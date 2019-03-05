@@ -1,16 +1,15 @@
 <template>
-  <v-container class="pt-2 pb-3" grid-list-lg fluid>
-    <v-layout row>
+  <v-container grid-list-lg fluid>
+    <v-layout fill-height column>
+      <v-flex v-if="matchStartedAt" class="display-4 text-xs-center" xs12>
+        <div v-if="shotTimeLeft">
+          {{ shotTimeLeft }}
+        </div>
+        <div v-else style="color: #eee;">
+          00:00
+        </div>
+      </v-flex>
       <v-flex v-if="matchStartedAt" xs12>
-        {{ matchTimeLeft }}
-        {{ shotTimeLeft }}
-      </v-flex>
-      <v-flex v-else xs12>
-        {{ matchMinutes }}:00
-      </v-flex>
-    </v-layout>
-    <v-layout v-if="matchStartedAt" row>
-      <v-flex xs12>
         <v-btn v-if="!timerStarted" @click="startTimer()" color="primary" block>
           Start Clock
         </v-btn>
@@ -18,8 +17,15 @@
           Stop Clock
         </v-btn>
       </v-flex>
-    </v-layout>
-    <v-layout row>
+      <v-spacer></v-spacer>
+      <v-flex class="display-4 text-xs-center" xs12 shrink>
+        <div v-if="matchStartedAt">
+          {{ matchTimeLeft }}
+        </div>
+        <div v-else xs12>
+          {{ matchMinutes }}:00
+        </div>
+      </v-flex>
       <v-flex xs12>
         <v-btn v-if="!matchStartedAt" @click="startMatch()" color="primary" block>
           Start match
@@ -31,6 +37,12 @@
     </v-layout>
   </v-container>
 </template>
+
+<style>
+.display-4 {
+  font-size: 20em !important;
+}
+</style>
 
 <script>
 import moment from 'moment'
@@ -94,7 +106,7 @@ export default {
     startTimer() {
       // Started at
       this.timerStartedAt = moment()
-      this.timerEndAt = this.timerStartedAt.add(this.secondsPerShot, 'second')
+      this.timerEndAt = this.timerStartedAt.add(this.secondsPerShot + 1, 'second')
 
       this.timerStarted = true
     },
