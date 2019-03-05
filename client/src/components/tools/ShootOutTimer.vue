@@ -35,10 +35,27 @@
         </v-btn>
       </v-flex>
     </v-layout>
+    <div fill-height></div>
+    <v-layout row>
+      <v-flex xs2>
+        <v-text-field type="number" label="Match minutes" v-model.number="matchMinutes" dense></v-text-field>
+      </v-flex>
+      <v-flex xs2>
+        <v-text-field type="number" label="Seconds per shot" v-model.number="secondsPerShot" dense></v-text-field>
+      </v-flex>
+      <v-flex xs2>
+        <v-text-field type="number" label="Seconds per shot after half" v-model.number="fasterSecondsPerShot" dense></v-text-field>
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 
 <style>
+#app main.v-content {
+  padding-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+
 .display-4 {
   font-size: 20em !important;
 }
@@ -52,14 +69,15 @@ export default {
     return {
       interval: null,
       // Players
-      player1: '',
-      player2: '',
+      // player1: '',
+      // player2: '',
       // Match
-      matchMinutes: 10,
+      matchMinutes: parseInt(localStorage.getItem('MSS:tools:shoot-out-timer:matchMinutes')) || 10,
       matchStartedAt: null,
       matchEndAt: null,
       // Shot
-      secondsPerShot: 15,
+      secondsPerShot: parseInt(localStorage.getItem('MSS:tools:shoot-out-timer:secondsPerShot')) || 15,
+      fasterSecondsPerShot: parseInt(localStorage.getItem('MSS:tools:shoot-out-timer:fasterSecondsPerShot')) || 10,
       timerStartedAt: null,
       timerEndAt: null,
       timerStarted: false
@@ -70,17 +88,47 @@ export default {
       if (!this.matchEndAt) { return null }
       let diff = moment(moment()).diff(this.matchEndAt) * -1
 
-      return moment.utc(diff).format('mm:ss')
+      if (diff > 0) {
+        return moment.utc(diff).format('mm:ss')
+      } else if (diff < -4500) {
+        this.endMatch()
+      } else {
+        return '-' + moment.utc(Math.abs(diff - 1000)).format('mm:ss')
+      }
     },
     shotTimeLeft() {
       if (!this.timerEndAt) { return null }
       let diff = moment(moment()).diff(this.timerEndAt) * -1
 
-      return moment.utc(diff).format('mm:ss')
+      if (diff > 0) {
+        return moment.utc(diff).format('mm:ss')
+      } else if (diff < -4500) {
+        this.stopTimer()
+      } else {
+        return '-' + moment .utc(Math.abs(diff - 1000)).format('mm:ss')
+      }
     },
     timerStopped() {
       return !this.timerStarted
     }
+  },
+  mounted() {
+    // Keyboard bind to start and stop shot timer
+    window.addEventListener("keyup", (e) => {
+      // Spacebar
+      if (e.keyCode == 32 || e.which == 32) {
+        e.preventDefault() 
+
+        // Start match if not started yet
+        if (!this.matchStartedAt) {
+          this.startMatch()
+          return
+        }
+
+        // Toggle shot timer
+        this.toggleTimer()
+      }
+    })
   },
   methods: {
     trigger() {
@@ -104,11 +152,21 @@ export default {
       this.reset();
     },
     startTimer() {
-      // Started at
-      this.timerStartedAt = moment()
-      this.timerEndAt = this.timerStartedAt.add(this.secondsPerShot + 1, 'second')
+      // Only start timer if match already started
+      if (this.matchEndAt) {
+        // Started at
+        this.timerStartedAt = moment()
 
-      this.timerStarted = true
+        // Over half time = Faster shot time
+        let diff = moment(this.timerStartedAt).diff(this.matchEndAt) * -1
+        if ((diff / 1000) < (this.matchMinutes * 60 / 2)) {
+          this.timerEndAt = this.timerStartedAt.add(this.fasterSecondsPerShot + 1, 'second')
+        } else {
+          this.timerEndAt = this.timerStartedAt.add(this.secondsPerShot + 1, 'second')
+        }
+        
+        this.timerStarted = true
+      }
     },
     stopTimer() {
       this.timerStartedAt = null
@@ -127,6 +185,17 @@ export default {
       if (this.interval) {
         clearInterval(this.interval)
       }
+    }
+  },
+  watch: {
+    matchMinutes: (matchMinutes) => {
+      localStorage.setItem('MSS:tools:shoot-out-timer:matchMinutes', matchMinutes)
+    },
+    secondsPerShot: (secondsPerShot) => {
+      localStorage.setItem('MSS:tools:shoot-out-timer:secondsPerShot', secondsPerShot)
+    },
+    fasterSecondsPerShot: (fasterSecondsPerShot) => {
+      localStorage.setItem('MSS:tools:shoot-out-timer:fasterSecondsPerShot', fasterSecondsPerShot)
     }
   },
   name: "ShootOutTimer"
