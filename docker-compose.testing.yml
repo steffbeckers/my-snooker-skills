@@ -10,6 +10,7 @@ services:
       mode: replicated
       replicas: 2
     depends_on:
+      - mongodb
       - api
   api:
     environment:
@@ -28,6 +29,9 @@ services:
     networks:
       - reverse-proxy_default
       - default
+    deploy:
+      mode: replicated
+      replicas: 2
     depends_on:
       - mongodb
   mongodb:
