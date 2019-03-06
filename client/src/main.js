@@ -76,9 +76,17 @@ router.beforeEach((to, from, next) => {
   localStorage.setItem('previous-page', from.path)
 
   // Check front-end and API versions
-  store.dispatch('checkVersion')
+  //store.dispatch('checkVersion')
+
+  // Check code updates with build timestamp and notify users
+  // Only in production
+  if (process.env.NODE_ENV === 'production') {
+    store.dispatch('checkCodeUpdate')
+  }
+
   // Reset global messages on navigate
   store.commit('resetMessages')
+  
   // Reset global snackbars on navigate
   store.commit('resetSnackbars')
 

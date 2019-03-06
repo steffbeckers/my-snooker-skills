@@ -14,7 +14,11 @@
     "forever": "npm run kill && forever -l forever.log -o output.log -e error.log --minUptime 3000 --spinSleepTime 3000 --verbose --uid \"snooker\" --watch --watchIgnore client/ server/server.js",
     "posttest": "npm run lint && nsp check",
     "console": "loopback-console",
-    "kill": "powershell.exe If (Get-NetTCPConnection -LocalPort 3000) { Stop-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess -Force }"
+    "kill": "powershell.exe If (Get-NetTCPConnection -LocalPort 3000) { Stop-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess -Force }",
+    "merge-to-test": "git checkout test && git merge develop",
+    "merge-to-master": "git checkout master && git merge test",
+    "merge-dev-to-master": "npm run merge-to-test && npm run merge-to-master",
+    "push-all": "git push --all"
   },
   "dependencies": {
     "asynckit": "^0.4.0",

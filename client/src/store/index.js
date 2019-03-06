@@ -12,6 +12,7 @@ export default new Vuex.Store({
     // Env
     env: process.env.NODE_ENV,
     debug: localStorage.getItem('debug') || process.env.NODE_ENV === 'local' || process.env.NODE_ENV === 'development',
+    buildDateTime: process.env.VUE_APP_BUILD_DATETIME,
     forceOffline: false,
     // Messages
     infos: [],
@@ -277,6 +278,24 @@ export default new Vuex.Store({
             })
           }
         })
+    },
+    checkCodeUpdate({ commit, state }) {
+      // Code last updated
+      let codeLastUpdated = localStorage.getItem('code-last-updated')
+      if (codeLastUpdated && codeLastUpdated !== state.buildDateTime) {    
+        // Show snackbar on update available
+        commit('snackbar', {
+          bottom: true,
+          timeout: 0,
+          keepOnNav: -1,
+          text: `App is updated on ${ moment(state.buildDateTime).format("DD/MM HH:mm") }!`,
+          buttonText: 'Reload',
+          reload: true
+        })
+      }
+
+      // Build date to local storage
+      localStorage.setItem('code-last-updated', state.buildDateTime)
     },
     addPlayerAsFriend({ commit, state }, player) {
       Vue.prototype.$axios
