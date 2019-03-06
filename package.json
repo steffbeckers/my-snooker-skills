@@ -18,7 +18,7 @@
     "merge-to-test": "git checkout test && git merge develop",
     "merge-to-master": "git checkout master && git merge test",
     "merge-dev-to-master": "npm run merge-to-test && npm run merge-to-master",
-    "push-all": "git push --all"
+    "push-all": "git push --all && git checkout develop"
   },
   "dependencies": {
     "asynckit": "^0.4.0",
