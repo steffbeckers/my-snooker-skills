@@ -10,10 +10,10 @@
         </div>
       </v-flex>
       <v-flex v-if="matchStartedAt" xs12>
-        <v-btn v-if="!timerStarted" @click="startTimer()" color="primary" block>
+        <v-btn v-if="!timerStarted" @click="toggleTimer()" color="primary" block>
           Start Clock
         </v-btn>
-        <v-btn v-if="timerStarted" @click="stopTimer()" color="primary" block>
+        <v-btn v-if="timerStarted" @click="toggleTimer()" color="primary" block>
           Stop Clock
         </v-btn>
       </v-flex>
@@ -63,6 +63,7 @@
 
 <script>
 import moment from 'moment'
+require('howler');
 
 export default {
   data() {
@@ -78,6 +79,7 @@ export default {
       // Shot
       secondsPerShot: parseInt(localStorage.getItem('MSS:tools:shoot-out-timer:secondsPerShot')) || 15,
       fasterSecondsPerShot: parseInt(localStorage.getItem('MSS:tools:shoot-out-timer:fasterSecondsPerShot')) || 10,
+      shotTimerSound: null,
       timerStartedAt: null,
       timerEndAt: null,
       timerStarted: false
@@ -99,6 +101,13 @@ export default {
     shotTimeLeft() {
       if (!this.timerEndAt) { return null }
       let diff = moment(moment()).diff(this.timerEndAt) * -1
+
+      // Timer sound
+      if (diff > 1000 && diff < 6000 && !this.shotTimerSound.playing()) {
+        this.shotTimerSound.play()
+      } else if (diff < 1000 && this.shotTimerSound.playing()) {
+        this.shotTimerSound.stop()
+      }
 
       if (diff > 0) {
         return moment.utc(diff).format('mm:ss')
@@ -128,6 +137,12 @@ export default {
         // Toggle shot timer
         this.toggleTimer()
       }
+    })
+
+    // Shot sound
+    this.shotTimerSound = new Howl({
+      src: ['/sounds/shoot-out-second-warning-sound.mp3'],
+      loop: true
     })
   },
   methods: {
@@ -169,6 +184,11 @@ export default {
       }
     },
     stopTimer() {
+      // Shot sound
+      if (this.shotTimerSound.playing()) {
+        this.shotTimerSound.stop()
+      }
+
       this.timerStartedAt = null
       this.timerEndAt = null
 

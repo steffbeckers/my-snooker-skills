@@ -17,6 +17,7 @@
     "axios": "^0.18.0",
     "dexie": "^2.0.4",
     "fancytrack": "^1.0.5",
+    "howler": "^2.1.1",
     "moment": "^2.24.0",
     "node-sass": "^4.11.0",
     "sass-loader": "^7.1.0",
