@@ -1,10 +1,5 @@
 image: docker:latest
 
-# TODO: This doesn't work. Try searching for other caching strategies.
-# cache:
-#   paths:
-#   - node_modules/
-
 services:
   - docker:dind # TODO: Try to remove this ':dind'
 
@@ -27,6 +22,10 @@ build:
     - docker push "$CI_REGISTRY_IMAGE/api:$CI_COMMIT_REF_SLUG"
   except:
     - master
+  cache:
+    paths:
+      - node_modules/
+      - client/node_modules/
 
 build-master:
   stage: build
