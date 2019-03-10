@@ -68,27 +68,35 @@ export default {
   data() {
     return {
       interval: null,
-      // Players
-      // player1: '',
-      // player2: '',
       // Match
       matchMinutes: parseInt(localStorage.getItem('MSS:tools:shoot-out-timer:matchMinutes')) || 10,
       matchStartedAt: null,
       matchEndAt: null,
-      matchTimerSound: null,
       // Shot
       secondsPerShot: parseInt(localStorage.getItem('MSS:tools:shoot-out-timer:secondsPerShot')) || 15,
       fasterSecondsPerShot: parseInt(localStorage.getItem('MSS:tools:shoot-out-timer:fasterSecondsPerShot')) || 10,
-      shotTimerSound: null,
       timerStartedAt: null,
       timerEndAt: null,
-      timerStarted: false
+      timerStarted: false,
+      // Sounds
+      matchTimerSound: null,
+      tenSecondWarningSound: null,
+      played10SecondWarning: false,
+      shotTimerSound: null
     }
   },
   computed: {
     matchTimeLeft() {
       if (!this.matchEndAt) { return null }
       let diff = moment(moment()).diff(this.matchEndAt) * -1
+
+      // 10 second shot clock now in operation
+      if ((diff / 1000) < (this.matchMinutes * 60 / 2 + 1)) {
+        if (this.fasterSecondsPerShot === 10 && !this.played10SecondWarning) {
+          this.tenSecondWarningSound.play()
+          this.played10SecondWarning = true
+        }
+      }
 
       // Timer sound
       if (diff > 1000 && diff < 11000 && !this.matchTimerSound.playing()) {
@@ -166,6 +174,11 @@ export default {
       src: ['/sounds/beep.mp3'],
       loop: true
     })
+
+    // Shot
+    this.tenSecondWarningSound = new Howl({
+      src: ['/sounds/shoot-out-10-second.mp3']
+    })
   },
   methods: {
     trigger() {
@@ -185,6 +198,17 @@ export default {
       this.stopTimer()
       this.matchStartedAt = null
       this.matchEndAt = null
+
+      // Stop sounds
+      if (this.matchTimerSound && this.matchTimerSound.playing()) {
+        this.matchTimerSound.stop()
+      }
+      if (this.shotTimerSound && this.shotTimerSound.playing()) {
+        this.shotTimerSound.stop()
+      }
+      if (this.tenSecondWarningSound && this.tenSecondWarningSound.playing()) {
+        this.tenSecondWarningSound.stop()
+      }
 
       this.reset();
     },
@@ -207,7 +231,7 @@ export default {
     },
     stopTimer() {
       // Shot sound
-      if (this.shotTimerSound.playing()) {
+      if (this.shotTimerSound && this.shotTimerSound.playing()) {
         this.shotTimerSound.stop()
       }
 
@@ -224,6 +248,8 @@ export default {
       }
     },
     reset() {
+      this.played10SecondWarning = false
+
       if (this.interval) {
         clearInterval(this.interval)
       }
