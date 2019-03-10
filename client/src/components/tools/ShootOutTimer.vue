@@ -5,7 +5,7 @@
         <div v-if="shotTimeLeft">
           {{ shotTimeLeft }}
         </div>
-        <div v-else style="color: #eee;">
+        <div v-else style="color: #ddd;">
           00:00
         </div>
       </v-flex>
@@ -23,7 +23,7 @@
           {{ matchTimeLeft }}
         </div>
         <div v-else xs12>
-          {{ matchMinutes }}:00
+          <span v-if="matchMinutes < 10 || matchMinutes === ''">0</span>{{ matchMinutes }}:00
         </div>
       </v-flex>
       <v-flex xs12>
@@ -35,16 +35,15 @@
         </v-btn>
       </v-flex>
     </v-layout>
-    <div fill-height></div>
     <v-layout row>
       <v-flex xs2>
-        <v-text-field type="number" label="Match minutes" v-model.number="matchMinutes" dense></v-text-field>
+        <v-text-field type="number" min="1" step="1" label="Match minutes" v-model.number="matchMinutes" dense></v-text-field>
       </v-flex>
       <v-flex xs2>
-        <v-text-field type="number" label="Seconds per shot" v-model.number="secondsPerShot" dense></v-text-field>
+        <v-text-field type="number" min="5" step="1" label="Seconds per shot" v-model.number="secondsPerShot" dense></v-text-field>
       </v-flex>
       <v-flex xs2>
-        <v-text-field type="number" label="Seconds per shot after half" v-model.number="fasterSecondsPerShot" dense></v-text-field>
+        <v-text-field type="number" min="5" step="1" label="Seconds per shot after half" v-model.number="fasterSecondsPerShot" dense></v-text-field>
       </v-flex>
     </v-layout>
   </v-container>
@@ -57,7 +56,7 @@
 }
 
 .display-4 {
-  font-size: 20em !important;
+  font-size: 17em !important;
 }
 </style>
 
@@ -76,6 +75,7 @@ export default {
       matchMinutes: parseInt(localStorage.getItem('MSS:tools:shoot-out-timer:matchMinutes')) || 10,
       matchStartedAt: null,
       matchEndAt: null,
+      matchTimerSound: null,
       // Shot
       secondsPerShot: parseInt(localStorage.getItem('MSS:tools:shoot-out-timer:secondsPerShot')) || 15,
       fasterSecondsPerShot: parseInt(localStorage.getItem('MSS:tools:shoot-out-timer:fasterSecondsPerShot')) || 10,
@@ -90,6 +90,13 @@ export default {
       if (!this.matchEndAt) { return null }
       let diff = moment(moment()).diff(this.matchEndAt) * -1
 
+      // Timer sound
+      if (diff > 1000 && diff < 11000 && !this.matchTimerSound.playing()) {
+        this.matchTimerSound.play()
+      } else if (diff < 1000 && this.matchTimerSound.playing()) {
+        this.matchTimerSound.stop()
+      }
+
       if (diff > 0) {
         return moment.utc(diff).format('mm:ss')
       } else if (diff < -4500) {
@@ -103,7 +110,7 @@ export default {
       let diff = moment(moment()).diff(this.timerEndAt) * -1
 
       // Timer sound
-      if (diff > 1000 && diff < 6000 && !this.shotTimerSound.playing()) {
+      if (diff > 1000 && diff < 6000 && !this.shotTimerSound.playing() && !this.matchTimerSound.playing()) {
         this.shotTimerSound.play()
       } else if (diff < 1000 && this.shotTimerSound.playing()) {
         this.shotTimerSound.stop()
@@ -114,7 +121,7 @@ export default {
       } else if (diff < -4500) {
         this.stopTimer()
       } else {
-        return '-' + moment .utc(Math.abs(diff - 1000)).format('mm:ss')
+        return '-' + moment.utc(Math.abs(diff - 1000)).format('mm:ss')
       }
     },
     timerStopped() {
@@ -123,6 +130,12 @@ export default {
   },
   mounted() {
     // Keyboard bind to start and stop shot timer
+    window.addEventListener('keydown', (e) => {
+      // Spacebar
+      if (e.keyCode == 32 || e.which == 32) {
+        e.preventDefault();
+      }
+    });
     window.addEventListener("keyup", (e) => {
       // Spacebar
       if (e.keyCode == 32 || e.which == 32) {
@@ -139,9 +152,18 @@ export default {
       }
     })
 
-    // Shot sound
+    // Sounds
+    // src: ['/sounds/shoot-out-second-warning-sound.mp3'],    
+
+    // Match
+    this.matchTimerSound = new Howl({
+      src: ['/sounds/beep.mp3'],
+      loop: true
+    })
+
+    // Shot
     this.shotTimerSound = new Howl({
-      src: ['/sounds/shoot-out-second-warning-sound.mp3'],
+      src: ['/sounds/beep.mp3'],
       loop: true
     })
   },
