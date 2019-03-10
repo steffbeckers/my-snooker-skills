@@ -1,7 +1,7 @@
 image: docker:latest
 
 services:
-  - docker:dind # TODO: Try to remove this ':dind'
+  - docker
 
 stages:
   - build
