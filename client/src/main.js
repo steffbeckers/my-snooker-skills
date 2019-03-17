@@ -15,6 +15,7 @@ import './plugins/axios'
 import './plugins/filters'
 import './plugins/upload'
 import './plugins/database'
+import './plugins/service-worker'
 
 // Components
 import App from './App.vue'
@@ -22,6 +23,7 @@ import MatchesCardList from './components/matches/CardList.vue'
 import TournamentsCardList from './components/tournaments/CardList.vue'
 import PlayersCardList from './components/players/CardList.vue'
 import ClubsCardList from './components/clubs/CardList.vue'
+
 Vue.component('MatchesCardList', MatchesCardList)
 Vue.component('TournamentsCardList', TournamentsCardList)
 Vue.component('PlayersCardList', PlayersCardList)

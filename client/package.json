@@ -1,16 +1,16 @@
 {
   "name": "my-snooker-skills-vue",
   "version": "2.2.7",
+  "private": true,
   "description": "Track your snooker skills, compare with friends and use a real-time scoreboard.",
   "author": "Steff Beckers <steff@steffbeckers.eu>",
-  "private": true,
   "scripts": {
-    "start": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "build.develop": "vue-cli-service build --mode develop",
     "build.master": "vue-cli-service build --mode master",
     "build.test": "vue-cli-service build --mode test",
-    "build.develop": "vue-cli-service build --mode develop",
-    "lint": "vue-cli-service lint"
+    "start": "vue-cli-service serve --open"
   },
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
@@ -20,6 +20,7 @@
     "howler": "^2.1.1",
     "moment": "^2.24.0",
     "node-sass": "^4.11.0",
+    "register-service-worker": "^1.6.2",
     "sass-loader": "^7.1.0",
     "vue": "^2.6.2",
     "vue-analytics": "^5.16.2",
@@ -36,6 +37,7 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.4.0",
     "@vue/cli-plugin-eslint": "^3.4.0",
+    "@vue/cli-plugin-pwa": "^3.5.1",
     "@vue/cli-service": "^3.4.0",
     "vue-cli-plugin-vuetify": "^0.2.1",
     "vue-template-compiler": "^2.6.2"
