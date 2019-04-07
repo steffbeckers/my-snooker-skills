@@ -32,6 +32,12 @@
     "settings": {
       "type": "object"
     },
+    "pools": {
+      "type": "object"
+    },
+    "rounds": {
+      "type": "object"
+    },
     "handicaps": {
       "type": "object"
     }
@@ -45,7 +51,8 @@
     },
     "teams": {
       "type": "hasAndBelongsToMany",
-      "model": "Team"
+      "model": "Team",
+      "throughTable": "TournamentTeam"
     },
     "league": {
       "type": "belongsTo",

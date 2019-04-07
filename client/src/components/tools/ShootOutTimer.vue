@@ -61,6 +61,8 @@
 </style>
 
 <script>
+/* eslint-disable */
+
 import moment from 'moment'
 require('howler');
 

@@ -17,9 +17,6 @@
     }
   },
   "properties": {
-    "clubId": {
-      "required": true
-    },
     "name": {
       "type": "string",
       "required": true
