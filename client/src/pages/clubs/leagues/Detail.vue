@@ -30,6 +30,9 @@
                   <v-icon color="rgba(0,0,0,.54)" class="mr-2">line_style</v-icon> Tournaments
                 </v-toolbar-title>
                 <v-spacer></v-spacer>
+                <v-btn class="mr-3" v-if="$store.state.authenticated" exact color="primary">
+                  <v-icon small class="mr-2">play_arrow</v-icon>Play
+                </v-btn>
                 <div style="max-width: 150px;">
                   <v-text-field
                     v-model="tournamentsSearch"

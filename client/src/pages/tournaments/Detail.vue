@@ -8,6 +8,9 @@
           {{ tournament.league.club.name }} - {{ tournament.league.name }} - {{ tournament.startDateTime | formatDate }}
         </v-toolbar-title>
         <v-spacer></v-spacer>
+        <v-btn class="mr-3" v-if="$store.state.authenticated" exact color="primary">
+            <v-icon small class="mr-2">play_arrow</v-icon>Play
+          </v-btn>
         <v-menu v-if="$store.state.authenticated" bottom left>
           <v-btn slot="activator" icon>
             <v-icon color="rgba(0,0,0,.54)">more_vert</v-icon>
