@@ -42,7 +42,7 @@
               <tbody>
                 <tr v-for="(player, playerIndex) in tournament.players" :key="player.id">
                   <td>{{ player.firstName }} {{ player.lastName }}</td>
-                  <td v-if="Object.keys(tournament.handicaps).length"></td>
+                  <td v-if="Object.keys(tournament.handicaps).length">{{ tournament.handicaps[player.id] }}</td>
                   <td>{{ playerIndex + 1 }}</td>
                 </tr>
               </tbody>
