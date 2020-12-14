@@ -1,4 +1,4 @@
-version: "3.7"
+version: '3.7'
 
 services:
   web:
@@ -15,16 +15,16 @@ services:
   api:
     environment:
       - NODE_ENV=testing
-      - MYSNOOKERSKILLS_MONGODB_TEST_PASSWORD=Lxj3ekjHNKYQOw94KVmQ
-      - AWS_S3_KEY=N2bsOKciYTZU7jq7ud8aTEnkL+OZcRGLFUtzuUIz
+      - MYSNOOKERSKILLS_MONGODB_TEST_PASSWORD=SECRET
+      - AWS_S3_KEY=SECRET
       - AWS_S3_KEY_ID=AKIAIFGEYZTPCV6ZYSAA
-      - EMAIL_PASSWORD_STEFF=INHn7RgNynZ5j1h2hmab
-      - EMAIL_PASSWORD_INFO=Qom6YsE9XrZX8ruI0bUe
-      - EMAIL_PASSWORD_PRIVACY=pyD5PKttFHqHfQ5Fixd5
-      - EMAIL_PASSWORD_ADMIN=S6lnKqlZEkkDGUSbBeRx
-      - EMAIL_PASSWORD_SUPPORT=7CLjzm9qC4U7tBxN7Sxn
-      - EMAIL_PASSWORD_REGISTRATION=x0UJINMxzyTkgbMChJuq
-      - EMAIL_PASSWORD_ACCOUNT=ZQRPWTLYZMCC0sIK9IxP
+      - EMAIL_PASSWORD_STEFF=SECRET
+      - EMAIL_PASSWORD_INFO=SECRET
+      - EMAIL_PASSWORD_PRIVACY=SECRET
+      - EMAIL_PASSWORD_ADMIN=SECRET
+      - EMAIL_PASSWORD_SUPPORT=SECRET
+      - EMAIL_PASSWORD_REGISTRATION=SECRET
+      - EMAIL_PASSWORD_ACCOUNT=SECRET
     image: registry.gitlab.com/mysnookerskills/app/api:test
     networks:
       - reverse-proxy_default
@@ -37,7 +37,7 @@ services:
   mongodb:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=cvr4kzpzmlXx8T0HfIcn
+      - MONGO_INITDB_ROOT_PASSWORD=SECRET
       - MONGO_INITDB_DATABASE=MySnookerSkills
     image: mongo
     networks:
@@ -51,7 +51,7 @@ services:
       - ME_CONFIG_MONGODB_ENABLE_ADMIN=false
       - ME_CONFIG_MONGODB_AUTH_DATABASE=MySnookerSkills
       - ME_CONFIG_MONGODB_AUTH_USERNAME=MySnookerSkills
-      - ME_CONFIG_MONGODB_AUTH_PASSWORD=Lxj3ekjHNKYQOw94KVmQ
+      - ME_CONFIG_MONGODB_AUTH_PASSWORD=SECRET
     image: mongo-express
     networks:
       - default
