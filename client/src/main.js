@@ -1,33 +1,33 @@
-import '@babel/polyfill'
+import '@babel/polyfill';
 
-import Vue from 'vue'
-import VueAnalytics from 'vue-analytics'
+import Vue from 'vue';
+import VueAnalytics from 'vue-analytics';
 // import VuetifyGoogleAutocomplete from 'vuetify-google-autocomplete'
-import * as VueGoogleMaps from 'vue2-google-maps'
-import VueSSE from 'vue-sse'
-import Authentication from './services/authentication'
-import store from './store'
-import router from './router'
-import './plugins/vuetify'
-import './plugins/logger'
-import './plugins/cookies'
-import './plugins/axios'
-import './plugins/filters'
-import './plugins/upload'
-import './plugins/database'
-import './plugins/service-worker'
+import * as VueGoogleMaps from 'vue2-google-maps';
+import VueSSE from 'vue-sse';
+import Authentication from './services/authentication';
+import store from './store';
+import router from './router';
+import './plugins/vuetify';
+import './plugins/logger';
+import './plugins/cookies';
+import './plugins/axios';
+import './plugins/filters';
+import './plugins/upload';
+import './plugins/database';
+import './plugins/service-worker';
 
 // Components
-import App from './App.vue'
-import MatchesCardList from './components/matches/CardList.vue'
-import TournamentsCardList from './components/tournaments/CardList.vue'
-import PlayersCardList from './components/players/CardList.vue'
-import ClubsCardList from './components/clubs/CardList.vue'
+import App from './App.vue';
+import MatchesCardList from './components/matches/CardList.vue';
+import TournamentsCardList from './components/tournaments/CardList.vue';
+import PlayersCardList from './components/players/CardList.vue';
+import ClubsCardList from './components/clubs/CardList.vue';
 
-Vue.component('MatchesCardList', MatchesCardList)
-Vue.component('TournamentsCardList', TournamentsCardList)
-Vue.component('PlayersCardList', PlayersCardList)
-Vue.component('ClubsCardList', ClubsCardList)
+Vue.component('MatchesCardList', MatchesCardList);
+Vue.component('TournamentsCardList', TournamentsCardList);
+Vue.component('PlayersCardList', PlayersCardList);
+Vue.component('ClubsCardList', ClubsCardList);
 
 // Server Sent Events
 Vue.use(VueSSE);
@@ -36,18 +36,18 @@ Vue.use(VueSSE);
 if (process.env.NODE_ENV === 'production') {
   Vue.use(VueAnalytics, {
     id: 'UA-101766005-4',
-    router
-  })
+    router,
+  });
 }
 
 // Disabled the Google Autocomplete search
 // Vue.use(VuetifyGoogleAutocomplete, {
-//   apiKey: 'AIzaSyB4NmsqPnw-5iMpnhVZWu2g9CBfTRke9Ks'
+//   apiKey: 'SECRET'
 // })
 
 Vue.use(VueGoogleMaps, {
   load: {
-    key: 'AIzaSyB4NmsqPnw-5iMpnhVZWu2g9CBfTRke9Ks',
+    key: 'SECRET',
     libraries: 'places', // This is required if you use the Autocomplete plugin
     // OR: libraries: 'places,drawing'
     // OR: libraries: 'places,drawing,visualization'
@@ -68,14 +68,14 @@ Vue.use(VueGoogleMaps, {
   //// Vue.component('GmapMarker', GmapMarker)
   //// then disable the following:
   // installComponents: true,
-})
+});
 
 // Authentication
-Vue.prototype.$authentication = new Authentication()
+Vue.prototype.$authentication = new Authentication();
 // Guards
 router.beforeEach((to, from, next) => {
   // Last page
-  localStorage.setItem('previous-page', from.path)
+  localStorage.setItem('previous-page', from.path);
 
   // Check front-end and API versions
   //store.dispatch('checkVersion')
@@ -83,62 +83,62 @@ router.beforeEach((to, from, next) => {
   // Check code updates with build timestamp and notify users
   // Only in production
   if (process.env.NODE_ENV === 'production') {
-    store.dispatch('checkCodeUpdate')
+    store.dispatch('checkCodeUpdate');
   }
 
   // Reset global messages on navigate
-  store.commit('resetMessages')
-  
+  store.commit('resetMessages');
+
   // Reset global snackbars on navigate
-  store.commit('resetSnackbars')
+  store.commit('resetSnackbars');
 
   // Reset status code 0 counter
-  window.statusCode0Count = 0
+  window.statusCode0Count = 0;
 
-  if (to.matched.some(record => record.meta.requiresAdmin)) {
+  if (to.matched.some((record) => record.meta.requiresAdmin)) {
     if (!store.state.isAdmin) {
       next({
         name: 'Login',
-        query: {redirect: to.fullPath}
-      })
+        query: { redirect: to.fullPath },
+      });
     } else {
-      localStorage.setItem('page-requiresAdmin', true)
-      next()
+      localStorage.setItem('page-requiresAdmin', true);
+      next();
     }
-  } else if (to.matched.some(record => record.meta.requiresAuth)) {
+  } else if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!store.state.authenticated) {
       next({
         name: 'Login',
-        query: {redirect: to.fullPath}
-      })
+        query: { redirect: to.fullPath },
+      });
     } else {
-      localStorage.setItem('page-requiresAuth', true)
-      next()
+      localStorage.setItem('page-requiresAuth', true);
+      next();
     }
   } else {
-    localStorage.setItem('page-requiresAdmin', false)
-    localStorage.setItem('page-requiresAuth', false)
-    next()
+    localStorage.setItem('page-requiresAdmin', false);
+    localStorage.setItem('page-requiresAuth', false);
+    next();
   }
-})
+});
 
 // Set Authorization header, if token exists
-var token = Vue.prototype.$cookie.get('token')
+var token = Vue.prototype.$cookie.get('token');
 if (token) {
-  Vue.prototype.$axios.defaults.headers.common['Authorization'] = token
+  Vue.prototype.$axios.defaults.headers.common['Authorization'] = token;
 }
 
 // Error tracking
-let url = process.env.VUE_APP_API + '/Bugs/trackAppError'
+let url = process.env.VUE_APP_API + '/Bugs/trackAppError';
 window.FancyTrack.init({
-  url: url
-})
+  url: url,
+});
 Vue.config.errorHandler = (error, vm, info) => {
   /* eslint no-console: ["error", { allow: ["error"] }] */
-  console.error('Oops, an error occured:')
-  console.error(error)
-  console.error(vm)
-  console.error(info)
+  console.error('Oops, an error occured:');
+  console.error(error);
+  console.error(vm);
+  console.error(info);
 
   // Don't log to database in local dev
   if (process.env.NODE_ENV === 'local') {
@@ -146,10 +146,10 @@ Vue.config.errorHandler = (error, vm, info) => {
   }
 
   // Global state
-  let state = vm.$store.state
+  let state = vm.$store.state;
   // If authenticated, don't log the access token of user for security
   if (state.token) {
-    delete state.token
+    delete state.token;
   }
 
   let bug = {
@@ -163,23 +163,23 @@ Vue.config.errorHandler = (error, vm, info) => {
       params: vm.$route.params,
       fullPath: vm.$route.fullPath,
       name: vm.$route.name,
-      meta: vm.$route.meta
+      meta: vm.$route.meta,
     },
     state: state,
     browser: window.FancyTrack.browser,
     mobile: window.FancyTrack.mobile,
     os: window.FancyTrack.os,
-    userAgent: window.FancyTrack.userAgent
-  }
+    userAgent: window.FancyTrack.userAgent,
+  };
   Vue.prototype.$axios.post(window.FancyTrack.url, bug);
 };
 
 // Vue's production tip
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 // Lauch the Vue rocket
 new Vue({
-  render: h => h(App),
+  render: (h) => h(App),
   router,
-  store
-}).$mount('#app')
+  store,
+}).$mount('#app');
